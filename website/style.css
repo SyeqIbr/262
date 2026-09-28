@@ -1223,3 +1223,262 @@ a.quiz-row:focus-visible {
 summary .row-meta + .chev {
   margin-left: 14px;
 }
+
+/* ======================================================
+   LESSON 6: Richer notes (diagrams, key points, key words)
+   ====================================================== */
+
+/* "In this note" box at the top of each note */
+.key-points {
+  margin: 8px 0 8px;
+  padding: 20px 24px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+}
+
+.key-points h2 {
+  font-family: "Outfit", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  margin: 0 0 10px;
+}
+
+.key-points ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.key-points li {
+  display: flex;
+  gap: 10px;
+  margin: 0;
+}
+
+.key-points li::before {       /* a small tick before each point */
+  content: "✓";
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ----- Diagrams -----
+   <figure> holds a picture; <figcaption> is its caption. */
+.diagrams {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.diagram {
+  margin: 0;
+  padding: 16px 12px 12px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+}
+
+.diagram svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.diagram figcaption {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-top: 8px;
+}
+
+.diagram figcaption b {
+  color: var(--text);
+}
+
+/* Colours inside the SVG drawings */
+.diagram text   { fill: var(--text); font: 12px "Outfit", system-ui, sans-serif; }
+.diagram .line  { stroke: var(--muted); stroke-width: 1; }
+.diagram .edge  { fill: color-mix(in srgb, var(--accent) 8%, transparent); stroke: var(--accent); stroke-width: 2; }
+.diagram .wall  { fill: none; stroke: #a3a88f; stroke-width: 5; }
+.diagram .thin  { fill: none; stroke: var(--accent); stroke-width: 1.5; }
+.diagram .nuc   { fill: color-mix(in srgb, #c4b5fd 35%, transparent); stroke: #c4b5fd; stroke-width: 1.5; }
+.diagram .mito  { fill: color-mix(in srgb, #fb923c 30%, transparent); stroke: #fb923c; stroke-width: 1.2; }
+.diagram .chlo  { fill: color-mix(in srgb, #4ade80 45%, transparent); stroke: #22c55e; stroke-width: 1.2; }
+.diagram .vac   { fill: color-mix(in srgb, #60a5fa 18%, transparent); stroke: #60a5fa; stroke-width: 1.2; }
+.diagram .dna   { fill: none; stroke: #c4b5fd; stroke-width: 1.8; }
+.diagram .ribo  { fill: var(--text); }
+.diagram .particle { fill: var(--accent); }
+.diagram .membrane { stroke: var(--muted); stroke-width: 2; stroke-dasharray: 6 5; }
+.diagram .arrow { stroke: var(--text); stroke-width: 2; fill: none; }
+.diagram .arrowhead { fill: var(--text); }
+.diagram .muted { fill: var(--muted); }
+
+/* ----- Step-by-step flow (for real sequences, like the cell cycle) ----- */
+.flow {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+  counter-reset: step;           /* CSS can count for us! */
+}
+
+.flow li {
+  counter-increment: step;
+  margin: 0;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+}
+
+.flow li::before {
+  content: counter(step);        /* shows 1, 2, 3... */
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin-bottom: 10px;
+  border-radius: 50%;
+  font-family: "Unbounded", sans-serif;
+  font-size: 0.8rem;
+  color: var(--background);
+  background: var(--accent);
+}
+
+.flow b {
+  display: block;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+/* ----- Worked example ----- */
+.worked {
+  margin: 20px 0;
+  padding: 18px 22px;
+  border: 1px dashed color-mix(in srgb, var(--accent) 45%, transparent);
+  border-radius: 14px;
+}
+
+.worked .label {
+  display: block;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+
+.worked p {
+  margin: 4px 0;
+}
+
+.worked .answer {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* A red-edged tip for common mistakes */
+.tip.mistake {
+  border-left-color: #f87171;
+}
+
+.tip.mistake b {
+  color: #f87171;
+}
+
+/* ----- Key words glossary ----- 
+   <dl> = description list: <dt> is the word, <dd> is its meaning. */
+.key-words {
+  margin: 16px 0 0;
+  display: grid;
+  grid-template-columns: minmax(130px, max-content) 1fr;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.key-words dt,
+.key-words dd {
+  margin: 0;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.key-words dt {
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--surface);
+}
+
+.key-words dd {
+  color: #c9ccd3;
+}
+
+.key-words dt:nth-last-of-type(1),
+.key-words dd:last-of-type {
+  border-bottom: none;
+}
+
+@media (max-width: 520px) {
+  .key-words { grid-template-columns: 1fr; }
+  .key-words dt { border-bottom: none; padding-bottom: 2px; }
+}
+
+/* ----- Calmer hub lists ----- */
+.sub-label {
+  margin: 0;
+  padding: 16px 20px 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+}
+
+.steps.plain {
+  border-bottom: none;
+  padding-top: 0;
+}
+
+/* Topics that aren't ready yet: one quiet line, not a whole box */
+.locked {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 20px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  color: var(--muted);
+}
+
+.locked .code {
+  opacity: 0.6;
+}
+
+.locked .pill {
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+/* A row of diagrams that is allowed to be wider than the text column.
+   margin-left: 50% moves it to the middle, then translateX(-50%)
+   pulls it back by half its own width, so it ends up centred. */
+.diagrams.wide {
+  width: min(1060px, 100vw - 40px);
+  margin-left: 50%;
+  transform: translateX(-50%);
+}
+
+/* A single diagram shouldn't grow huge on a wide screen */
+.diagram svg {
+  max-width: 480px;
+  margin: 0 auto;
+}
