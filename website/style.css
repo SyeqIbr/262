@@ -20,6 +20,7 @@
   --border: rgba(255, 255, 255, 0.08);
   --text: #e6e8ec;
   --muted: #8b909a;       /* dimmer text for less important things */
+  color-scheme: dark;     /* tells the browser our site is dark (scrollbars etc.) */
 }
 
 /* "--accent" is the colour of whatever subject we're looking at.
@@ -98,7 +99,7 @@ body::before {
    "position: sticky" makes the bar stick to the top as you scroll. */
 .nav {
   position: sticky;
-  top: 0;
+  top: env(safe-area-inset-top, 0px);   /* 0, or below a phone's notch */
   z-index: 10;
   display: flex;
   align-items: center;
@@ -339,12 +340,17 @@ main {
   gap: 16px;
 }
 
-.topic-grid li {
+.topic-grid .card {
   display: flex;
   flex-direction: column;  /* stack the badge above the name */
   gap: 14px;
   min-height: 120px;
   padding: 20px;
+}
+
+.topic-grid .card {
+  box-sizing: border-box;  /* padding counts inside the height, not added on */
+  height: 100%;            /* a linked tile fills its grid cell like the others */
 }
 
 .topic-grid .code {
@@ -381,4 +387,278 @@ footer {
   font-size: 0.85rem;
   color: var(--muted);
   border-top: 1px solid var(--border);
+}
+
+/* ======================================================
+   LESSON 4: Topic pages (notes + quiz)
+   ====================================================== */
+
+/* A "Ready" pill on topic tiles that have a page */
+.status {
+  margin-top: auto;        /* sits at the bottom of the tile */
+  align-self: flex-start;
+  font-size: 0.8rem;
+  color: var(--accent);
+}
+
+/* Narrower column for reading: long lines of text are tiring. */
+.topic-page {
+  max-width: 780px;
+}
+
+/* "On this page" jump links. href="#microscopy" jumps to id="microscopy". */
+.jump-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 28px;
+}
+
+.jump-links a {
+  font-size: 0.9rem;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.jump-links a:hover,
+.jump-links a:focus-visible {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Leave room for the sticky nav bar when jumping to a section. */
+.notes section {
+  scroll-margin-top: 90px;
+  padding: 40px 0;
+  border-top: 1px solid var(--border);
+}
+
+.notes h2 {
+  font-family: "Unbounded", sans-serif;
+  font-weight: 600;
+  font-size: 1.35rem;
+  margin: 0 0 16px;
+  text-wrap: balance;
+}
+
+.notes h3 {
+  font-size: 1.1rem;
+  margin: 28px 0 8px;
+  color: var(--accent);
+}
+
+.notes p,
+.notes li {
+  color: #c9ccd3;
+}
+
+.notes ul {
+  padding-left: 20px;
+}
+
+.notes li {
+  margin-bottom: 6px;
+}
+
+/* Key words in bold glow slightly in the subject colour */
+.notes strong {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--accent) 50%, transparent);
+  text-underline-offset: 3px;
+}
+
+/* ----- Tables ----- */
+.table-wrap {
+  overflow-x: auto;        /* on phones, a wide table scrolls by itself */
+  margin: 16px 0;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+th, td {
+  text-align: left;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+th {
+  font-weight: 600;
+  color: var(--text);
+  background: var(--surface);
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
+td.yes { color: var(--accent); }
+td.no  { color: var(--muted); }
+
+/* ----- Formula box ----- */
+.formula {
+  margin: 20px 0;
+  padding: 20px 24px;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+}
+
+.formula .equation {
+  font-family: "Unbounded", sans-serif;
+  font-size: clamp(1rem, 3.5vw, 1.3rem);
+  color: var(--text);
+  margin: 0 0 8px;
+}
+
+.formula .hint {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+/* Unit ladder: mm → µm → nm */
+.ladder {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.ladder .unit {
+  font-family: "Unbounded", sans-serif;
+  font-size: 0.9rem;
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+.ladder .step {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+/* Callout for "exam tip" boxes */
+.tip {
+  margin: 20px 0;
+  padding: 14px 18px;
+  border-left: 3px solid var(--accent);
+  background: var(--surface);
+  border-radius: 0 12px 12px 0;
+  font-size: 0.95rem;
+}
+
+.tip b {
+  color: var(--accent);
+}
+
+/* ----- Quiz ----- */
+.quiz-score {
+  font-family: "Unbounded", sans-serif;
+  font-size: 0.95rem;
+  color: var(--accent);
+  margin: 0 0 20px;
+}
+
+.question {
+  margin: 0 0 20px;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+}
+
+.question legend {
+  float: left;             /* lets the legend sit inside the box normally */
+  width: 100%;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+
+.options {
+  clear: both;
+  display: grid;
+  gap: 8px;
+}
+
+.option {
+  font: inherit;
+  text-align: left;
+  color: var(--text);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.option:hover:not(:disabled),
+.option:focus-visible {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.option:disabled {
+  cursor: default;
+}
+
+/* Right and wrong answers. These colours mean the same thing on every
+   subject page, so they don't use --accent. */
+.option.correct {
+  border-color: #4ade80;
+  background: rgba(74, 222, 128, 0.12);
+}
+
+.option.wrong {
+  border-color: #f87171;
+  background: rgba(248, 113, 113, 0.12);
+}
+
+.explanation {
+  margin: 14px 0 0;
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+
+.button {
+  font: inherit;
+  font-weight: 600;
+  color: var(--background);
+  background: var(--accent);
+  border: none;
+  border-radius: 999px;
+  padding: 12px 24px;
+  cursor: pointer;
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--text);
+  outline-offset: 3px;
+}
+
+/* Shown only on phones, above tables that are wider than the screen */
+.swipe-hint {
+  display: none;
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin: 0 0 -8px;
+}
+
+@media (max-width: 640px) {
+  .swipe-hint { display: block; }
+  th, td { padding: 8px 10px; font-size: 0.9rem; }
 }
