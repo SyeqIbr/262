@@ -1,17 +1,11 @@
 <!DOCTYPE html>
 <!--
-  LESSON 2: Dark, ambient design
-  ------------------------------
-  Everything between the comment markers (less-than, !, two dashes ...
-  two dashes, greater-than) is a COMMENT. The browser ignores it.
-  Careful: writing the closing marker inside a comment ends it early!
-
+  LESSON 3: Links and multiple pages
+  ----------------------------------
   New things in this lesson:
-    - Loading a custom font from Google Fonts
-    - A dark colour scheme built from CSS variables
-    - "Ambient" glows made with blurred, slowly moving colour blobs
-    - A halftone dot texture (like the reference site) made purely with CSS
-    - Topic codes (B1, C1, P1...) following the AQA GCSE specification
+    - All the CSS moved into style.css, shared by every page
+    - A navigation bar at the top of every page
+    - Links! An <a> tag with href="biology.html" takes you to biology.html
 -->
 <html lang="en">
 <head>
@@ -19,229 +13,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>GCSE Science Revision</title>
 
-  <!--
-    Fonts: these lines download two free fonts from Google Fonts.
-      Unbounded = chunky, rounded font for headings
-      Outfit    = clean, readable font for body text
-  -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Unbounded:wght@600;800&display=swap" rel="stylesheet">
 
-  <style>
-    /* ---------- 1. Colour variables ---------- */
-    :root {
-      --biology: #4ade80;     /* soft neon green  */
-      --chemistry: #fb923c;   /* warm amber       */
-      --physics: #60a5fa;     /* electric blue    */
-
-      --background: #0b0c10;  /* almost black, slightly blue */
-      --surface: rgba(255, 255, 255, 0.03);  /* see-through card colour */
-      --border: rgba(255, 255, 255, 0.08);
-      --text: #e6e8ec;
-      --muted: #8b909a;       /* dimmer text for less important things */
-    }
-
-    /* ---------- 2. The page itself ---------- */
-    body {
-      font-family: "Outfit", system-ui, sans-serif;
-      color: var(--text);
-      background: var(--background);
-      margin: 0;
-      line-height: 1.6;
-      min-height: 100vh;
-      overflow-x: hidden;     /* stops the glows causing sideways scrolling */
-    }
-
-    /* ---------- 3. Ambient glows ----------
-       ".glow" elements are big coloured circles, heavily blurred so they
-       look like soft light. "position: fixed" keeps them in place while
-       you scroll, and "z-index: -1" puts them BEHIND everything else. */
-    .glow {
-      position: fixed;
-      width: 520px;
-      height: 520px;
-      border-radius: 50%;           /* 50% turns a square into a circle */
-      filter: blur(120px);
-      opacity: 0.22;
-      z-index: -1;
-      animation: drift 24s ease-in-out infinite alternate;
-    }
-    .glow.one   { background: var(--biology);   top: -160px; left: -140px; }
-    .glow.two   { background: var(--physics);   top: 30%;    right: -200px; animation-delay: -8s; }
-    .glow.three { background: var(--chemistry); bottom: -220px; left: 30%; animation-delay: -16s; }
-
-    /* @keyframes describes an animation step by step.
-       Here the glow slowly wanders and grows, then (because of
-       "alternate" above) wanders back again. */
-    @keyframes drift {
-      from { transform: translate(0, 0) scale(1); }
-      to   { transform: translate(80px, 60px) scale(1.15); }
-    }
-
-    /* ---------- 4. Halftone dot texture ----------
-       body::before is an invisible extra layer covering the whole screen.
-       The radial-gradient draws ONE tiny dot, and background-size repeats
-       it every 6px, making a grid of dots. The mask fades the dots out
-       towards the bottom of the screen. */
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1.6px);
-      background-size: 6px 6px;
-      mask-image: radial-gradient(ellipse at top left, black 10%, transparent 70%);
-      -webkit-mask-image: radial-gradient(ellipse at top left, black 10%, transparent 70%);
-    }
-
-    /* Some people get motion sickness, so their device asks sites to
-       reduce motion. This respects that by switching animations off. */
-    @media (prefers-reduced-motion: reduce) {
-      .glow { animation: none; }
-    }
-
-    /* ---------- 5. Header ---------- */
-    header {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 96px 20px 48px;
-    }
-
-    .eyebrow {                 /* the small label above the big heading */
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.2em;
-      font-size: 0.8rem;
-      margin: 0 0 12px;
-    }
-
-    h1 {
-      font-family: "Unbounded", sans-serif;
-      font-weight: 800;
-      font-size: clamp(2.2rem, 6vw, 4.2rem);  /* grows with the screen, within limits */
-      line-height: 1.05;
-      letter-spacing: -0.02em;
-      margin: 0 0 20px;
-    }
-
-    /* Gradient text: paint a gradient as the background, then clip it
-       to the shape of the letters so only the text shows it. */
-    .gradient-text {
-      background: linear-gradient(90deg, var(--biology), var(--physics), var(--chemistry));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    .intro {
-      color: var(--muted);
-      font-size: 1.15rem;
-      max-width: 560px;
-      margin: 0;
-    }
-
-    /* ---------- 6. Subject cards ---------- */
-    main {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 20px 64px;
-    }
-
-    .subjects {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-    }
-
-    .card {
-      /* "--accent" is set per subject further down, so this one rule
-         styles all three cards in their own colour. */
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 28px;
-      backdrop-filter: blur(12px);        /* frosted-glass effect over the glows */
-      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
-    }
-
-    /* :hover = when the mouse is over the card */
-    .card:hover {
-      transform: translateY(-4px);
-      border-color: var(--accent);
-      box-shadow: 0 0 40px -10px var(--accent);
-    }
-
-    .card h2 {
-      font-family: "Unbounded", sans-serif;
-      font-weight: 600;
-      font-size: 1.4rem;
-      margin: 0 0 4px;
-      color: var(--accent);
-    }
-
-    .card .spec {
-      color: var(--muted);
-      font-size: 0.85rem;
-      margin: 0 0 20px;
-    }
-
-    .biology   { --accent: var(--biology); }
-    .chemistry { --accent: var(--chemistry); }
-    .physics   { --accent: var(--physics); }
-
-    /* ---------- 7. Topic list ---------- */
-    .topics {
-      list-style: none;   /* removes the default bullet points */
-      padding: 0;
-      margin: 0;
-    }
-
-    .topics li {
-      display: flex;      /* puts the code and topic name side by side */
-      align-items: center;
-      gap: 12px;
-      padding: 10px 0;
-      border-top: 1px solid var(--border);
-    }
-
-    .code {                /* the little "B1" / "C1" / "P1" badge */
-      font-family: "Unbounded", sans-serif;
-      font-size: 0.75rem;
-      min-width: 40px;
-      text-align: center;
-      padding: 4px 0;
-      border-radius: 8px;
-      color: var(--accent);
-      background: color-mix(in srgb, var(--accent) 12%, transparent);
-    }
-
-    .tag {                 /* "Triple only" label */
-      margin-left: auto;   /* pushes the tag to the far right */
-      font-size: 0.7rem;
-      color: var(--muted);
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      padding: 2px 10px;
-      white-space: nowrap;
-    }
-
-    /* ---------- 8. Footer ---------- */
-    footer {
-      text-align: center;
-      padding: 32px 20px;
-      font-size: 0.85rem;
-      color: var(--muted);
-      border-top: 1px solid var(--border);
-    }
-  </style>
+  <!-- This one line loads ALL of our design from style.css -->
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  <!-- The three ambient glows. They're empty; CSS does all the work. -->
   <div class="glow one"></div>
   <div class="glow two"></div>
   <div class="glow three"></div>
+
+  <!--
+    The navigation bar. Each subject link also has its subject class
+    (e.g. "biology") so it glows in that colour when you hover over it.
+  -->
+  <nav class="nav">
+    <a class="brand" href="index.html">GCSE Science</a>
+    <a class="nav-link biology" href="biology.html">Biology</a>
+    <a class="nav-link chemistry" href="chemistry.html">Chemistry</a>
+    <a class="nav-link physics" href="physics.html">Physics</a>
+  </nav>
 
   <header>
     <p class="eyebrow">AQA GCSE · Combined &amp; Triple Science</p>
@@ -255,9 +49,13 @@
   <main>
     <section class="subjects">
 
-      <!-- BIOLOGY: AQA 8461 (Triple) / 8464 (Combined) -->
       <article class="card biology">
-        <h2>Biology</h2>
+        <!--
+          The link: <a href="...">text</a>
+          href = where the link goes. "biology.html" means
+          "the file called biology.html in the same folder as this one".
+        -->
+        <h2><a class="subject-link" href="biology.html">Biology <span class="arrow">→</span></a></h2>
         <p class="spec">AQA 8461 · 8464</p>
         <ul class="topics">
           <li><span class="code">B1</span> Cell biology</li>
@@ -270,9 +68,8 @@
         </ul>
       </article>
 
-      <!-- CHEMISTRY: AQA 8462 (Triple) / 8464 (Combined) -->
       <article class="card chemistry">
-        <h2>Chemistry</h2>
+        <h2><a class="subject-link" href="chemistry.html">Chemistry <span class="arrow">→</span></a></h2>
         <p class="spec">AQA 8462 · 8464</p>
         <ul class="topics">
           <li><span class="code">C1</span> Atomic structure and the periodic table</li>
@@ -288,9 +85,8 @@
         </ul>
       </article>
 
-      <!-- PHYSICS: AQA 8463 (Triple) / 8464 (Combined) -->
       <article class="card physics">
-        <h2>Physics</h2>
+        <h2><a class="subject-link" href="physics.html">Physics <span class="arrow">→</span></a></h2>
         <p class="spec">AQA 8463 · 8464</p>
         <ul class="topics">
           <li><span class="code">P1</span> Energy</li>

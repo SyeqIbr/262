@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<!--
+  A SUBJECT PAGE
+  --------------
+  This page is built from the same pieces as the homepage and uses the
+  same style.css. The big difference: <body class="biology">.
+  That one class turns the accent colour AND all the glows green.
+
+  chemistry.html and physics.html are copies of this page with the
+  class, title and topics changed.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Biology · GCSE Science Revision</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Unbounded:wght@600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="biology">
+  <div class="glow one"></div>
+  <div class="glow two"></div>
+  <div class="glow three"></div>
+
+  <nav class="nav">
+    <a class="brand" href="index.html">GCSE Science</a>
+    <!-- aria-current="page" marks the page we're on, so it's highlighted -->
+    <a class="nav-link biology" href="biology.html" aria-current="page">Biology</a>
+    <a class="nav-link chemistry" href="chemistry.html">Chemistry</a>
+    <a class="nav-link physics" href="physics.html">Physics</a>
+  </nav>
+
+  <header>
+    <a class="back-link" href="index.html">← All subjects</a>
+    <p class="eyebrow">AQA GCSE · 8461 Triple · 8464 Combined</p>
+    <h1><span class="accent-text">Biology</span></h1>
+    <p class="intro">
+      Seven topics across two papers. Choose a topic to revise.
+    </p>
+  </header>
+
+  <main>
+    <!-- Each <section> is one exam paper -->
+    <section class="paper">
+      <h2 class="paper-title">Paper 1 <small>Topics B1–B4</small></h2>
+      <ul class="topic-grid">
+        <!-- Each topic tile reuses the "card" style from the homepage -->
+        <li class="card"><span class="code">B1</span><span class="topic-name">Cell biology</span></li>
+        <li class="card"><span class="code">B2</span><span class="topic-name">Organisation</span></li>
+        <li class="card"><span class="code">B3</span><span class="topic-name">Infection and response</span></li>
+        <li class="card"><span class="code">B4</span><span class="topic-name">Bioenergetics</span></li>
+      </ul>
+    </section>
+
+    <section class="paper">
+      <h2 class="paper-title">Paper 2 <small>Topics B5–B7</small></h2>
+      <ul class="topic-grid">
+        <li class="card"><span class="code">B5</span><span class="topic-name">Homeostasis and response</span></li>
+        <li class="card"><span class="code">B6</span><span class="topic-name">Inheritance, variation and evolution</span></li>
+        <li class="card"><span class="code">B7</span><span class="topic-name">Ecology</span></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    Made while learning to code with Claude
+  </footer>
+</body>
+</html>
