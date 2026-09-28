@@ -1,18 +1,18 @@
 /*
-  LESSON 9: The reading bar (note pages only)
+  LESSON 9: Reading helpers (note pages only)
   -------------------------------------------
-  Once you scroll past the title, a slim bar appears under the nav. It shows
-    - which section you're reading,
-    - a "Sections" button that opens a list of every section, to jump to,
-    - a thin line along the bottom that fills up as you read.
-  All of it is built here from the note's own <h2> headings.
+  1. A thin line under the nav that fills up as you read (every screen size).
+  2. On laptops: a slim strip of little lines on the left edge, one per
+     section. The current section's line is longer and coloured. Hover
+     over the strip (or tab to it) to see the section names; click one
+     to jump there.
+  Both are built here from the note's own <h2> headings.
 */
 
 (function () {
   const nav = document.querySelector(".nav");
-  const title = document.querySelector(".note-title");
   const headings = Array.from(document.querySelectorAll(".notes h2"));
-  if (!nav || !title || headings.length === 0) return;
+  if (!nav || headings.length === 0) return;
 
   // Give every heading an id, so we can jump straight to it.
   // "Light vs electron microscopes" → id="light-vs-electron-microscopes"
@@ -22,68 +22,52 @@
     }
   });
 
-  // Build the bar
-  const bar = document.createElement("div");
-  bar.className = "readbar";
-  bar.innerHTML =
-    '<span class="readbar-title"></span>' +
-    '<button class="readbar-button" type="button" aria-expanded="false">Sections <span aria-hidden="true">▾</span></button>' +
-    '<ol class="readbar-menu" hidden></ol>' +
-    '<span class="readbar-fill"></span>';
-  nav.append(bar);
+  // 1. The progress line
+  const line = document.createElement("div");
+  line.className = "read-line";
+  document.body.append(line);
 
-  const current = bar.querySelector(".readbar-title");
-  const button = bar.querySelector(".readbar-button");
-  const menu = bar.querySelector(".readbar-menu");
-  const fill = bar.querySelector(".readbar-fill");
-
-  headings.forEach(function (h) {
+  // 2. The side strip
+  const rail = document.createElement("nav");
+  rail.className = "toc-rail";
+  rail.setAttribute("aria-label", "Sections in this note");
+  const list = document.createElement("ol");
+  const links = headings.map(function (h) {
     const li = document.createElement("li");
     const a = document.createElement("a");
     a.href = "#" + h.id;
-    a.textContent = h.textContent;
-    a.addEventListener("click", closeMenu);
+    const tick = document.createElement("span");
+    tick.className = "tick";
+    const label = document.createElement("span");
+    label.className = "label";
+    label.textContent = h.textContent;
+    a.append(tick, label);
     li.append(a);
-    menu.append(li);
+    list.append(li);
+    return a;
   });
+  rail.append(list);
+  document.body.append(rail);
 
-  function openMenu() {
-    menu.hidden = false;
-    button.setAttribute("aria-expanded", "true");
-  }
-  function closeMenu() {
-    menu.hidden = true;
-    button.setAttribute("aria-expanded", "false");
-  }
-  button.addEventListener("click", function () {
-    if (menu.hidden) openMenu(); else closeMenu();
-  });
-  // Close the list if you click anywhere else or press Escape
-  document.addEventListener("click", function (e) {
-    if (!bar.contains(e.target)) closeMenu();
-  });
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") closeMenu();
-  });
-
-  // Every time the page scrolls, update the bar
+  // Every time the page scrolls, update both
   function update() {
-    const doc = document.documentElement;
-    const scrollable = doc.scrollHeight - window.innerHeight;
+    // Sit the line just under the nav (the nav is taller on phones)
+    line.style.top = nav.getBoundingClientRect().bottom + "px";
+
+    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
     const progress = scrollable > 0 ? window.scrollY / scrollable : 1;
-    fill.style.width = Math.round(progress * 100) + "%";
+    line.style.width = Math.round(progress * 100) + "%";
 
-    // Show the bar once the big title has scrolled out of view
-    bar.classList.toggle("show", title.getBoundingClientRect().bottom < nav.getBoundingClientRect().bottom);
-
-    // The current section is the last heading above the middle-ish of the screen
-    let here = headings[0];
-    headings.forEach(function (h) {
-      if (h.getBoundingClientRect().top < window.innerHeight * 0.35) here = h;
+    // The current section is the last heading above the top third of the screen
+    let here = 0;
+    headings.forEach(function (h, i) {
+      if (h.getBoundingClientRect().top < window.innerHeight * 0.35) here = i;
     });
-    current.textContent = here.textContent;
-    menu.querySelectorAll("a").forEach(function (a) {
-      a.classList.toggle("active", a.textContent === here.textContent);
+    links.forEach(function (a, i) {
+      a.classList.toggle("active", i === here);
+      a.classList.toggle("done", i < here);     // sections you've already passed
+      if (i === here) a.setAttribute("aria-current", "true");
+      else a.removeAttribute("aria-current");
     });
   }
 

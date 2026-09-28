@@ -34,15 +34,18 @@
   --pill-practice: #7dd3fc;
   --pill-ai: #fbbf24;
   --glow-strength: 0.22;
+  --biology-glow: #4ade80;      /* the soft coloured lights behind the page */
+  --chemistry-glow: #fb923c;
+  --physics-glow: #60a5fa;
   color-scheme: dark;     /* tells the browser our site is dark (scrollbars etc.) */
 }
 
 /* "--accent" is the colour of whatever subject we're looking at.
    Putting class="biology" on a card, or on the <body> of a whole page,
    switches everything inside it to that subject's colour. */
-.biology   { --accent: var(--biology); }
-.chemistry { --accent: var(--chemistry); }
-.physics   { --accent: var(--physics); }
+.biology   { --accent: var(--biology);   --accent-glow: var(--biology-glow); }
+.chemistry { --accent: var(--chemistry); --accent-glow: var(--chemistry-glow); }
+.physics   { --accent: var(--physics);   --accent-glow: var(--physics-glow); }
 
 /* ---------- 2. The page itself ---------- */
 body {
@@ -75,16 +78,16 @@ a {
   z-index: -1;
   animation: drift 24s ease-in-out infinite alternate;
 }
-.glow.one   { background: var(--biology);   top: -160px; left: -140px; }
-.glow.two   { background: var(--physics);   top: 30%;    right: -200px; animation-delay: -8s; }
-.glow.three { background: var(--chemistry); bottom: -220px; left: 30%; animation-delay: -16s; }
+.glow.one   { background: var(--biology-glow);   top: -160px; left: -140px; }
+.glow.two   { background: var(--physics-glow);   top: 30%;    right: -200px; animation-delay: -8s; }
+.glow.three { background: var(--chemistry-glow); bottom: -220px; left: 30%; animation-delay: -16s; }
 
 /* On a subject page, every glow takes that subject's colour instead.
    "body.biology .glow" means: a .glow that is inside a <body class="biology">. */
 body.biology .glow,
 body.chemistry .glow,
 body.physics .glow {
-  background: var(--accent);
+  background: var(--accent-glow);
 }
 
 @keyframes drift {
@@ -2422,28 +2425,32 @@ body { background: transparent; }
    data-mode="light" to <html>, and these values take over.
    ====================================================== */
 html[data-mode="light"] {
+  /* Soft blue-grey paper, white cards, and pastel glows */
   --biology: #15803d;
   --chemistry: #c2410c;
   --physics: #1d4ed8;
-  --background: #f5f6f8;
-  --surface: rgba(255, 255, 255, 0.75);
-  --border: rgba(15, 23, 42, 0.12);
-  --text: #111827;
-  --text-2: #374151;
-  --muted: #5b6472;
+  --biology-glow: #86efac;
+  --chemistry-glow: #fdba74;
+  --physics-glow: #a5b4fc;
+  --glow-strength: 0.55;
+  --background: #e9edf4;
+  --surface: rgba(255, 255, 255, 0.78);
+  --border: rgba(30, 41, 59, 0.11);
+  --text: #0f172a;
+  --text-2: #334155;
+  --muted: #5b6577;
   --good: #16a34a;
   --warn: #ca8a04;
   --bad: #dc2626;
   --on-accent: #ffffff;
-  --glass: rgba(245, 246, 248, 0.75);
-  --glass-strong: rgba(245, 246, 248, 0.92);
-  --dots: rgba(15, 23, 42, 0.07);
-  --track: rgba(15, 23, 42, 0.1);
+  --glass: rgba(233, 237, 244, 0.72);
+  --glass-strong: rgba(242, 245, 250, 0.92);
+  --dots: rgba(30, 41, 59, 0.06);
+  --track: rgba(30, 41, 59, 0.1);
   --input-bg: #ffffff;
   --pill-study: #6d28d9;
   --pill-practice: #0369a1;
   --pill-ai: #b45309;
-  --glow-strength: 0.14;
   color-scheme: light;
 }
 
@@ -2509,104 +2516,9 @@ html[data-mode="light"] .mode-toggle .moon { display: block; }
   }
 }
 
-/* ----- Reading bar (note pages) ----- */
+/* ----- Reading helpers (note pages) ----- */
 .nav {
-  overflow: visible;      /* the reading bar hangs just below the nav */
-}
-
-.readbar {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 20px;
-  background: var(--glass-strong);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--border);
-  font-size: 0.9rem;
-  opacity: 0;
-  transform: translateY(-8px);
-  pointer-events: none;
-  transition: opacity 0.2s, transform 0.2s;
-}
-
-.readbar.show {
-  opacity: 1;
-  transform: none;
-  pointer-events: auto;
-}
-
-.readbar-title {
-  flex: 1;
-  min-width: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;        /* "…" if the section name is too long */
-  color: var(--text);
-  font-weight: 600;
-}
-
-.readbar-button {
-  font: inherit;
-  color: var(--accent);
-  background: transparent;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 4px 14px;
-  cursor: pointer;
-  white-space: nowrap;
-}
-
-.readbar-button:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
-.readbar-menu {
-  position: absolute;
-  top: calc(100% + 6px);
-  right: 16px;
-  width: min(320px, calc(100vw - 32px));
-  max-height: 60vh;
-  overflow-y: auto;
-  margin: 0;
-  padding: 8px;
-  list-style: none;
-  background: var(--glass-strong);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.5);
-}
-
-.readbar-menu a {
-  display: block;
-  padding: 8px 12px;
-  border-radius: 8px;
-  color: var(--muted);
-}
-
-.readbar-menu a:hover,
-.readbar-menu a:focus-visible,
-.readbar-menu a.active {
-  color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 10%, transparent);
-  outline: none;
-}
-
-/* The line that fills up as you read */
-.readbar-fill {
-  position: absolute;
-  left: 0;
-  bottom: -1px;
-  height: 2px;
-  width: 0;
-  background: var(--accent);
+  overflow: visible;
 }
 
 /* Jumping to a section leaves room for the nav + reading bar */
@@ -2745,4 +2657,107 @@ html[data-mode="light"] .mode-toggle .moon { display: block; }
 /* Jumping to a heading leaves room for the nav + reading bar */
 .notes h2 {
   scroll-margin-top: 130px;
+}
+
+/* The thin line under the nav that fills as you read */
+.read-line {
+  position: fixed;
+  left: 0;
+  height: 2px;
+  width: 0;
+  z-index: 11;
+  background: var(--accent);
+  pointer-events: none;
+}
+
+/* The slim strip of section lines on the left (laptops only) */
+.toc-rail {
+  display: none;
+}
+
+@media (min-width: 1240px) {
+  .toc-rail {
+    display: block;
+    position: fixed;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 15;
+  }
+}
+
+.toc-rail ol {
+  list-style: none;
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  border-radius: 14px;
+  transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.toc-rail a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.toc-rail .tick {
+  flex-shrink: 0;
+  width: 14px;
+  height: 3px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--muted) 45%, transparent);
+  transition: width 0.25s, background 0.25s;
+}
+
+.toc-rail a.done .tick {
+  background: color-mix(in srgb, var(--accent) 50%, transparent);
+}
+
+.toc-rail a.active .tick {
+  width: 26px;
+  background: var(--accent);
+}
+
+/* Section names stay hidden until you hover over the strip */
+.toc-rail .label {
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: max-width 0.25s, opacity 0.2s;
+}
+
+.toc-rail:hover ol,
+.toc-rail:focus-within ol {
+  background: var(--glass-strong);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-color: var(--border);
+  box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.4);
+}
+
+.toc-rail:hover .label,
+.toc-rail:focus-within .label {
+  max-width: 240px;
+  opacity: 1;
+}
+
+.toc-rail a:hover,
+.toc-rail a:focus-visible,
+.toc-rail a.active {
+  color: var(--text);
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toc-rail .tick, .toc-rail .label { transition: none; }
+}
+
+/* Headings you jump to leave room for the nav */
+.notes h2 {
+  scroll-margin-top: 100px;
 }
