@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<!--
+  LESSON 1: The skeleton of a web page
+  ------------------------------------
+  Everything between <!-- and --> is a COMMENT. The browser ignores it,
+  so we can leave notes for ourselves.
+
+  A web page is made of three layers:
+    1. HTML  = the content and structure (headings, paragraphs, links)
+    2. CSS   = the design (colours, fonts, spacing)   -> inside <style> below
+    3. JavaScript = the behaviour (buttons that do things) -> a later lesson
+-->
+<html lang="en">
+<head>
+  <!-- The <head> holds information ABOUT the page. It isn't shown on screen. -->
+  <meta charset="UTF-8">
+  <!-- This line makes the page look right on phones: -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- The text shown on the browser tab: -->
+  <title>GCSE Science Revision</title>
+
+  <style>
+    /*
+      This is CSS. Each rule has the form:
+
+        selector { property: value; }
+
+      The selector says WHICH elements to style,
+      and the properties inside the braces say HOW.
+    */
+
+    /* Colours we'll reuse. Change these to re-theme the whole site. */
+    :root {
+      --biology: #2e9e5b;
+      --chemistry: #d9731a;
+      --physics: #3a6fd8;
+      --text: #1f2933;
+      --background: #f5f7fa;
+    }
+
+    body {
+      font-family: system-ui, sans-serif;
+      color: var(--text);
+      background: var(--background);
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    header {
+      background: var(--text);
+      color: white;
+      text-align: center;
+      padding: 40px 16px;
+    }
+
+    header h1 {
+      margin: 0;
+    }
+
+    main {
+      max-width: 900px;   /* stops text getting too wide on big screens */
+      margin: 0 auto;     /* "auto" left and right centres the block */
+      padding: 24px 16px;
+    }
+
+    /* The three subject cards sit side by side and wrap onto new lines on phones */
+    .subjects {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      border-top: 6px solid;   /* the colour comes from the classes below */
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    }
+
+    .card h2 {
+      margin-top: 0;
+    }
+
+    /* One element can have several classes, e.g. class="card biology" */
+    .biology   { border-color: var(--biology); }
+    .chemistry { border-color: var(--chemistry); }
+    .physics   { border-color: var(--physics); }
+
+    footer {
+      text-align: center;
+      padding: 24px;
+      font-size: 0.9em;
+      color: #6b7280;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- The <body> holds everything you actually SEE on the page. -->
+
+  <header>
+    <h1>GCSE Science Revision</h1>
+    <p>Biology · Chemistry · Physics</p>
+  </header>
+
+  <main>
+    <p>
+      Welcome! Pick a subject below to start revising.
+      <!-- TRY IT: change this sentence, save, and refresh the page. -->
+    </p>
+
+    <section class="subjects">
+      <article class="card biology">
+        <h2>Biology</h2>
+        <ul>
+          <li>Cell biology</li>
+          <li>Organisation</li>
+          <li>Infection and response</li>
+          <li>Bioenergetics</li>
+        </ul>
+      </article>
+
+      <article class="card chemistry">
+        <h2>Chemistry</h2>
+        <ul>
+          <li>Atomic structure</li>
+          <li>Bonding and structure</li>
+          <li>Quantitative chemistry</li>
+          <li>Chemical changes</li>
+        </ul>
+      </article>
+
+      <article class="card physics">
+        <h2>Physics</h2>
+        <ul>
+          <li>Energy</li>
+          <li>Electricity</li>
+          <li>Particle model of matter</li>
+          <li>Atomic structure</li>
+        </ul>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    Made while learning to code with Claude
+  </footer>
+</body>
+</html>
