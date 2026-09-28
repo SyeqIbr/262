@@ -88,17 +88,22 @@ document.querySelectorAll("a[data-note]").forEach(function (link) {
   }
 });
 
-// 3. Quiz links: show your best score and fill the ring.
-//    e.g. <a data-quiz="b1-cell-structure" data-total="7">
+// 3. Quiz and blurting links: show your best score and fill the ring.
+//    e.g. <a data-quiz="b1-cell-structure" data-total="7">            → "Best 6 / 7"
+//         <a data-quiz="blurt-b1-cell-structure" data-total="100" data-unit="%"> → "Best 80%"
 document.querySelectorAll("[data-quiz]").forEach(function (el) {
+  const tried = loadValue("best:" + el.dataset.quiz) !== null;
   const best = bestScore(el.dataset.quiz);
   const total = Number(el.dataset.total);
   const ring = el.querySelector(".ring");
   const label = el.querySelector(".best");
   if (ring) ring.style.setProperty("--p", Math.round((best / total) * 100));
-  if (label) label.textContent = loadValue("best:" + el.dataset.quiz) === null
-    ? "Not started"
-    : "Best " + best + " / " + total;
+  if (!label) return;
+  if (el.dataset.unit === "%") {
+    label.textContent = tried ? "Best " + best + "%" : (label.hasAttribute("data-quiet") ? "" : "Not started");
+  } else {
+    label.textContent = tried ? "Best " + best + " / " + total : "Not started";
+  }
 });
 
 // 4. Topic rings: how much of the topic is done.

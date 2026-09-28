@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<!--
+  B1 BLURTING: Cell structure. blurt.js does all the work; the notes Claude reads are at the bottom.
+  This page is in the "biology" folder, so links to the main folder start with "../".
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Blurt Cell structure · GCSE Biology</title>
+  <!-- Paint the page dark straight away, so there's no white flash between pages -->
+  <meta name="color-scheme" content="dark">
+  <style>html { background: #0b0c10; }</style>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Unbounded:wght@600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+</head>
+
+<body class="biology">
+  <div class="glow one"></div>
+  <div class="glow two"></div>
+  <div class="glow three"></div>
+
+  <nav class="nav">
+    <a class="brand" href="../index.html">GCSE Science</a>
+    <a class="nav-link biology" href="../biology.html" aria-current="page">Biology</a>
+    <a class="nav-link chemistry" href="../chemistry.html">Chemistry</a>
+    <a class="nav-link physics" href="../physics.html">Physics</a>
+  </nav>
+
+  <main class="note-page">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="../biology.html">Biology</a> <span>›</span>
+      <a href="../biology-blurting.html">Blurting</a> <span>›</span>
+      <span>B1 · Cell structure</span>
+    </nav>
+    <p class="eyebrow">B1 Cell biology · Blurting</p>
+    <h1 class="note-title"><span class="accent-text">Cell structure</span></h1>
+    <p class="intro">Covers 3 notes:</p>
+    <ul class="covers">
+        <li><a href="b1-cells.html">Animal, plant &amp; bacterial cells</a></li>
+        <li><a href="b1-microscopy.html">Microscopy</a></li>
+        <li><a href="b1-culturing-microorganisms.html">Culturing microorganisms</a></li>
+    </ul>
+
+    <!-- blurt.js draws everything in this box -->
+    <div id="blurt" aria-live="polite"></div>
+  </main>
+
+  <footer>
+    Made while learning to code with Claude
+  </footer>
+  <script>
+    // Details blurt.js needs. "notes" is what Claude writes questions from.
+    window.BLURT = {
+  "id": "blurt-b1-cell-structure",
+  "subject": "Biology",
+  "topic": "B1 Cell biology",
+  "subtopic": "Cell structure",
+  "quickCheck": "quiz-b1-cell-structure.html",
+  "notes": "# Animal, plant & bacterial cells\n## Two kinds of cell\n Every living thing is made of cells. Plant and animal cells are\n eukaryotic: their genetic material is enclosed in a\n nucleus. Bacterial cells are prokaryotic:\n they have no nucleus. Instead, their DNA is a single loop that floats in\n the cytoplasm, and they may also have small extra rings of DNA called\n plasmids. Prokaryotic cells are much smaller than\n eukaryotic cells.\n Animal cell\n Plant cell\n Bacterial cell (not to scale: it's far smaller)\n## What each part does\n Swipe the table sideways to see every column →\n Part | What it does | Animal | Plant | Bacteria | \n Nucleus | Contains genetic material; controls the cell's activities | ✓ | ✓ | ✗ | \n Cytoplasm | Jelly-like liquid where most chemical reactions happen | ✓ | ✓ | ✓ | \n Cell membrane | Controls what enters and leaves the cell | ✓ | ✓ | ✓ | \n Mitochondria | Where aerobic respiration happens, releasing energy | ✓ | ✓ | ✗ | \n Ribosomes | Where proteins are made | ✓ | ✓ | ✓ | \n Chloroplasts | Absorb light for photosynthesis | ✗ | ✓ | ✗ | \n Permanent vacuole | Filled with cell sap; keeps the cell firm | ✗ | ✓ | ✗ | \n Cell wall | Strengthens and supports the cell | ✗ | ✓ cellulose | ✓ not cellulose | \n Single DNA loop | Bacterial genetic material, free in the cytoplasm | ✗ | ✗ | ✓ | \n Plasmids | Small rings of extra DNA | ✗ | ✗ | ✓ | \n Common mistake: \"Cell membrane\" and \"cell wall\"\n are different structures. Examiners won't accept one for the other. And\n not all plant cells have chloroplasts: root cells don't, because they get no light.\n## Orders of magnitude\n Cells come in very different sizes, so scientists compare them using\n orders of magnitude. Each order of magnitude is a factor\n of 10.\n Worked example\n A plant cell is 100 µm wide. A bacterium is 1 µm wide. How many orders of magnitude bigger is the plant cell?\n 100 ÷ 1 = 100, and 100 = 10 × 10 = 102\n The plant cell is 2 orders of magnitude bigger.\n## Specialised cells\n Cells become specialised through differentiation: as a\n cell matures, it develops the parts it needs for a particular job. Most\n animal cells differentiate early in life. Many plant cells keep the\n ability to differentiate throughout their lives. In mature animals, cell\n division is mainly used for repair and replacement.\n Swipe the table sideways to see every column →\n Cell | Job | How it's adapted | \n Sperm cell | Reach and fertilise an egg | Tail to swim; many mitochondria to release energy; enzymes in the head to break into the egg | \n Nerve cell | Carry electrical impulses | Long, to cover distance; branched ends to connect with many other cells | \n Muscle cell | Contract | Protein fibres that slide to shorten the cell; many mitochondria | \n Root hair cell | Absorb water and mineral ions | Long \"hair\" gives a large surface area; no chloroplasts | \n Xylem | Carry water and mineral ions up the plant | Hollow tubes with no end walls, strengthened by lignin | \n Phloem | Carry dissolved sugars around the plant | Cells joined end to end, with pores in the end walls (sieve plates) | \n Exam tip: Always link the feature to the job, e.g.\n \"many mitochondria to release energy for swimming\", not just\n \"many mitochondria\".\nKey words: Eukaryotic: A cell whose genetic material is enclosed in a nucleus, e.g. plant and animal cells.; Prokaryotic: A cell with no nucleus, e.g. bacteria. Its DNA is a single loop in the cytoplasm.; Plasmid: A small ring of extra DNA found in bacteria.; Differentiation: The process by which a cell becomes specialised for a particular job.; Order of magnitude: A factor of 10, used to compare sizes.\n\n# Microscopy\n## Light vs electron microscopes\n Light microscopes let us see cells and their nucleus. Electron\n microscopes have a much higher magnification and a much higher\n resolution: the ability to tell two points that are\n close together apart. This means they can show small structures, such\n as ribosomes and the inside of mitochondria, in detail. They have helped\n scientists understand what cells are made of.\n | Light microscope | Electron microscope | \n Magnification | Lower | Much higher | \n Resolution | Lower | Much higher | \n Living specimens? | Yes | No | \n Cost and size | Cheap and portable | Expensive and large | \n## Calculating magnification\n magnification = image size ÷ real size\n Rearranged: real size = image size ÷ magnification. Both sizes must be in the same unit.\n### Converting units\n mm\n × 1000 →\n µm\n × 1000 →\n nm\n To go the other way (nm → µm → mm), divide by 1000 at each step.\n Worked example 1\n An image of a cell is 5 mm wide. The real cell is 0.05 mm wide. What is the magnification?\n 5 ÷ 0.05 = 100\n Magnification = × 100\n Worked example 2\n A cell's image is 20 mm wide at a magnification of × 400. What is the real width in µm?\n Real size = 20 ÷ 400 = 0.05 mm\n 0.05 mm × 1000 = 50 µm\n Real width = 50 µm\n Common mistake: dividing numbers that are in\n different units. Convert first, then divide. Magnification has no units,\n but always write it with a × sign.\n## Required practical: microscopy\n Aim: use a light microscope to observe, draw and label plant or animal cells.\n Prepare the slidePlace a thin layer of tissue (e.g. onion epidermis) on a slide. Add a drop of stain such as iodine, so the parts show up.\n Add a coverslipLower it on at an angle to avoid trapping air bubbles.\n FocusStart with the lowest-power objective lens. Focus with the coarse knob, then the fine knob. Then switch to a higher power.\n RecordDraw what you see with a sharp pencil: clear lines, no shading. Label the parts and add the magnification or a scale bar.\nKey words: Magnification: How many times bigger the image is than the real object.; Resolution: The ability to tell apart two points that are close together.; Micrometre (µm): One thousandth of a millimetre.; Stain: A dye added to a specimen so its parts are easier to see.\n\n# Culturing microorganisms\nTriple only: this note is for GCSE Biology (8461),\n not Combined Science.\n## How bacteria multiply\n Bacteria multiply by binary fission: one cell splits into\n two. In ideal conditions this can happen as often as once every 20 minutes,\n so numbers grow very quickly.\n Bacteria can be grown in a nutrient broth (a liquid) or\n as colonies on an agar gel plate. To investigate them\n properly, the culture must not be contaminated by other microorganisms.\n## Aseptic technique\n Step | Why | \n Sterilise Petri dishes and culture media before use | Kills any microorganisms already there | \n Pass the inoculating loop through a flame | Sterilises the loop | \n Tape the lid on, but don't seal it all the way round | Lets oxygen in, so harmful anaerobic bacteria don't grow | \n Store the plate upside down | Stops condensation dripping onto the agar | \n Incubate at no more than 25 °C in school labs | Reduces the chance of growing harmful pathogens | \n## Calculations\n bacteria at the end = bacteria at the start × 2number of divisions\n Worked example 1\n A bacterium divides every 20 minutes. How many bacteria come from one cell after 2 hours?\n 2 hours = 120 minutes. 120 ÷ 20 = 6 divisions\n 1 × 26 = 64\n 64 bacteria\n area of a clear zone = πr²\n Worked example 2\n A clear zone has a diameter of 12 mm. What is its area?\n Radius = 12 ÷ 2 = 6 mm. Area = π × 6² = π × 36\n Area = 113 mm² (to 3 significant figures)\n Common mistake: using the diameter in πr².\n Halve it first to get the radius.\n## Required practical: microbiology\n Aim: investigate how antiseptics or antibiotics affect bacterial growth.\n Spread the bacteriaUse a sterile spreader to cover an agar plate evenly with bacteria.\n Add the discsPlace paper discs soaked in different antiseptics or antibiotics on the plate, plus a control disc soaked in sterile water.\n IncubateTape the lid, turn the plate upside down, and leave it at 25 °C for about 48 hours.\n MeasureMeasure the diameter of the clear zone around each disc and work out its area.\n A bigger clear zone means the substance is better at killing the bacteria or stopping them growing.\nKey words: Binary fission: The way bacteria reproduce: one cell splits into two.; Aseptic technique: Methods that stop unwanted microorganisms contaminating a culture.; Agar: A jelly that bacteria are grown on, containing the nutrients they need.; Clear zone: The area around a disc where bacteria haven't grown."
+};
+  </script>
+  <script src="../blurt.js"></script>
+  <script src="../progress.js"></script>
+</body>
+</html>

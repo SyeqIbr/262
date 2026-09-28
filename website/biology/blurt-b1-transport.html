@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!--
+  B1 BLURTING: Transport in cells. blurt.js does all the work; the notes Claude reads are at the bottom.
+  This page is in the "biology" folder, so links to the main folder start with "../".
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Blurt Transport in cells · GCSE Biology</title>
+  <!-- Paint the page dark straight away, so there's no white flash between pages -->
+  <meta name="color-scheme" content="dark">
+  <style>html { background: #0b0c10; }</style>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Unbounded:wght@600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+</head>
+
+<body class="biology">
+  <div class="glow one"></div>
+  <div class="glow two"></div>
+  <div class="glow three"></div>
+
+  <nav class="nav">
+    <a class="brand" href="../index.html">GCSE Science</a>
+    <a class="nav-link biology" href="../biology.html" aria-current="page">Biology</a>
+    <a class="nav-link chemistry" href="../chemistry.html">Chemistry</a>
+    <a class="nav-link physics" href="../physics.html">Physics</a>
+  </nav>
+
+  <main class="note-page">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="../biology.html">Biology</a> <span>›</span>
+      <a href="../biology-blurting.html">Blurting</a> <span>›</span>
+      <span>B1 · Transport in cells</span>
+    </nav>
+    <p class="eyebrow">B1 Cell biology · Blurting</p>
+    <h1 class="note-title"><span class="accent-text">Transport in cells</span></h1>
+    <p class="intro">Covers 2 notes:</p>
+    <ul class="covers">
+        <li><a href="b1-diffusion.html">Diffusion &amp; exchange surfaces</a></li>
+        <li><a href="b1-osmosis-active-transport.html">Osmosis &amp; active transport</a></li>
+    </ul>
+
+    <!-- blurt.js draws everything in this box -->
+    <div id="blurt" aria-live="polite"></div>
+  </main>
+
+  <footer>
+    Made while learning to code with Claude
+  </footer>
+  <script>
+    // Details blurt.js needs. "notes" is what Claude writes questions from.
+    window.BLURT = {
+  "id": "blurt-b1-transport",
+  "subject": "Biology",
+  "topic": "B1 Cell biology",
+  "subtopic": "Transport in cells",
+  "quickCheck": "quiz-b1-transport.html",
+  "notes": "# Diffusion & exchange surfaces\n## What is diffusion?\n Diffusion is the spreading out of the particles of a gas\n or a solution, resulting in a net movement from an area of\n higher concentration to an area of lower\n concentration. It happens because particles are always moving\n randomly. It doesn't need energy from the cell.\n Particles spread out across the cell membrane (dashed line) until the concentration is even.\n Examples of diffusion in living things:\n Oxygen and carbon dioxide moving in and out of cells during gas exchange\n The waste product urea moving from cells into the blood plasma, to be removed by the kidneys\n## What speeds up diffusion?\n Factor | Effect | \n Concentration gradient | A bigger difference in concentration → faster diffusion | \n Temperature | Higher temperature → particles move faster → faster diffusion | \n Surface area of the membrane | Larger surface area → more room for particles to cross → faster diffusion | \n## Surface area to volume ratio\n A single-celled organism has a large surface area compared with its\n volume, so diffusion across its surface is enough to meet its needs.\n Bigger organisms have a smaller surface area to volume ratio, so\n they need exchange surfaces and transport systems.\n Worked example\n Find the surface area to volume ratio of a 2 cm cube.\n Surface area = 6 faces × (2 × 2) = 24 cm²\n Volume = 2 × 2 × 2 = 8 cm³\n Ratio = 24 : 8 = 3 : 1\n A 1 cm cube has a ratio of 6 : 1, so the bigger cube has the smaller ratio.\n## Exchange surfaces\n A good exchange surface has:\n a large surface area\n a thin membrane, so particles only diffuse a short distance\n an efficient blood supply (in animals), to keep the concentration gradient steep\n ventilation, for gas exchange (in animals)\n Where | Adaptation | \n Small intestine | Millions of villi give a huge surface area; good blood supply | \n Lungs | Millions of alveoli with thin walls; good blood supply; ventilated by breathing | \n Fish gills | Thin filaments with a large surface area and many blood vessels | \n Plant roots | Root hair cells give a large surface area | \n Leaves | Flat and thin, with stomata that let gases in and out |\nKey words: Diffusion: The net movement of particles from an area of higher concentration to an area of lower concentration.; Concentration gradient: The difference in concentration between two areas.; Surface area to volume ratio: How much surface an object has compared with its size.; Exchange surface: A surface adapted for substances to pass through it, e.g. the alveoli.\n\n# Osmosis & active transport\n## Osmosis\n Osmosis is the diffusion of water from a dilute solution\n to a concentrated solution through a partially permeable\n membrane. The membrane lets water through but not larger\n dissolved particles.\n A dilute solution has a lot of water and a little dissolved substance.\n A concentrated solution has less water and more dissolved substance.\n Common mistake: saying \"particles\" move in\n osmosis. It's always water, and always through a\n partially permeable membrane. Leaving either out can cost a mark.\n### Cells in different solutions\n Outside the cell | Water moves… | Plant cell | Animal cell | \n More dilute than the cell | Into the cell | Swells and becomes firm (turgid). The cell wall stops it bursting. | Swells and may burst | \n Same concentration | No overall movement | No change | No change | \n More concentrated than the cell | Out of the cell | Goes soft (flaccid); the membrane may pull away from the wall | Shrivels | \n## Required practical: osmosis\n Aim: investigate how the concentration of a salt or sugar solution affects the mass of plant tissue.\n PrepareCut equal-sized potato cylinders. Blot them dry and weigh each one.\n SoakPut each cylinder in a different concentration of solution, e.g. 0.0 to 1.0 mol/dm³.\n WaitLeave them for the same time (e.g. 24 hours) at the same temperature.\n Re-weighBlot them dry, weigh them again and calculate the percentage change in mass.\n % change in mass = (final − initial) ÷ initial × 100\n Using % change means you can compare cylinders that started at different masses.\n Plot % change in mass against concentration. Mass goes up in dilute\n solutions and down in concentrated ones. Where the line crosses zero,\n the solution has the same concentration as the potato cells.\n## Active transport\n Active transport moves substances from a more dilute\n solution to a more concentrated solution: against the\n concentration gradient. This needs energy from respiration.\n Root hair cells use it to take in mineral ions from very dilute soil water. Plants need these ions for healthy growth.\n The gut uses it to absorb sugar into the blood, even when there's more sugar in the blood than in the gut. Cells then use the sugar for respiration.\n### Comparing the three processes\n Process | What moves | Direction | Energy? | \n Diffusion | Particles, e.g. oxygen | High → low concentration | No | \n Osmosis | Water, through a partially permeable membrane | Dilute → concentrated solution | No | \n Active transport | e.g. mineral ions, sugar | Low → high concentration | Yes |\nKey words: Osmosis: The diffusion of water from a dilute to a concentrated solution through a partially permeable membrane.; Partially permeable: Lets some substances (like water) through, but not others.; Turgid: Describes a plant cell that is swollen and firm with water.; Active transport: Moving substances against a concentration gradient, using energy from respiration."
+};
+  </script>
+  <script src="../blurt.js"></script>
+  <script src="../progress.js"></script>
+</body>
+</html>

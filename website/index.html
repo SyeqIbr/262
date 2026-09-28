@@ -2,17 +2,19 @@
 <!--
   HOMEPAGE
   --------
-  The first page students see. It introduces the site, shows the three
-  subjects (and which topics are ready), and explains how to use it.
+  The first page students see. It introduces the site, shows what AI
+  blurting looks like, lists the subjects, and explains how to use it.
 
-  Remember: all the design lives in style.css, and progress.js makes
-  every page open at the top.
+  All the design lives in style.css. progress.js makes every page open at the top.
 -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>GCSE Science Revision</title>
+  <!-- Paint the page dark straight away, so there's no white flash between pages -->
+  <meta name="color-scheme" content="dark">
+  <style>html { background: #0b0c10; }</style>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,40 +34,72 @@
     <a class="nav-link physics" href="physics.html">Physics</a>
   </nav>
 
-  <header class="hero">
-    <p class="eyebrow">AQA GCSE · Combined &amp; Triple Science</p>
-    <h1>Revise <span class="gradient-text">smarter</span>,<br>not longer.</h1>
-    <p class="intro">
-      Clear notes with diagrams, then quick quizzes to check you've got it.
-      Every topic follows the AQA specification.
-    </p>
-    <div class="hero-actions">
-      <a class="button" href="biology-notes.html">Start with B1 Cell biology</a>
-      <a class="button ghost" href="#subjects">Choose a subject</a>
+  <!-- Two columns: the words on the left, an example on the right -->
+  <header class="hero hero-split">
+    <div>
+      <p class="eyebrow">AQA GCSE · Combined &amp; Triple Science</p>
+      <h1>Revise <span class="gradient-text">smarter</span>,<br>not longer.</h1>
+      <p class="intro">
+        Read clear notes, blurt everything you remember, and get every answer
+        marked by AI, so you know exactly what to go over again.
+      </p>
+      <div class="hero-actions">
+        <a class="button icon-button" href="biology-notes.html">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h12a2 2 0 0 1 2 2v14H7a2 2 0 0 1-2-2z"/><path d="M9 8h6M9 12h6"/></svg>
+          Start with B1 Cell biology
+        </a>
+        <a class="button ghost" href="#how">How it works</a>
+      </div>
     </div>
+
+    <!-- An example of a marked blurting answer (just a picture made of HTML) -->
+    <figure class="demo" aria-label="Example: a blurting answer marked by AI">
+      <div class="demo-top">
+        <span class="pill ai">AI marked</span>
+        <span class="demo-where">B1 · Microscopy</span>
+      </div>
+      <div class="demo-item correct">
+        <p class="demo-q"><span class="q-num">9.</span> A cell is 20 µm long. Its image is 8 mm long. Calculate the magnification. <span class="q-marks">[2 marks]</span></p>
+        <p class="demo-a">8 mm = 8000 µm, so 8000 ÷ 20 = × 400</p>
+        <p class="demo-f"><span class="verdict correct">✓ 2/2</span> Excellent: you converted the units first.</p>
+      </div>
+      <div class="demo-item partial">
+        <p class="demo-q"><span class="q-num">1.</span> What is magnification? <span class="q-marks">[1 mark]</span></p>
+        <p class="demo-a">how zoomed in it is</p>
+        <p class="demo-f"><span class="verdict partial">½ 0/1</span> Right idea, too informal. Say: how many times bigger the image is than the real object.</p>
+      </div>
+      <figcaption class="demo-score">
+        <span class="rating-chip secure">Secure</span> Microscopy: 18 / 21 marks
+      </figcaption>
+    </figure>
   </header>
 
   <main>
-    <!-- id="subjects" is where the "Choose a subject" button jumps to -->
     <section class="home-section" id="subjects">
       <h2 class="section-title">Subjects</h2>
-      <p class="section-intro">Highlighted topics are ready to revise. More are on the way.</p>
+      <p class="section-intro">Highlighted topics are ready. More are on the way.</p>
 
       <div class="subjects">
         <!-- The whole card is one link. class="biology" gives it the green accent. -->
         <a class="card subject-card biology" href="biology.html">
-          <h3>Biology</h3>
+          <span class="subject-top">
+            <h3>Biology</h3>
+            <span class="subject-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="11" cy="11" r="3.2"/><circle cx="16.5" cy="15.5" r="1.2"/><circle cx="7.5" cy="16" r="0.8"/></svg></span>
+          </span>
           <p class="meta">AQA 8461 · 8464 · 7 topics</p>
           <div class="chips">
             <span class="chip ready">B1</span><span class="chip">B2</span><span class="chip">B3</span>
             <span class="chip">B4</span><span class="chip">B5</span><span class="chip">B6</span>
             <span class="chip">B7</span>
           </div>
-          <p class="status">6 notes · 3 quizzes ready <span class="arrow">→</span></p>
+          <p class="status">6 notes · 3 blurting sets ready <span class="arrow">→</span></p>
         </a>
 
         <a class="card subject-card chemistry" href="chemistry.html">
-          <h3>Chemistry</h3>
+          <span class="subject-top">
+            <h3>Chemistry</h3>
+            <span class="subject-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6M10 3v6l-5.6 9.7A1.5 1.5 0 0 0 5.7 21h12.6a1.5 1.5 0 0 0 1.3-2.3L14 9V3"/><path d="M7.2 15h9.6"/></svg></span>
+          </span>
           <p class="meta">AQA 8462 · 8464 · 10 topics</p>
           <div class="chips">
             <span class="chip">C1</span><span class="chip">C2</span><span class="chip">C3</span>
@@ -77,7 +111,10 @@
         </a>
 
         <a class="card subject-card physics" href="physics.html">
-          <h3>Physics</h3>
+          <span class="subject-top">
+            <h3>Physics</h3>
+            <span class="subject-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="1.6"/><ellipse cx="12" cy="12" rx="9.5" ry="3.6"/><ellipse cx="12" cy="12" rx="9.5" ry="3.6" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9.5" ry="3.6" transform="rotate(-60 12 12)"/></svg></span>
+          </span>
           <p class="meta">AQA 8463 · 8464 · 8 topics</p>
           <div class="chips">
             <span class="chip">P1</span><span class="chip">P2</span><span class="chip">P3</span>
@@ -89,14 +126,31 @@
       </div>
     </section>
 
-    <section class="home-section">
+    <section class="home-section" id="how">
       <h2 class="section-title">How it works</h2>
-      <p class="section-intro">Short sessions, done often, beat one long cram.</p>
-      <!-- A real sequence, so it's a numbered list (CSS draws the numbers) -->
-      <ol class="flow">
-        <li class="step-bio"><b>Read a note</b><p>Each note covers one part of the spec, with diagrams, worked examples and key words.</p></li>
-        <li class="step-chem"><b>Take the quiz</b><p>A few quick questions straight after, while it's fresh. You see the right answer and why.</p></li>
-        <li class="step-phys"><b>Track your progress</b><p>Your best scores fill the progress rings, so you can see which topics need another go.</p></li>
+      <p class="section-intro">Four steps for every subtopic. Short sessions, done often, beat one long cram.</p>
+      <!-- A real sequence, so it's a numbered list. Each step has an icon. -->
+      <ol class="steps-grid">
+        <li class="step-bio">
+          <span class="step-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h12a2 2 0 0 1 2 2v14H7a2 2 0 0 1-2-2z"/><path d="M9 8h6M9 12h6"/></svg></span>
+          <b>Read the notes</b>
+          <p>Short notes with diagrams, worked examples and key words.</p>
+        </li>
+        <li class="step-chem">
+          <span class="step-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13 7 4 4"/></svg></span>
+          <b>Blurt it</b>
+          <p>Close your notes and answer 20–30 fresh questions from memory.</p>
+        </li>
+        <li class="step-phys">
+          <span class="step-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg></span>
+          <b>Get it marked</b>
+          <p>AI marks every answer, explains what you missed and rates each section.</p>
+        </li>
+        <li class="step-soon">
+          <span class="step-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg></span>
+          <b>Exam questions <span class="soon-pill">Soon</span></b>
+          <p>Finish with real past paper questions on the same topic.</p>
+        </li>
       </ol>
     </section>
   </main>

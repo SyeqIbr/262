@@ -1664,3 +1664,659 @@ a.button {
     padding: 12px 14px;
   }
 }
+
+/* ======================================================
+   LESSON 8: Blurting + smoother page changes
+   ====================================================== */
+
+/* Smooth page changes: supporting browsers cross-fade between pages
+   instead of flashing. Browsers that don't support it just ignore it. */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.25s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+}
+
+/* ----- Blurting cards ----- */
+.blurt-card {
+  margin: 8px 0 24px;
+  padding: 28px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface);
+}
+
+.blurt-card.slim {
+  padding: 16px 22px;
+}
+
+.blurt-h {
+  font-family: "Unbounded", sans-serif;
+  font-weight: 600;
+  font-size: 1.2rem;
+  margin: 0 0 8px;
+}
+
+.blurt-p {
+  margin: 0 0 16px;
+  color: #c9ccd3;
+}
+
+.blurt-card.slim .blurt-p {
+  margin: 0;
+}
+
+.blurt-label {
+  font-weight: 600;
+  margin: 8px 0 8px;
+}
+
+.blurt-small {
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin: 12px 0 0;
+}
+
+.blurt-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.blurt-error {
+  margin: 0 0 16px;
+  padding: 12px 16px;
+  border-left: 3px solid #f87171;
+  border-radius: 0 12px 12px 0;
+  background: rgba(248, 113, 113, 0.08);
+  color: var(--text);
+}
+
+/* 20 / 25 / 30 choice */
+.segmented {
+  display: inline-flex;
+  padding: 4px;
+  gap: 4px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
+
+.segment {
+  font: inherit;
+  font-weight: 600;
+  color: var(--muted);
+  background: transparent;
+  border: none;
+  border-radius: 999px;
+  padding: 8px 20px;
+  cursor: pointer;
+}
+
+.segment[aria-checked="true"] {
+  color: var(--background);
+  background: var(--accent);
+}
+
+.segment:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Progress while Claude works */
+.progress-bar {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--border);
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.progress-bar span {
+  display: block;
+  height: 100%;
+  width: 4%;
+  border-radius: inherit;
+  background: var(--accent);
+  transition: width 0.4s;
+}
+
+.working .progress-bar span {
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% { opacity: 0.5; }
+}
+
+/* ----- Questions ----- */
+.blurt-section {
+  font-family: "Unbounded", sans-serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--accent);
+  margin: 36px 0 12px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.blurt-q {
+  margin-bottom: 18px;
+}
+
+.blurt-question {
+  display: block;
+  margin: 0 0 8px;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.q-num {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.q-marks {
+  color: var(--muted);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.blurt-input {
+  width: 100%;
+  box-sizing: border-box;
+  font: inherit;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 14px;
+  resize: vertical;
+}
+
+.blurt-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
+}
+
+/* The bar at the bottom with "Mark my answers" */
+.blurt-bar {
+  position: sticky;
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 24px;
+  padding: 12px 12px 12px 20px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(11, 12, 16, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 5;
+}
+
+.blurt-count {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.blurt-regen {
+  margin-top: 20px;
+}
+
+.regen-confirm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.regen-confirm .blurt-small {
+  margin: 0;
+}
+
+/* ----- Results ----- */
+.results-card {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.score-ring {
+  --p: 0;
+  flex-shrink: 0;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(closest-side, var(--background) 82%, transparent 83%),
+    conic-gradient(var(--accent) calc(var(--p) * 1%), var(--border) 0);
+  font-family: "Unbounded", sans-serif;
+  font-size: 1.1rem;
+}
+
+.results-text .blurt-p {
+  margin: 0;
+}
+
+@media (max-width: 520px) {
+  .results-card { flex-direction: column; align-items: flex-start; }
+}
+
+.ratings {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.rating-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.rating-row .blurt-small {
+  margin: 2px 0 0;
+}
+
+.rating-chip {
+  flex-shrink: 0;
+  min-width: 96px;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid;
+}
+
+.rating-chip.secure  { color: #4ade80; border-color: rgba(74, 222, 128, 0.4); background: rgba(74, 222, 128, 0.08); }
+.rating-chip.nearly  { color: #facc15; border-color: rgba(250, 204, 21, 0.4); background: rgba(250, 204, 21, 0.08); }
+.rating-chip.revisit { color: #f87171; border-color: rgba(248, 113, 113, 0.4); background: rgba(248, 113, 113, 0.08); }
+
+/* A marked answer: coloured edge by verdict */
+.blurt-q.marked {
+  padding: 14px 18px;
+  border-left: 3px solid var(--border);
+  border-radius: 0 12px 12px 0;
+  background: var(--surface);
+}
+
+.blurt-q.marked.correct   { border-left-color: #4ade80; }
+.blurt-q.marked.partial   { border-left-color: #facc15; }
+.blurt-q.marked.incorrect { border-left-color: #f87171; }
+
+.verdict {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.verdict.correct   { color: #4ade80; background: rgba(74, 222, 128, 0.12); }
+.verdict.partial   { color: #facc15; background: rgba(250, 204, 21, 0.12); }
+.verdict.incorrect { color: #f87171; background: rgba(248, 113, 113, 0.12); }
+.verdict.blank     { color: var(--muted); background: var(--border); }
+
+.your-answer {
+  margin: 0 0 8px;
+  white-space: pre-wrap;         /* keep the student's line breaks */
+  color: var(--text);
+  font-style: italic;
+}
+
+.feedback {
+  margin: 0 0 8px;
+  color: #c9ccd3;
+}
+
+.model-answer {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+
+.model-answer b {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ----- "Blurt it" call-to-action at the end of a subtopic ----- */
+.blurt-cta {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 24px;
+  padding: 24px;
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+.blurt-cta .cta-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  background: var(--accent);
+  color: var(--background);
+}
+
+.blurt-cta .cta-icon svg {
+  width: 26px;
+  height: 26px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.blurt-cta b {
+  display: block;
+  font-size: 1.1rem;
+}
+
+.blurt-cta small {
+  display: block;
+  color: #c9ccd3;
+  margin-top: 2px;
+}
+
+.blurt-cta .arrow {
+  margin-left: auto;
+  font-size: 1.4rem;
+  color: var(--accent);
+}
+
+.next-blurt {
+  margin: 20px 0 0;
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+
+/* Sidebar "Soon" pill (for Exam questions) */
+.side-link .soon-pill {
+  margin-left: auto;
+  font-size: 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 1px 7px;
+  color: var(--muted);
+}
+
+@media (max-width: 860px) {
+  .side-link .soon-pill { display: none; }
+}
+
+/* Empty state (e.g. Exam questions, coming soon) */
+.empty-state {
+  text-align: center;
+  padding: 56px 24px;
+}
+
+.empty-state svg {
+  width: 44px;
+  height: 44px;
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  margin-bottom: 12px;
+}
+
+.empty-state p {
+  max-width: 46ch;
+  margin: 8px auto 0;
+  color: var(--muted);
+}
+
+/* Small pill marking AI features */
+.pill.ai { color: #fbbf24; border-color: rgba(251, 191, 36, 0.3); }
+
+/* The list of notes a blurting set covers */
+.covers {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0;
+  margin: 10px 0 28px;
+}
+
+.covers a {
+  display: inline-block;
+  font-size: 0.9rem;
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--muted);
+}
+
+.covers a:hover,
+.covers a:focus-visible {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* Phones: the four menu items share one row */
+@media (max-width: 860px) {
+  .sidebar {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+  }
+}
+
+/* ======================================================
+   Homepage refresh
+   ====================================================== */
+.hero-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 48px;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .hero-split { grid-template-columns: minmax(0, 1fr); padding-top: 56px; }
+}
+
+/* A button with an icon in it */
+.icon-button {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon-button svg,
+.subject-icon svg,
+.step-icon svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* The example of a marked blurting answer */
+.demo {
+  margin: 0;
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: rgba(20, 22, 28, 0.7);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.8);
+  transform: rotate(-1.2deg);          /* a slight tilt makes it feel like an object */
+}
+
+.demo-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.demo-where {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.demo-item {
+  padding: 12px 14px;
+  margin-bottom: 10px;
+  border-left: 3px solid var(--border);
+  border-radius: 0 12px 12px 0;
+  background: var(--surface);
+}
+
+.demo-item.correct { border-left-color: #4ade80; }
+.demo-item.partial { border-left-color: #facc15; }
+
+.demo-q { margin: 0 0 6px; font-size: 0.92rem; }
+.demo-a { margin: 0 0 6px; font-style: italic; font-size: 0.92rem; }
+.demo-f { margin: 0; font-size: 0.85rem; color: #c9ccd3; }
+
+.demo-score {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.demo-score .rating-chip { min-width: 0; }
+
+/* Subject card top row: name + round icon */
+.subject-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.subject-icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.subject-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.subject-card {
+  min-height: 0;
+}
+
+/* How it works: four cards with icons */
+.steps-grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 14px;
+  counter-reset: step;
+}
+
+.steps-grid li {
+  counter-increment: step;
+  position: relative;
+  padding: 22px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+}
+
+.steps-grid li::after {              /* the step number, top-right */
+  content: counter(step);
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  font-family: "Unbounded", sans-serif;
+  font-size: 1.6rem;
+  color: var(--border);
+}
+
+.steps-grid .step-bio  { --accent: var(--biology); }
+.steps-grid .step-chem { --accent: var(--chemistry); }
+.steps-grid .step-phys { --accent: var(--physics); }
+.steps-grid .step-soon { --accent: var(--muted); }
+
+.step-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  margin-bottom: 14px;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.steps-grid b {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.steps-grid p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.soon-pill {
+  font-size: 0.65rem;
+  font-weight: 400;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 1px 7px;
+  color: var(--muted);
+}
+
+/* Fix: the page background lives on <html>, so <body> must be see-through,
+   otherwise it covers the glows (which sit behind everything). */
+html { background: var(--background); }
+body { background: transparent; }
+
+/* Leave room for the sticky nav when jumping to the blurting results */
+#blurt { scroll-margin-top: 90px; }
