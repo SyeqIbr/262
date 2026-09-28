@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<!--
+  B1 QUIZ: Cell structure. The questions are in the <script> at the bottom.
+  This page is in the "biology" folder, so links to the main folder start with "../".
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Cell structure Quiz · GCSE Biology</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Unbounded:wght@600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+</head>
+
+<body class="biology">
+  <div class="glow one"></div>
+  <div class="glow two"></div>
+  <div class="glow three"></div>
+
+  <nav class="nav">
+    <a class="brand" href="../index.html">GCSE Science</a>
+    <a class="nav-link biology" href="../biology.html" aria-current="page">Biology</a>
+    <a class="nav-link chemistry" href="../chemistry.html">Chemistry</a>
+    <a class="nav-link physics" href="../physics.html">Physics</a>
+  </nav>
+
+  <main class="note-page">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="../biology.html">Biology</a> <span>›</span>
+      <a href="../biology-quizzes.html">Topic quizzes</a> <span>›</span>
+      <span>B1 · Cell structure</span>
+    </nav>
+    <p class="eyebrow">B1 Cell biology · Quiz</p>
+    <h1 class="note-title"><span class="accent-text">Cell structure</span></h1>
+    <p class="intro">7 questions. Your best score is saved on this device.
+      Need a refresher? <a class="accent-text" href="b1-eukaryotes-prokaryotes.html">Read the notes first</a>.</p>
+
+    <!-- quiz.js fills this empty box with the questions below -->
+    <div id="quiz" class="notes" style="margin-top: 32px"></div>
+  </main>
+
+  <footer>
+    Made while learning to code with Claude
+  </footer>
+  <script>
+    // Used to save this quiz's best score (see progress.js)
+    const QUIZ_ID = "b1-cell-structure";
+
+    // "answer" counts from 0: 0 = first option, 1 = second option...
+    const QUESTIONS = [
+      {
+        "question": "Which structure is found in plant cells but NOT in animal cells?",
+        "options": [
+          "Mitochondria",
+          "Chloroplasts",
+          "Ribosomes",
+          "Cell membrane"
+        ],
+        "answer": 1,
+        "explain": "Chloroplasts absorb light for photosynthesis, which animal cells don't do."
+      },
+      {
+        "question": "Where is the genetic material in a bacterial cell?",
+        "options": [
+          "In the nucleus",
+          "In the mitochondria",
+          "In a single DNA loop and plasmids in the cytoplasm",
+          "In the cell wall"
+        ],
+        "answer": 2,
+        "explain": "Bacteria are prokaryotic, so they have no nucleus."
+      },
+      {
+        "question": "An image of a cell is 5 mm wide. The real cell is 0.05 mm wide. What is the magnification?",
+        "options": [
+          "× 0.01",
+          "× 10",
+          "× 100",
+          "× 250"
+        ],
+        "answer": 2,
+        "explain": "Magnification = image size ÷ real size = 5 ÷ 0.05 = × 100."
+      },
+      {
+        "question": "How many micrometres (µm) are in 1 millimetre?",
+        "options": [
+          "10",
+          "100",
+          "1000",
+          "1 000 000"
+        ],
+        "answer": 2,
+        "explain": "1 mm = 1000 µm, and 1 µm = 1000 nm."
+      },
+      {
+        "question": "Why can electron microscopes show ribosomes when light microscopes can't?",
+        "options": [
+          "They have a higher resolution",
+          "They use coloured stains",
+          "They can view living cells",
+          "They are cheaper"
+        ],
+        "answer": 0,
+        "explain": "Higher resolution means they can tell apart points that are very close together."
+      },
+      {
+        "question": "How is a root hair cell adapted to absorb water?",
+        "options": [
+          "It has lots of chloroplasts",
+          "It has a large surface area",
+          "It has a tail",
+          "It has no cell wall"
+        ],
+        "answer": 1,
+        "explain": "The long 'hair' gives a large surface area for absorbing water and mineral ions."
+      },
+      {
+        "question": "(Triple) Why is the lid of a Petri dish taped but not sealed all the way round?",
+        "options": [
+          "So the agar doesn't dry out",
+          "So oxygen can get in and harmful anaerobic bacteria don't grow",
+          "So the bacteria can escape",
+          "So it is easier to open"
+        ],
+        "answer": 1,
+        "explain": "Without oxygen, harmful anaerobic bacteria could grow."
+      }
+    ];
+  </script>
+  <script src="../quiz.js"></script>
+</body>
+</html>

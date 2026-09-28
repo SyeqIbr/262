@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<!--
+  B1 QUIZ: Transport in cells. The questions are in the <script> at the bottom.
+  This page is in the "biology" folder, so links to the main folder start with "../".
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Transport in cells Quiz · GCSE Biology</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Unbounded:wght@600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+</head>
+
+<body class="biology">
+  <div class="glow one"></div>
+  <div class="glow two"></div>
+  <div class="glow three"></div>
+
+  <nav class="nav">
+    <a class="brand" href="../index.html">GCSE Science</a>
+    <a class="nav-link biology" href="../biology.html" aria-current="page">Biology</a>
+    <a class="nav-link chemistry" href="../chemistry.html">Chemistry</a>
+    <a class="nav-link physics" href="../physics.html">Physics</a>
+  </nav>
+
+  <main class="note-page">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="../biology.html">Biology</a> <span>›</span>
+      <a href="../biology-quizzes.html">Topic quizzes</a> <span>›</span>
+      <span>B1 · Transport in cells</span>
+    </nav>
+    <p class="eyebrow">B1 Cell biology · Quiz</p>
+    <h1 class="note-title"><span class="accent-text">Transport in cells</span></h1>
+    <p class="intro">6 questions. Your best score is saved on this device.
+      Need a refresher? <a class="accent-text" href="b1-diffusion.html">Read the notes first</a>.</p>
+
+    <!-- quiz.js fills this empty box with the questions below -->
+    <div id="quiz" class="notes" style="margin-top: 32px"></div>
+  </main>
+
+  <footer>
+    Made while learning to code with Claude
+  </footer>
+  <script>
+    // Used to save this quiz's best score (see progress.js)
+    const QUIZ_ID = "b1-transport";
+
+    // "answer" counts from 0: 0 = first option, 1 = second option...
+    const QUESTIONS = [
+      {
+        "question": "Which is the correct definition of osmosis?",
+        "options": [
+          "Movement of particles from high to low concentration",
+          "Movement of water from a concentrated to a dilute solution",
+          "Diffusion of water from a dilute to a concentrated solution through a partially permeable membrane",
+          "Movement of substances against a concentration gradient using energy"
+        ],
+        "answer": 2,
+        "explain": "Osmosis is specifically about water crossing a partially permeable membrane."
+      },
+      {
+        "question": "Which change would make diffusion faster?",
+        "options": [
+          "A lower temperature",
+          "A smaller surface area",
+          "A higher temperature",
+          "A smaller concentration difference"
+        ],
+        "answer": 2,
+        "explain": "Particles move faster at higher temperatures."
+      },
+      {
+        "question": "What is the surface area to volume ratio of a 1 cm cube?",
+        "options": [
+          "1 : 1",
+          "3 : 1",
+          "6 : 1",
+          "1 : 6"
+        ],
+        "answer": 2,
+        "explain": "Surface area = 6 × 1 cm² = 6 cm². Volume = 1 cm³. So the ratio is 6 : 1."
+      },
+      {
+        "question": "A potato cylinder is put in a very concentrated salt solution. What happens to its mass?",
+        "options": [
+          "It increases",
+          "It decreases",
+          "It stays the same",
+          "It doubles"
+        ],
+        "answer": 1,
+        "explain": "Water moves out of the potato cells by osmosis, into the more concentrated solution."
+      },
+      {
+        "question": "Why does active transport need energy?",
+        "options": [
+          "It moves substances against a concentration gradient",
+          "It only happens in plant cells",
+          "It moves water through a membrane",
+          "It happens at high temperatures"
+        ],
+        "answer": 0,
+        "explain": "Moving from low to high concentration needs energy from respiration."
+      },
+      {
+        "question": "Which is an example of active transport?",
+        "options": [
+          "Oxygen entering the blood in the lungs",
+          "Root hair cells absorbing mineral ions",
+          "Water entering a potato cell",
+          "Carbon dioxide leaving a leaf"
+        ],
+        "answer": 1,
+        "explain": "Soil water is very dilute, so mineral ions must be moved in against the gradient."
+      }
+    ];
+  </script>
+  <script src="../quiz.js"></script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<!--
+  B1 QUIZ: Cell division. The questions are in the <script> at the bottom.
+  This page is in the "biology" folder, so links to the main folder start with "../".
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Cell division Quiz · GCSE Biology</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Unbounded:wght@600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+</head>
+
+<body class="biology">
+  <div class="glow one"></div>
+  <div class="glow two"></div>
+  <div class="glow three"></div>
+
+  <nav class="nav">
+    <a class="brand" href="../index.html">GCSE Science</a>
+    <a class="nav-link biology" href="../biology.html" aria-current="page">Biology</a>
+    <a class="nav-link chemistry" href="../chemistry.html">Chemistry</a>
+    <a class="nav-link physics" href="../physics.html">Physics</a>
+  </nav>
+
+  <main class="note-page">
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href="../biology.html">Biology</a> <span>›</span>
+      <a href="../biology-quizzes.html">Topic quizzes</a> <span>›</span>
+      <span>B1 · Cell division</span>
+    </nav>
+    <p class="eyebrow">B1 Cell biology · Quiz</p>
+    <h1 class="note-title"><span class="accent-text">Cell division</span></h1>
+    <p class="intro">5 questions. Your best score is saved on this device.
+      Need a refresher? <a class="accent-text" href="b1-mitosis.html">Read the notes first</a>.</p>
+
+    <!-- quiz.js fills this empty box with the questions below -->
+    <div id="quiz" class="notes" style="margin-top: 32px"></div>
+  </main>
+
+  <footer>
+    Made while learning to code with Claude
+  </footer>
+  <script>
+    // Used to save this quiz's best score (see progress.js)
+    const QUIZ_ID = "b1-cell-division";
+
+    // "answer" counts from 0: 0 = first option, 1 = second option...
+    const QUESTIONS = [
+      {
+        "question": "What happens during mitosis?",
+        "options": [
+          "One set of chromosomes is pulled to each end of the cell",
+          "The cell makes four different cells",
+          "The cell wall is broken down",
+          "Chloroplasts divide to make energy"
+        ],
+        "answer": 0,
+        "explain": "Mitosis produces two genetically identical cells."
+      },
+      {
+        "question": "What happens to the DNA before mitosis?",
+        "options": [
+          "It is destroyed",
+          "It is copied",
+          "It leaves the nucleus",
+          "It is halved"
+        ],
+        "answer": 1,
+        "explain": "DNA is copied so each new cell gets a full set of chromosomes."
+      },
+      {
+        "question": "In body cells, chromosomes are normally found…",
+        "options": [
+          "on their own",
+          "in pairs",
+          "in groups of four",
+          "in the cytoplasm"
+        ],
+        "answer": 1,
+        "explain": "Body cells contain chromosomes in pairs."
+      },
+      {
+        "question": "Where are stem cells found in plants?",
+        "options": [
+          "Xylem",
+          "Meristems",
+          "Root hair cells",
+          "Phloem"
+        ],
+        "answer": 1,
+        "explain": "Meristems at the tips of roots and shoots can become any type of plant cell."
+      },
+      {
+        "question": "Why are stem cells from therapeutic cloning not rejected by the patient?",
+        "options": [
+          "They come from bone marrow",
+          "They have the same genes as the patient",
+          "They are very small",
+          "They have been sterilised"
+        ],
+        "answer": 1,
+        "explain": "The embryo is made with the patient's own genes, so the immune system doesn't attack the cells."
+      }
+    ];
+  </script>
+  <script src="../quiz.js"></script>
+</body>
+</html>

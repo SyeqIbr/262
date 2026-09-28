@@ -662,3 +662,564 @@ td.no  { color: var(--muted); }
   .swipe-hint { display: block; }
   th, td { padding: 8px 10px; font-size: 0.9rem; }
 }
+
+/* ======================================================
+   LESSON 5: A subject "hub" with a sidebar menu
+   ====================================================== */
+
+/* Two columns: a 230px menu on the left, content on the right. */
+.app {
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+  gap: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px 64px;
+}
+
+.sidebar {
+  position: sticky;                                   /* stays put while you scroll */
+  top: calc(env(safe-area-inset-top, 0px) + 84px);    /* just below the nav bar */
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.side-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  margin: 18px 12px 6px;
+}
+
+.side-label:first-child { margin-top: 0; }
+
+.side-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  color: var(--text);
+  transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+
+.side-link svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+a.side-link:hover,
+a.side-link:focus-visible {
+  background: var(--surface);
+  color: var(--accent);
+}
+
+.side-link[aria-current="page"] {
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  color: var(--accent);
+}
+
+/* Menu items that don't exist yet */
+.side-link.soon {
+  color: var(--muted);
+}
+
+.side-link.soon em {
+  margin-left: auto;
+  font-style: normal;
+  font-size: 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 1px 8px;
+}
+
+/* On phones and small tablets the menu becomes a row you can swipe. */
+@media (max-width: 860px) {
+  .app {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+    padding-top: 20px;
+  }
+  .sidebar {
+    position: static;
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: 6px;
+  }
+  .side-label { display: none; }
+  .side-link { border: 1px solid var(--border); }
+}
+
+/* Page headings inside the hub */
+.hub-title {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  margin-bottom: 8px;
+}
+
+.hub-intro {
+  color: var(--muted);
+  margin: 0 0 32px;
+  max-width: 60ch;
+}
+
+.section-title {
+  font-family: "Unbounded", sans-serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin: 40px 0 6px;
+}
+
+.section-intro {
+  color: var(--muted);
+  margin: 0 0 18px;
+}
+
+/* ----- Overview: spec + progress strip ----- */
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.stat {
+  padding: 18px 20px;
+}
+
+.stat .label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.stat .value {
+  display: block;
+  font-family: "Unbounded", sans-serif;
+  font-size: 1.3rem;
+  margin-top: 4px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ----- Overview: resource cards ----- */
+.resource-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.resource {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 190px;
+}
+
+.resource-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.resource-top svg {
+  width: 26px;
+  height: 26px;
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.pills {
+  display: flex;
+  gap: 6px;
+}
+
+.pill {
+  font-size: 0.75rem;
+  padding: 3px 10px;
+  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.pill.study    { color: #c4b5fd; border-color: rgba(196, 181, 253, 0.3); }
+.pill.practice { color: #7dd3fc; border-color: rgba(125, 211, 252, 0.3); }
+
+.resource h3 {
+  margin: 4px 0 0;
+  font-size: 1.15rem;
+}
+
+.resource p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.resource .go {
+  margin-top: auto;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.resource.soon {
+  opacity: 0.55;
+}
+
+/* A card that is a link but shouldn't lift on hover */
+.resource.soon:hover {
+  transform: none;
+  border-color: var(--border);
+  box-shadow: none;
+}
+
+.paper-list {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 6px;
+}
+
+.paper-list li {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* ----- Progress rings ----- 
+   A conic-gradient paints a "pie". The mask cuts out the middle,
+   leaving a ring. --p is the percentage filled (set by progress.js). */
+.ring {
+  --p: 0;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: conic-gradient(var(--accent) calc(var(--p) * 1%), rgba(255, 255, 255, 0.12) 0);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3.5px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3.5px));
+}
+
+.ring.small {
+  width: 22px;
+  height: 22px;
+}
+
+/* ----- Accordions (open/close lists) -----
+   <details> and <summary> are built into HTML: click the summary to
+   show or hide the rest. No JavaScript needed! */
+.accordion {
+  display: grid;
+  gap: 14px;
+}
+
+details.topic {
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+details.topic > summary {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+  cursor: pointer;
+  list-style: none;             /* hide the default triangle */
+}
+
+details.topic > summary::-webkit-details-marker { display: none; }
+
+details.topic > summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+  border-radius: 18px;
+}
+
+.topic-head {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.topic-head b {
+  font-size: 1.05rem;
+}
+
+.topic-head small {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* The round arrow button on the right, which flips when open */
+.chev {
+  margin-left: auto;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  display: grid;
+  place-items: center;
+  transition: transform 0.25s, background 0.25s;
+}
+
+.chev::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid var(--text);
+  border-bottom: 2px solid var(--text);
+  transform: translateY(-2px) rotate(45deg);   /* a "v" shape made from two borders */
+}
+
+details[open] > summary .chev {
+  transform: rotate(180deg);
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+.topic-body {
+  border-top: 1px solid var(--border);
+}
+
+/* Subtopics inside a topic */
+details.subtopic > summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  cursor: pointer;
+  list-style: none;
+  font-weight: 600;
+  border-bottom: 1px solid var(--border);
+}
+
+details.subtopic > summary::-webkit-details-marker { display: none; }
+
+details.subtopic > summary .chev {
+  width: 28px;
+  height: 28px;
+}
+
+details.subtopic > summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+/* The timeline of notes: dots joined by a line */
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.steps li {
+  position: relative;
+}
+
+.steps a,
+.steps .soon-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 20px 10px 24px;
+}
+
+.steps a:hover,
+.steps a:focus-visible {
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  color: var(--accent);
+  outline: none;
+}
+
+.dot {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 2px solid var(--muted);
+  background: var(--background);
+  position: relative;
+  z-index: 1;
+}
+
+/* A note you've read gets a filled dot (progress.js adds "done") */
+.done .dot {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* The vertical line joining the dots */
+.steps li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 31px;
+  top: 32px;
+  bottom: -12px;
+  width: 2px;
+  background: var(--border);
+}
+
+.soon-item {
+  color: var(--muted);
+}
+
+.row-meta {
+  margin-left: auto;
+  font-size: 0.8rem;
+  color: var(--muted);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Quiz rows on the quizzes page */
+.quiz-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+a.quiz-row:hover,
+a.quiz-row:focus-visible {
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  outline: none;
+}
+
+.quiz-row:last-child {
+  border-bottom: none;
+}
+
+.coming-soon-note {
+  padding: 14px 20px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* ======================================================
+   Single note and quiz pages
+   ====================================================== */
+.note-page {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 40px 20px 64px;
+}
+
+.crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--muted);
+  margin-bottom: 28px;
+}
+
+.crumbs a:hover,
+.crumbs a:focus-visible {
+  color: var(--accent);
+}
+
+.note-title {
+  font-size: clamp(1.9rem, 5vw, 3rem);
+  text-wrap: balance;
+}
+
+.note-page .notes section:first-child {
+  border-top: none;
+  padding-top: 8px;
+}
+
+/* "Test yourself" card at the end of a note */
+.test-yourself {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.test-yourself .ring {
+  width: 40px;
+  height: 40px;
+}
+
+.test-yourself b {
+  display: block;
+}
+
+.test-yourself small {
+  color: var(--muted);
+}
+
+.test-yourself .arrow {
+  margin-left: auto;
+  color: var(--accent);
+  font-size: 1.3rem;
+}
+
+/* Previous / next buttons */
+.pager {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.pager a {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 16px 20px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  transition: border-color 0.2s;
+}
+
+.pager a:hover,
+.pager a:focus-visible {
+  border-color: var(--accent);
+  outline: none;
+}
+
+.pager small {
+  color: var(--muted);
+}
+
+.pager .next {
+  grid-column: 2;
+  text-align: right;
+}
+
+@media (max-width: 520px) {
+  .pager { grid-template-columns: 1fr; }
+  .pager .next { grid-column: 1; }
+}
+
+/* Fixes: inside the hub, "main" shouldn't be centred by margin: auto
+   (in a grid that shrinks it). Let it fill its column instead. */
+.app > main {
+  margin: 0;
+  padding: 0;
+  max-width: 900px;
+  min-width: 0;
+}
+
+/* When a count sits before the arrow, keep them together on the right */
+summary .row-meta + .chev {
+  margin-left: 14px;
+}

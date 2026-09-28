@@ -17,6 +17,11 @@
     }
 */
 
+/*
+  NEW in Lesson 5: if the page also sets QUIZ_ID (e.g. "b1-cell-structure"),
+  the student's best score is saved in localStorage (see progress.js).
+*/
+
 // Find the empty box on the page where the quiz should go.
 const quizBox = document.getElementById("quiz");
 
@@ -102,6 +107,21 @@ function updateScore(scoreLine) {
     scoreLine.textContent = "Score: " + score + " / " + answered + " answered (" + total + " questions)";
   } else {
     scoreLine.textContent = "Finished! You scored " + score + " out of " + total + ".";
+    saveBest();
+  }
+}
+
+// Keep the highest score this student has ever got on this quiz.
+function saveBest() {
+  if (typeof QUIZ_ID === "undefined") return;   // this page doesn't save scores
+  try {
+    const key = "best:" + QUIZ_ID;
+    const previous = localStorage.getItem(key);
+    if (previous === null || score > Number(previous)) {
+      localStorage.setItem(key, score);
+    }
+  } catch (error) {
+    // Storage is blocked (e.g. private browsing): just don't save.
   }
 }
 
