@@ -35,6 +35,16 @@ function isRead(noteId) {
   return loadValue("read:" + noteId) === "1";
 }
 
+// 0. Always start a new page at the top. Some browsers (and preview
+//    windows) try to keep your old scroll position, which is confusing
+//    after clicking "Next". A link to a #section still jumps to it.
+if ("scrollRestoration" in history) {
+  history.scrollRestoration = "manual";
+}
+if (!location.hash) {
+  window.scrollTo(0, 0);
+}
+
 // 1. On a note page, <body data-note="..."> marks that note as read.
 if (document.body.dataset.note) {
   saveValue("read:" + document.body.dataset.note, "1");
