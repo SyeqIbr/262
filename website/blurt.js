@@ -303,9 +303,10 @@ async function mark() {
     state.score = scored;
     state.percent = percent;
     saveState();
-    saveBest(percent);
+    if (!state.retryOf) saveBest(percent);   // a retry round doesn't count as a full score
     render();
     box.scrollIntoView({ block: "start" });
+    if (percent >= 80) celebrate();
   } catch (error) {
     state.stage = "answering";
     render();
@@ -406,9 +407,11 @@ function setProgress(text, fraction) {
 function renderAnswering() {
   const total = allQuestions().length;
   const intro = el("div", "blurt-card slim");
-  intro.append(el("p", "blurt-p",
-    total + " questions. Answer from memory: no peeking! " +
-    "Your answers save as you type, so you can come back later."));
+  intro.append(el("p", "blurt-p", state.retryOf
+    ? "Retry round: just the " + total + " question" + (total === 1 ? "" : "s") +
+      " you didn't get fully right last time. You've got this!"
+    : total + " questions. Answer from memory: no peeking! " +
+      "Your answers save as you type, so you can come back later."));
   box.append(intro);
 
   state.sections.forEach(function (section) {
@@ -500,6 +503,11 @@ function renderResults() {
                el("span", "rag-dot partial"), count("partial") + " nearly ",
                el("span", "rag-dot incorrect"), (count("incorrect") + count("blank")) + " not yet");
   text.append(tally);
+  if (percent >= 80) {
+    text.append(el("p", "celebrate-text", percent === 100
+      ? "Perfect score! Every single one correct. 🎉"
+      : "Brilliant work! That section is really sinking in. 🎉"));
+  }
   if (state.summary) text.append(el("p", "blurt-p", state.summary));
   card.append(score, text);
   box.append(card);
@@ -555,14 +563,91 @@ function renderResults() {
   });
 
   const actions = el("div", "blurt-actions");
-  actions.append(button("Try the same questions again", "button", function () {
-    state = { stage: "answering", count: state.count, sections: state.sections, answers: {} };
+
+  // Retry only the ambers and reds
+  const toRedo = questions.filter(function (q) { return state.results[q.id].verdict !== "correct"; });
+  if (toRedo.length > 0) {
+    actions.append(button("Retry my " + toRedo.length + " ambers and reds", "button", function () {
+      const full = state.retryOf || { sections: state.sections, count: state.count };
+      const sections = state.sections
+        .map(function (s) {
+          return { title: s.title, questions: s.questions.filter(function (q) {
+            return state.results[q.id].verdict !== "correct";
+          }) };
+        })
+        .filter(function (s) { return s.questions.length > 0; });
+      state = { stage: "answering", count: state.count, sections: sections, answers: {}, retryOf: full };
+      saveState();
+      render();
+      box.scrollIntoView({ block: "start" });
+    }));
+  }
+
+  // After a retry round, go back to the whole set
+  if (state.retryOf) {
+    actions.append(button("Back to the full set", "button ghost", function () {
+      state = { stage: "answering", count: state.retryOf.count, sections: state.retryOf.sections, answers: {} };
+      saveState();
+      render();
+      box.scrollIntoView({ block: "start" });
+    }));
+  }
+
+  actions.append(button("Try the same questions again", "button ghost", function () {
+    state = { stage: "answering", count: state.count, sections: state.sections, answers: {}, retryOf: state.retryOf };
     saveState();
     render();
     box.scrollIntoView({ block: "start" });
   }));
   box.append(actions);
   box.append(newQuestionsControl());
+}
+
+// ---------- Confetti for a great score ----------
+// A <canvas> is a blank rectangle you can draw on with JavaScript.
+// We draw ~150 little coloured pieces, move them a tiny bit each frame
+// (about 60 times a second), then remove the canvas after 3 seconds.
+function celebrate() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const canvas = document.createElement("canvas");
+  canvas.className = "confetti";
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  document.body.append(canvas);
+  const ctx = canvas.getContext("2d");
+  const colours = ["#4ade80", "#fb923c", "#60a5fa", "#facc15", "#c4b5fd"];
+  const pieces = [];
+  for (let i = 0; i < 150; i++) {
+    pieces.push({
+      x: canvas.width / 2 + (Math.random() - 0.5) * 200,
+      y: canvas.height * 0.35,
+      dx: (Math.random() - 0.5) * 16,      // sideways speed
+      dy: -Math.random() * 14 - 4,         // upwards speed
+      size: Math.random() * 6 + 4,
+      spin: Math.random() * Math.PI,
+      colour: colours[i % colours.length],
+    });
+  }
+  const start = performance.now();
+  function frame(now) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pieces.forEach(function (p) {
+      p.dy = p.dy + 0.35;                  // gravity pulls them down
+      p.dx = p.dx * 0.99;                  // air slows them
+      p.x = p.x + p.dx;
+      p.y = p.y + p.dy;
+      p.spin = p.spin + 0.1;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.spin);
+      ctx.fillStyle = p.colour;
+      ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+      ctx.restore();
+    });
+    if (now - start < 3000) requestAnimationFrame(frame);
+    else canvas.remove();
+  }
+  requestAnimationFrame(frame);
 }
 
 // ---------- Start ----------

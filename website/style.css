@@ -20,6 +20,20 @@
   --border: rgba(255, 255, 255, 0.08);
   --text: #e6e8ec;
   --muted: #8b909a;       /* dimmer text for less important things */
+  --text-2: #c9ccd3;      /* body text in notes: a little softer than --text */
+  --good: #4ade80;        /* green: correct */
+  --warn: #facc15;        /* amber: nearly */
+  --bad: #f87171;         /* red: not yet */
+  --on-accent: #0b0c10;   /* text on a coloured button */
+  --glass: rgba(11, 12, 16, 0.6);         /* see-through bars (nav) */
+  --glass-strong: rgba(11, 12, 16, 0.85);
+  --dots: rgba(255, 255, 255, 0.07);      /* the halftone dot texture */
+  --track: rgba(255, 255, 255, 0.12);     /* empty part of progress rings */
+  --input-bg: rgba(255, 255, 255, 0.02);
+  --pill-study: #c4b5fd;
+  --pill-practice: #7dd3fc;
+  --pill-ai: #fbbf24;
+  --glow-strength: 0.22;
   color-scheme: dark;     /* tells the browser our site is dark (scrollbars etc.) */
 }
 
@@ -57,7 +71,7 @@ a {
   height: 520px;
   border-radius: 50%;
   filter: blur(120px);
-  opacity: 0.22;
+  opacity: var(--glow-strength);
   z-index: -1;
   animation: drift 24s ease-in-out infinite alternate;
 }
@@ -84,7 +98,7 @@ body::before {
   position: fixed;
   inset: 0;
   z-index: -1;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1.6px);
+  background-image: radial-gradient(var(--dots) 1px, transparent 1.6px);
   background-size: 6px 6px;
   mask-image: radial-gradient(ellipse at top left, black 10%, transparent 70%);
   -webkit-mask-image: radial-gradient(ellipse at top left, black 10%, transparent 70%);
@@ -105,7 +119,7 @@ body::before {
   align-items: center;
   gap: 8px;
   padding: 12px 20px;
-  background: rgba(11, 12, 16, 0.6);
+  background: var(--glass);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--border);
@@ -452,7 +466,7 @@ footer {
 
 .notes p,
 .notes li {
-  color: #c9ccd3;
+  color: var(--text-2);
 }
 
 .notes ul {
@@ -619,13 +633,13 @@ td.no  { color: var(--muted); }
 /* Right and wrong answers. These colours mean the same thing on every
    subject page, so they don't use --accent. */
 .option.correct {
-  border-color: #4ade80;
-  background: rgba(74, 222, 128, 0.12);
+  border-color: var(--good);
+  background: color-mix(in srgb, var(--good) 12%, transparent);
 }
 
 .option.wrong {
-  border-color: #f87171;
-  background: rgba(248, 113, 113, 0.12);
+  border-color: var(--bad);
+  background: color-mix(in srgb, var(--bad) 12%, transparent);
 }
 
 .explanation {
@@ -637,7 +651,7 @@ td.no  { color: var(--muted); }
 .button {
   font: inherit;
   font-weight: 600;
-  color: var(--background);
+  color: var(--on-accent);
   background: var(--accent);
   border: none;
   border-radius: 999px;
@@ -854,8 +868,8 @@ a.side-link:focus-visible {
   color: var(--muted);
 }
 
-.pill.study    { color: #c4b5fd; border-color: rgba(196, 181, 253, 0.3); }
-.pill.practice { color: #7dd3fc; border-color: rgba(125, 211, 252, 0.3); }
+.pill.study    { color: var(--pill-study); border-color: color-mix(in srgb, var(--pill-study) 35%, transparent); }
+.pill.practice { color: var(--pill-practice); border-color: color-mix(in srgb, var(--pill-practice) 35%, transparent); }
 
 .resource h3 {
   margin: 4px 0 0;
@@ -907,7 +921,7 @@ a.side-link:focus-visible {
   height: 28px;
   flex-shrink: 0;
   border-radius: 50%;
-  background: conic-gradient(var(--accent) calc(var(--p) * 1%), rgba(255, 255, 255, 0.12) 0);
+  background: conic-gradient(var(--accent) calc(var(--p) * 1%), var(--track) 0);
   -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3.5px));
   mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 3.5px));
 }
@@ -1309,7 +1323,7 @@ summary .row-meta + .chev {
 .diagram .thin  { fill: none; stroke: var(--accent); stroke-width: 1.5; }
 .diagram .nuc   { fill: color-mix(in srgb, #c4b5fd 35%, transparent); stroke: #c4b5fd; stroke-width: 1.5; }
 .diagram .mito  { fill: color-mix(in srgb, #fb923c 30%, transparent); stroke: #fb923c; stroke-width: 1.2; }
-.diagram .chlo  { fill: color-mix(in srgb, #4ade80 45%, transparent); stroke: #22c55e; stroke-width: 1.2; }
+.diagram .chlo  { fill: color-mix(in srgb, var(--good) 45%, transparent); stroke: var(--good); stroke-width: 1.2; }
 .diagram .vac   { fill: color-mix(in srgb, #60a5fa 18%, transparent); stroke: #60a5fa; stroke-width: 1.2; }
 .diagram .dna   { fill: none; stroke: #c4b5fd; stroke-width: 1.8; }
 .diagram .ribo  { fill: var(--text); }
@@ -1349,7 +1363,7 @@ summary .row-meta + .chev {
   border-radius: 50%;
   font-family: "Unbounded", sans-serif;
   font-size: 0.8rem;
-  color: var(--background);
+  color: var(--on-accent);
   background: var(--accent);
 }
 
@@ -1387,11 +1401,11 @@ summary .row-meta + .chev {
 
 /* A red-edged tip for common mistakes */
 .tip.mistake {
-  border-left-color: #f87171;
+  border-left-color: var(--bad);
 }
 
 .tip.mistake b {
-  color: #f87171;
+  color: var(--bad);
 }
 
 /* ----- Key words glossary ----- 
@@ -1419,7 +1433,7 @@ summary .row-meta + .chev {
 }
 
 .key-words dd {
-  color: #c9ccd3;
+  color: var(--text-2);
 }
 
 .key-words dt:nth-last-of-type(1),
@@ -1495,8 +1509,8 @@ summary .row-meta + .chev {
   margin-left: 10px;
   font-weight: 600;
 }
-.option.correct::after { content: "✓"; color: #4ade80; }
-.option.wrong::after   { content: "✗"; color: #f87171; }
+.option.correct::after { content: "✓"; color: var(--good); }
+.option.wrong::after   { content: "✗"; color: var(--bad); }
 
 /* Overview progress boxes sit side by side, even on phones */
 .stat-row.progress {
@@ -1709,7 +1723,7 @@ a.button {
 
 .blurt-p {
   margin: 0 0 16px;
-  color: #c9ccd3;
+  color: var(--text-2);
 }
 
 .blurt-card.slim .blurt-p {
@@ -1742,9 +1756,9 @@ a.button {
 .blurt-error {
   margin: 0 0 16px;
   padding: 12px 16px;
-  border-left: 3px solid #f87171;
+  border-left: 3px solid var(--bad);
   border-radius: 0 12px 12px 0;
-  background: rgba(248, 113, 113, 0.08);
+  background: color-mix(in srgb, var(--bad) 8%, transparent);
   color: var(--text);
 }
 
@@ -1769,7 +1783,7 @@ a.button {
 }
 
 .segment[aria-checked="true"] {
-  color: var(--background);
+  color: var(--on-accent);
   background: var(--accent);
 }
 
@@ -1842,7 +1856,7 @@ a.button {
   box-sizing: border-box;
   font: inherit;
   color: var(--text);
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--input-bg);
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 10px 14px;
@@ -1867,7 +1881,7 @@ a.button {
   padding: 12px 12px 12px 20px;
   border: 1px solid var(--border);
   border-radius: 999px;
-  background: rgba(11, 12, 16, 0.85);
+  background: var(--glass-strong);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   z-index: 5;
@@ -1951,9 +1965,9 @@ a.button {
   border: 1px solid;
 }
 
-.rating-chip.secure  { color: #4ade80; border-color: rgba(74, 222, 128, 0.4); background: rgba(74, 222, 128, 0.08); }
-.rating-chip.nearly  { color: #facc15; border-color: rgba(250, 204, 21, 0.4); background: rgba(250, 204, 21, 0.08); }
-.rating-chip.revisit { color: #f87171; border-color: rgba(248, 113, 113, 0.4); background: rgba(248, 113, 113, 0.08); }
+.rating-chip.secure  { color: var(--good); border-color: color-mix(in srgb, var(--good) 40%, transparent); background: color-mix(in srgb, var(--good) 8%, transparent); }
+.rating-chip.nearly  { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 40%, transparent); background: color-mix(in srgb, var(--warn) 8%, transparent); }
+.rating-chip.revisit { color: var(--bad); border-color: color-mix(in srgb, var(--bad) 40%, transparent); background: color-mix(in srgb, var(--bad) 8%, transparent); }
 
 /* A marked answer: coloured edge by verdict */
 .blurt-q.marked {
@@ -1963,9 +1977,9 @@ a.button {
   background: var(--surface);
 }
 
-.blurt-q.marked.correct   { border-left-color: #4ade80; }
-.blurt-q.marked.partial   { border-left-color: #facc15; }
-.blurt-q.marked.incorrect { border-left-color: #f87171; }
+.blurt-q.marked.correct   { border-left-color: var(--good); }
+.blurt-q.marked.partial   { border-left-color: var(--warn); }
+.blurt-q.marked.incorrect { border-left-color: var(--bad); }
 
 .verdict {
   display: inline-flex;
@@ -1979,9 +1993,9 @@ a.button {
   font-variant-numeric: tabular-nums;
 }
 
-.verdict.correct   { color: #4ade80; background: rgba(74, 222, 128, 0.12); }
-.verdict.partial   { color: #facc15; background: rgba(250, 204, 21, 0.12); }
-.verdict.incorrect { color: #f87171; background: rgba(248, 113, 113, 0.12); }
+.verdict.correct   { color: var(--good); background: color-mix(in srgb, var(--good) 12%, transparent); }
+.verdict.partial   { color: var(--warn); background: color-mix(in srgb, var(--warn) 12%, transparent); }
+.verdict.incorrect { color: var(--bad); background: color-mix(in srgb, var(--bad) 12%, transparent); }
 .verdict.blank     { color: var(--muted); background: var(--border); }
 
 .your-answer {
@@ -1993,7 +2007,7 @@ a.button {
 
 .feedback {
   margin: 0 0 8px;
-  color: #c9ccd3;
+  color: var(--text-2);
 }
 
 .model-answer {
@@ -2026,7 +2040,7 @@ a.button {
   place-items: center;
   border-radius: 14px;
   background: var(--accent);
-  color: var(--background);
+  color: var(--on-accent);
 }
 
 .blurt-cta .cta-icon svg {
@@ -2046,7 +2060,7 @@ a.button {
 
 .blurt-cta small {
   display: block;
-  color: #c9ccd3;
+  color: var(--text-2);
   margin-top: 2px;
 }
 
@@ -2100,7 +2114,7 @@ a.button {
 }
 
 /* Small pill marking AI features */
-.pill.ai { color: #fbbf24; border-color: rgba(251, 191, 36, 0.3); }
+.pill.ai { color: var(--pill-ai); border-color: color-mix(in srgb, var(--pill-ai) 35%, transparent); }
 
 /* The list of notes a blurting set covers */
 .covers {
@@ -2175,7 +2189,7 @@ a.button {
   padding: 20px;
   border: 1px solid var(--border);
   border-radius: 20px;
-  background: rgba(20, 22, 28, 0.7);
+  background: var(--glass);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.8);
@@ -2202,12 +2216,12 @@ a.button {
   background: var(--surface);
 }
 
-.demo-item.correct { border-left-color: #4ade80; }
-.demo-item.partial { border-left-color: #facc15; }
+.demo-item.correct { border-left-color: var(--good); }
+.demo-item.partial { border-left-color: var(--warn); }
 
 .demo-q { margin: 0 0 6px; font-size: 0.92rem; }
 .demo-a { margin: 0 0 6px; font-style: italic; font-size: 0.92rem; }
-.demo-f { margin: 0; font-size: 0.85rem; color: #c9ccd3; }
+.demo-f { margin: 0; font-size: 0.85rem; color: var(--text-2); }
 
 .demo-score {
   display: flex;
@@ -2340,9 +2354,9 @@ body { background: transparent; }
   margin-right: -4px;
 }
 
-.rag-dot.correct, .rag-square.correct     { background: #4ade80; }
-.rag-dot.partial, .rag-square.partial     { background: #facc15; }
-.rag-dot.incorrect, .rag-square.incorrect { background: #f87171; }
+.rag-dot.correct, .rag-square.correct     { background: var(--good); }
+.rag-dot.partial, .rag-square.partial     { background: var(--warn); }
+.rag-dot.incorrect, .rag-square.incorrect { background: var(--bad); }
 .rag-square.blank                         { background: var(--border); color: var(--muted); }
 
 .rag-review .blurt-h {
@@ -2382,7 +2396,7 @@ body { background: transparent; }
   border-radius: 8px;
   font-size: 0.75rem;
   font-weight: 600;
-  color: #0b0c10;
+  color: var(--on-accent);
   transition: transform 0.15s;
 }
 
@@ -2398,4 +2412,337 @@ body { background: transparent; }
 
 @media (max-width: 520px) {
   .rag-row { flex-direction: column; gap: 8px; }
+}
+
+/* ======================================================
+   LESSON 9: Light mode
+   ------------------------------------------------------
+   Because (almost) every colour is a variable, light mode is just
+   the same variables with light values. The sun/moon button adds
+   data-mode="light" to <html>, and these values take over.
+   ====================================================== */
+html[data-mode="light"] {
+  --biology: #15803d;
+  --chemistry: #c2410c;
+  --physics: #1d4ed8;
+  --background: #f5f6f8;
+  --surface: rgba(255, 255, 255, 0.75);
+  --border: rgba(15, 23, 42, 0.12);
+  --text: #111827;
+  --text-2: #374151;
+  --muted: #5b6472;
+  --good: #16a34a;
+  --warn: #ca8a04;
+  --bad: #dc2626;
+  --on-accent: #ffffff;
+  --glass: rgba(245, 246, 248, 0.75);
+  --glass-strong: rgba(245, 246, 248, 0.92);
+  --dots: rgba(15, 23, 42, 0.07);
+  --track: rgba(15, 23, 42, 0.1);
+  --input-bg: #ffffff;
+  --pill-study: #6d28d9;
+  --pill-practice: #0369a1;
+  --pill-ai: #b45309;
+  --glow-strength: 0.14;
+  color-scheme: light;
+}
+
+/* A few extras that need a nudge in light mode */
+html[data-mode="light"] .card,
+html[data-mode="light"] .question,
+html[data-mode="light"] .blurt-card,
+html[data-mode="light"] details.topic {
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+}
+html[data-mode="light"] .demo { box-shadow: 0 30px 60px -30px rgba(15, 23, 42, 0.35); }
+html[data-mode="light"] .diagram .nuc { stroke: #7c3aed; }
+html[data-mode="light"] .diagram .dna { stroke: #7c3aed; }
+html[data-mode="light"] .diagram .wall { stroke: #8a8f73; }
+html[data-mode="light"] .rag-square.partial { color: #111827; }
+
+/* ----- The sun / moon button in the nav ----- */
+.mode-toggle {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  margin-left: 4px;
+  color: var(--muted);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.mode-toggle:hover,
+.mode-toggle:focus-visible {
+  color: var(--text);
+  border-color: var(--text);
+  outline: none;
+}
+
+.mode-toggle svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Dark mode shows a sun (click for light); light mode shows a moon. */
+.mode-toggle .moon { display: none; }
+html[data-mode="light"] .mode-toggle .sun { display: none; }
+html[data-mode="light"] .mode-toggle .moon { display: block; }
+
+@media (max-width: 520px) {
+  .nav { position: sticky; }
+  .mode-toggle {
+    position: absolute;
+    top: 6px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* ----- Reading bar (note pages) ----- */
+.nav {
+  overflow: visible;      /* the reading bar hangs just below the nav */
+}
+
+.readbar {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 20px;
+  background: var(--glass-strong);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+  font-size: 0.9rem;
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.readbar.show {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+.readbar-title {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;        /* "…" if the section name is too long */
+  color: var(--text);
+  font-weight: 600;
+}
+
+.readbar-button {
+  font: inherit;
+  color: var(--accent);
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 4px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.readbar-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.readbar-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 16px;
+  width: min(320px, calc(100vw - 32px));
+  max-height: 60vh;
+  overflow-y: auto;
+  margin: 0;
+  padding: 8px;
+  list-style: none;
+  background: var(--glass-strong);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.5);
+}
+
+.readbar-menu a {
+  display: block;
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: var(--muted);
+}
+
+.readbar-menu a:hover,
+.readbar-menu a:focus-visible,
+.readbar-menu a.active {
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  outline: none;
+}
+
+/* The line that fills up as you read */
+.readbar-fill {
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 2px;
+  width: 0;
+  background: var(--accent);
+}
+
+/* Jumping to a section leaves room for the nav + reading bar */
+.notes section {
+  scroll-margin-top: 130px;
+}
+
+/* ----- "Continue where you left off" card ----- */
+.continue-card {
+  max-width: 1100px;
+  margin: 0 auto 8px;
+  padding: 0 20px;
+}
+
+.app .continue-card {
+  padding: 0;
+  margin: 0 0 24px;
+}
+
+.continue-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 22px;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--accent) 7%, var(--surface));
+}
+
+.continue-label {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  margin-bottom: 2px;
+}
+
+.continue-inner b {
+  display: block;
+  font-size: 1.1rem;
+}
+
+.continue-inner small {
+  color: var(--muted);
+}
+
+.continue-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.continue-actions .button {
+  padding: 10px 20px;
+}
+
+/* ----- Celebration ----- */
+.confetti {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;           /* clicks go straight through */
+  z-index: 100;
+}
+
+.celebrate-text {
+  margin: 0 0 10px;
+  font-weight: 600;
+  color: var(--good);
+}
+
+/* ----- Phone tab bar ----- */
+.tabbar {
+  display: none;
+}
+
+@media (max-width: 860px) {
+  .tabbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 6px 8px calc(env(safe-area-inset-bottom, 0px) + 6px);
+    background: var(--glass-strong);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-top: 1px solid var(--border);
+  }
+
+  .tabbar a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 6px 4px;
+    border-radius: 12px;
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+
+  .tabbar a[aria-current="page"] {
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+  }
+
+  .tabbar svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  /* The tab bar replaces the side menu on phones */
+  .sidebar { display: none; }
+
+  /* Leave room at the bottom so the tab bar never covers anything */
+  body:has(.tabbar) { padding-bottom: 76px; }
+  .blurt-bar { bottom: calc(env(safe-area-inset-bottom, 0px) + 84px); }
+}
+
+.home-continue {
+  margin-top: 28px;
+}
+.home-continue + .hero {
+  padding-top: 48px;
+}
+
+/* Jumping to a heading leaves room for the nav + reading bar */
+.notes h2 {
+  scroll-margin-top: 130px;
 }

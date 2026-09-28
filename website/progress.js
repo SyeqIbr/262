@@ -76,6 +76,72 @@ if (!location.hash) {
   [50, 200, 500].forEach(function (ms) { setTimeout(topUnlessScrolled, ms); });
 }
 
+// Light / dark mode: the sun/moon button in the nav.
+// The choice is saved, and a tiny script in each page's <head> applies it
+// straight away next time, before the page is drawn.
+document.querySelectorAll(".mode-toggle").forEach(function (button) {
+  button.addEventListener("click", function () {
+    const root = document.documentElement;
+    if (root.dataset.mode === "light") {
+      delete root.dataset.mode;
+      saveValue("mode", "dark");
+    } else {
+      root.dataset.mode = "light";
+      saveValue("mode", "light");
+    }
+  });
+});
+
+// "Continue where you left off": note and blurting pages remember
+// themselves (their <body> carries data-path, data-title, data-where),
+// and the homepage / overview show a card to jump back.
+if (document.body.dataset.path) {
+  saveValue("last", JSON.stringify({
+    path: document.body.dataset.path,
+    title: document.body.dataset.title,
+    where: document.body.dataset.where,
+    nextPath: document.body.dataset.nextPath || "",
+    nextTitle: document.body.dataset.nextTitle || "",
+  }));
+}
+
+const continueBox = document.getElementById("continue");
+if (continueBox) {
+  let last = null;
+  try { last = JSON.parse(loadValue("last")); } catch (error) {}
+  if (last && last.path) {
+    const card = document.createElement("div");
+    card.className = "continue-inner";
+    const text = document.createElement("div");
+    const label = document.createElement("span");
+    label.className = "continue-label";
+    label.textContent = "Pick up where you left off";
+    const title = document.createElement("b");
+    title.textContent = last.title;
+    const where = document.createElement("small");
+    where.textContent = last.where;
+    text.append(label, title, where);
+
+    const actions = document.createElement("div");
+    actions.className = "continue-actions";
+    const go = document.createElement("a");
+    go.className = "button";
+    go.href = last.path;
+    go.textContent = "Continue";
+    actions.append(go);
+    if (last.nextPath) {
+      const next = document.createElement("a");
+      next.className = "button ghost";
+      next.href = last.nextPath;
+      next.textContent = "Next: " + last.nextTitle;
+      actions.append(next);
+    }
+    card.append(text, actions);
+    continueBox.append(card);
+    continueBox.hidden = false;
+  }
+}
+
 // 1. On a note page, <body data-note="..."> marks that note as read.
 if (document.body.dataset.note) {
   saveValue("read:" + document.body.dataset.note, "1");
