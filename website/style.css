@@ -2320,3 +2320,82 @@ body { background: transparent; }
 
 /* Leave room for the sticky nav when jumping to the blurting results */
 #blurt { scroll-margin-top: 90px; }
+
+/* ----- Red / amber / green review ----- */
+.tally {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.rag-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: -4px;
+}
+
+.rag-dot.correct, .rag-square.correct     { background: #4ade80; }
+.rag-dot.partial, .rag-square.partial     { background: #facc15; }
+.rag-dot.incorrect, .rag-square.incorrect { background: #f87171; }
+.rag-square.blank                         { background: var(--border); color: var(--muted); }
+
+.rag-review .blurt-h {
+  margin-bottom: 16px;
+}
+
+.rag-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 0;
+  border-top: 1px solid var(--border);
+}
+
+.rag-middle {
+  flex: 1;
+  min-width: 0;
+}
+
+.rag-middle .blurt-small {
+  margin: 2px 0 0;
+}
+
+.rag-squares {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+/* Each square is a link that jumps to that question below */
+.rag-square {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #0b0c10;
+  transition: transform 0.15s;
+}
+
+.rag-square:hover,
+.rag-square:focus-visible {
+  transform: scale(1.12);
+  outline: none;
+}
+
+.blurt-q.marked {
+  scroll-margin-top: 90px;
+}
+
+@media (max-width: 520px) {
+  .rag-row { flex-direction: column; gap: 8px; }
+}

@@ -9,8 +9,9 @@
        (so they stay on the AQA spec). Claude also writes a mark scheme.
     3. The student types their answers. Answers save automatically.
     4. We ask Claude to MARK the answers against the mark scheme.
-    5. The student sees ✅ / 🟡 / ❌ for each answer, feedback, the model
-       answer, and a rating for each section. They can retry or regenerate.
+    5. Each answer is green (correct), amber (nearly) or red (not yet),
+       with feedback and the model answer. The score is simply out of the
+       number of questions, e.g. 19 / 25. They can retry or regenerate.
 
   Asking Claude uses claude.use("sample"). This only works inside the
   Claude preview, and it uses the viewer's own Claude account, so the
@@ -82,8 +83,32 @@ function allQuestions() {
   return state.sections.flatMap(function (s) { return s.questions; });
 }
 
-function totalMarks() {
-  return allQuestions().reduce(function (sum, q) { return sum + q.marks; }, 0);
+// Keep exactly `count` questions. If Claude wrote too many, take one away
+// at a time from whichever section has the most, so every section keeps some.
+function trimTo(sections, count) {
+  let total = sections.reduce(function (n, s) { return n + s.questions.length; }, 0);
+  while (total > count) {
+    const biggest = sections.reduce(function (a, b) {
+      return b.questions.length > a.questions.length ? b : a;
+    });
+    biggest.questions.pop();
+    total = total - 1;
+  }
+  return sections;
+}
+
+// Red / amber / green for a group of marked questions
+function ragFor(questions) {
+  let points = 0;
+  questions.forEach(function (q) {
+    const v = state.results[q.id].verdict;
+    if (v === "correct") points = points + 1;
+    if (v === "partial") points = points + 0.5;
+  });
+  const share = points / questions.length;
+  if (share >= 0.8) return "secure";
+  if (share >= 0.5) return "nearly";
+  return "revisit";
 }
 
 // What to tell the student when asking Claude goes wrong.
@@ -114,18 +139,19 @@ function generatePrompt(count) {
     "Topic: " + CONFIG.topic + ". Subtopic: " + CONFIG.subtopic + ".",
     "Use ONLY the revision notes below as your source. Do not test anything that isn't in them.",
     "",
-    "Write exactly " + count + " questions that, together, cover every important point in the notes,",
+    "Write EXACTLY " + count + " questions in total (count them: no more, no fewer) that, together, cover every important point in the notes,",
     "including the small details that separate a grade 9 answer from a grade 7.",
     "- Mix the command words: define, name, state, give two..., describe, explain, compare, calculate, put in order.",
     "- Include at least two calculations with real numbers if the notes contain a formula (e.g. unit conversions).",
-    "- Each question must be answerable in one to three sentences, without seeing the notes.",
+    "- Each question must be answerable in one or two sentences, without seeing the notes.",
+    "- Each question tests one thing, so it can be marked simply right, nearly right or wrong.",
     "- Never give away the answer in the question.",
     "- If something is Triple only, start the question with \"(Triple only)\".",
     "- Group the questions into sections that follow the headings in the notes, in order.",
-    "- marks is 1, 2 or 3. answer is a short mark scheme: the marking points an examiner would accept.",
+    "- answer is a short model answer: what an examiner would accept.",
     "",
     "Reply with only JSON in this shape:",
-    '{"sections":[{"title":"Microscopy","questions":[{"q":"What is magnification?","marks":1,"answer":"How many times bigger the image is than the real object."}]}]}',
+    '{"sections":[{"title":"Microscopy","questions":[{"q":"What is magnification?","answer":"How many times bigger the image is than the real object."}]}]}',
     "",
     "REVISION NOTES:",
     CONFIG.notes,
@@ -135,8 +161,8 @@ function generatePrompt(count) {
 function markPrompt(answered) {
   const items = answered.map(function (q) {
     return {
-      id: q.id, question: q.q, marks: q.marks,
-      markScheme: q.answer, studentAnswer: state.answers[q.id],
+      id: q.id, question: q.q,
+      modelAnswer: q.answer, studentAnswer: state.answers[q.id],
     };
   });
   return [
@@ -144,11 +170,11 @@ function markPrompt(answered) {
     "Topic: " + CONFIG.topic + ", " + CONFIG.subtopic + ".",
     "",
     "For each answer:",
-    "- Compare it with the mark scheme. Accept equivalent wording and ignore spelling mistakes.",
+    "- Compare it with the model answer. Accept equivalent wording and ignore spelling mistakes.",
     "- Give credit only for correct science. Require key terms where examiners do",
     "  (e.g. osmosis must mention water and a partially permeable membrane).",
-    "- verdict is \"correct\" (full marks), \"partial\" (some marks) or \"incorrect\" (no marks).",
-    "- awarded is the number of marks earned, from 0 up to the question's marks.",
+    "- verdict is \"correct\" (would get full credit), \"partial\" (right idea, but missing a key word",
+    "  or detail, or too informal) or \"incorrect\" (wrong or missing the point).",
     "- feedback is one short sentence (max 25 words) to the student: say exactly what was missing or wrong,",
     "  or for a correct answer, how to make it even more exam-ready (e.g. a more formal definition).",
     "",
@@ -156,7 +182,7 @@ function markPrompt(answered) {
     "and write a two-sentence summary: the biggest strength, and the most important thing to revise.",
     "",
     "Reply with only JSON in this shape:",
-    '{"results":[{"id":1,"verdict":"partial","awarded":1,"feedback":"..."}],',
+    '{"results":[{"id":1,"verdict":"partial","feedback":"..."}],',
     ' "sections":[{"title":"Microscopy","rating":"secure","comment":"..."}],',
     ' "summary":"..."}',
     "",
@@ -180,7 +206,7 @@ async function generate(count) {
       cache: false,                       // "New questions" must really be new
       onText: function (update) {
         // Count questions as they stream in, to show progress
-        const found = (update.text.match(/"q"\s*:/g) || []).length;
+        const found = Math.min(count, (update.text.match(/"q"\s*:/g) || []).length);
         setProgress("Writing questions… " + found + " of " + count, found / count);
       },
     });
@@ -198,7 +224,6 @@ async function generate(count) {
               return {
                 id: id,
                 q: String(q.q),
-                marks: Math.min(3, Math.max(1, Number(q.marks) || 1)),
                 answer: String(q.answer),
               };
             }),
@@ -207,6 +232,13 @@ async function generate(count) {
       .filter(function (s) { return s.questions.length > 0; });
 
     if (id === 0) throw { code: "invalid_json" };
+
+    // Exactly the number asked for, numbered 1, 2, 3... again after trimming
+    trimTo(sections, count);
+    let n = 0;
+    sections.forEach(function (s) {
+      s.questions.forEach(function (q) { n = n + 1; q.id = n; });
+    });
 
     state = { stage: "answering", count: count, sections: sections, answers: {} };
     saveState();
@@ -238,7 +270,7 @@ async function mark() {
       signal: controller.signal,
       cache: false,
       onText: function (update) {
-        const found = (update.text.match(/"verdict"\s*:/g) || []).length;
+        const found = Math.min(answered.length, (update.text.match(/"verdict"\s*:/g) || []).length);
         setProgress("Marking… " + found + " of " + answered.length + " answers", found / answered.length);
       },
     });
@@ -250,19 +282,19 @@ async function mark() {
       const verdict = ["correct", "partial", "incorrect"].includes(r.verdict) ? r.verdict : "incorrect";
       results[q.id] = {
         verdict: verdict,
-        awarded: Math.min(q.marks, Math.max(0, Number(r.awarded) || 0)),
         feedback: String(r.feedback || ""),
       };
     });
     // Blank answers score 0 without bothering Claude.
     questions.forEach(function (q) {
       if (!results[q.id]) {
-        results[q.id] = { verdict: "blank", awarded: 0, feedback: "No answer. Look this one up in the notes." };
+        results[q.id] = { verdict: "blank", feedback: "No answer. Look this one up in the notes." };
       }
     });
 
-    const scored = Object.values(results).reduce(function (sum, r) { return sum + r.awarded; }, 0);
-    const percent = Math.round((scored / totalMarks()) * 100);
+    // Score = number of green answers, out of the number of questions.
+    const scored = Object.values(results).filter(function (r) { return r.verdict === "correct"; }).length;
+    const percent = Math.round((scored / questions.length) * 100);
 
     state.stage = "results";
     state.results = results;
@@ -375,7 +407,7 @@ function renderAnswering() {
   const total = allQuestions().length;
   const intro = el("div", "blurt-card slim");
   intro.append(el("p", "blurt-p",
-    total + " questions · " + totalMarks() + " marks. Answer from memory: no peeking! " +
+    total + " questions. Answer from memory: no peeking! " +
     "Your answers save as you type, so you can come back later."));
   box.append(intro);
 
@@ -386,10 +418,9 @@ function renderAnswering() {
       const head = el("label", "blurt-question");
       head.htmlFor = "answer-" + q.id;
       head.append(el("span", "q-num", q.id + "."), " " + q.q + " ");
-      head.append(el("span", "q-marks", "[" + q.marks + (q.marks === 1 ? " mark]" : " marks]")));
       const input = el("textarea", "blurt-input");
       input.id = "answer-" + q.id;
-      input.rows = q.marks > 1 ? 3 : 2;
+      input.rows = 2;
       input.value = state.answers[q.id] || "";
       input.placeholder = "Your answer…";
       input.addEventListener("input", function () {
@@ -440,40 +471,63 @@ function newQuestionsControl() {
 
 const VERDICT = {
   correct:   { icon: "✓", label: "Correct" },
-  partial:   { icon: "½", label: "Partly right" },
-  incorrect: { icon: "✗", label: "Not right" },
-  blank:     { icon: "–", label: "Not answered" },
+  partial:   { icon: "~", label: "Nearly" },
+  incorrect: { icon: "✗", label: "Not yet" },
+  blank:     { icon: "–", label: "No answer" },
 };
 
 const RATING = { secure: "Secure", nearly: "Nearly there", revisit: "Revisit" };
 
 function renderResults() {
-  // Summary card
+  const questions = allQuestions();
+  const count = function (v) {
+    return questions.filter(function (q) { return state.results[q.id].verdict === v; }).length;
+  };
+
+  // Worked out fresh from the colours each time
+  const correct = count("correct");
+  const percent = Math.round((correct / questions.length) * 100);
+
+  // Summary card: "19 / 25" and how many were green, amber, red
   const card = el("div", "blurt-card results-card");
   const score = el("div", "score-ring");
-  score.style.setProperty("--p", state.percent);
-  score.append(el("span", "", state.percent + "%"));
+  score.style.setProperty("--p", percent);
+  score.append(el("span", "", percent + "%"));
   const text = el("div", "results-text");
-  text.append(el("h2", "blurt-h", state.score + " / " + totalMarks() + " marks"));
+  text.append(el("h2", "blurt-h", correct + " / " + questions.length + " correct"));
+  const tally = el("p", "tally");
+  tally.append(el("span", "rag-dot correct"), count("correct") + " correct ",
+               el("span", "rag-dot partial"), count("partial") + " nearly ",
+               el("span", "rag-dot incorrect"), (count("incorrect") + count("blank")) + " not yet");
+  text.append(tally);
   if (state.summary) text.append(el("p", "blurt-p", state.summary));
   card.append(score, text);
   box.append(card);
 
-  // Section ratings
-  if (state.sectionRatings.length) {
-    const list = el("div", "ratings");
-    state.sectionRatings.forEach(function (r) {
-      const rating = RATING[r.rating] ? r.rating : "nearly";
-      const row = el("div", "rating-row");
-      row.append(el("span", "rating-chip " + rating, RATING[rating]));
-      const t = el("div");
-      t.append(el("b", "", String(r.title || "")));
-      if (r.comment) t.append(el("p", "blurt-small", String(r.comment)));
-      row.append(t);
-      list.append(row);
+  // Progress review: one coloured square per question, section by section
+  const review = el("div", "blurt-card rag-review");
+  review.append(el("h2", "blurt-h", "Progress review"));
+  state.sections.forEach(function (section) {
+    const rating = ragFor(section.questions);
+    const comment = (state.sectionRatings || []).find(function (r) { return r.title === section.title; });
+    const row = el("div", "rag-row");
+    row.append(el("span", "rating-chip " + rating, RATING[rating]));
+    const middle = el("div", "rag-middle");
+    middle.append(el("b", "", section.title));
+    if (comment && comment.comment) middle.append(el("p", "blurt-small", String(comment.comment)));
+    const squares = el("div", "rag-squares");
+    section.questions.forEach(function (q) {
+      const v = state.results[q.id].verdict;
+      const sq = el("a", "rag-square " + v, String(q.id));
+      sq.href = "#q-" + q.id;
+      sq.title = "Question " + q.id + ": " + VERDICT[v].label;
+      squares.append(sq);
     });
-    box.append(list);
-  }
+    middle.append(squares);
+    row.append(middle);
+    review.append(row);
+  });
+  box.append(review);
 
   // Every question, with the student's answer, the mark, feedback and model answer
   state.sections.forEach(function (section) {
@@ -482,11 +536,11 @@ function renderResults() {
       const r = state.results[q.id];
       const v = VERDICT[r.verdict];
       const item = el("div", "blurt-q marked " + r.verdict);
+      item.id = "q-" + q.id;               // the squares above link here
       const head = el("p", "blurt-question");
       head.append(el("span", "q-num", q.id + "."), " " + q.q);
       const badge = el("span", "verdict " + r.verdict);
-      badge.append(el("span", "verdict-icon", v.icon), " " + r.awarded + "/" + q.marks);
-      badge.title = v.label;
+      badge.append(el("span", "verdict-icon", v.icon), " " + v.label);
       head.append(" ", badge);
       item.append(head);
 
