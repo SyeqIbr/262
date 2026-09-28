@@ -35,14 +35,45 @@ function isRead(noteId) {
   return loadValue("read:" + noteId) === "1";
 }
 
-// 0. Always start a new page at the top. Some browsers (and preview
-//    windows) try to keep your old scroll position, which is confusing
-//    after clicking "Next". A link to a #section still jumps to it.
-if ("scrollRestoration" in history) {
-  history.scrollRestoration = "manual";
-}
-if (!location.hash) {
+// 0. Always start a new page at the top.
+//    Some browsers and preview windows try to keep your old scroll
+//    position when a new page opens, which is confusing after "Next".
+//    So we jump to the top in three ways, to cover every case.
+function goToTop() {
   window.scrollTo(0, 0);
+  document.documentElement.scrollTop = 0;
+  document.body.scrollTop = 0;
+}
+
+if ("scrollRestoration" in history) {
+  history.scrollRestoration = "manual";   // don't restore old positions
+}
+
+// (a) When you click a link to another page, go to the top FIRST,
+//     so the position that gets remembered is already the top.
+document.addEventListener("click", function (event) {
+  const link = event.target.closest("a[href]");
+  if (!link) return;
+  const href = link.getAttribute("href");
+  if (href.startsWith("#") || link.target === "_blank") return;  // same-page jumps
+  goToTop();
+});
+
+// (b) When a page opens (unless the link was to a #section), go to the top,
+// (c) and try again a few times in case something restores the old
+//     position late. Stop as soon as the student scrolls themselves.
+if (!location.hash) {
+  let userScrolled = false;
+  ["wheel", "touchstart", "keydown"].forEach(function (type) {
+    window.addEventListener(type, function () { userScrolled = true; }, { once: true, passive: true });
+  });
+  function topUnlessScrolled() {
+    if (!userScrolled) goToTop();
+  }
+  goToTop();
+  window.addEventListener("load", topUnlessScrolled);
+  window.addEventListener("pageshow", topUnlessScrolled);
+  [50, 200, 500].forEach(function (ms) { setTimeout(topUnlessScrolled, ms); });
 }
 
 // 1. On a note page, <body data-note="..."> marks that note as read.

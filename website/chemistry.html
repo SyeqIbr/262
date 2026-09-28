@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<!-- Chemistry subject page: same layout as biology.html, with class="chemistry" -->
+<!--
+  CHEMISTRY OVERVIEW: the home page for the subject, with a side menu.
+-->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Chemistry · GCSE Science Revision</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,41 +26,72 @@
     <a class="nav-link physics" href="physics.html">Physics</a>
   </nav>
 
-  <header>
-    <a class="back-link" href="index.html">← All subjects</a>
-    <p class="eyebrow">AQA GCSE · 8462 Triple · 8464 Combined</p>
-    <h1><span class="accent-text">Chemistry</span></h1>
-    <p class="intro">
-      Ten topics across two papers. Choose a topic to revise.
-    </p>
-  </header>
+  <div class="app">
+    <!-- The side menu. On phones, CSS turns it into a row of three buttons. -->
+    <aside class="sidebar" aria-label="Chemistry menu">
+      <p class="side-label">Course</p>
+      <a class="side-link" href="chemistry.html" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg> Overview</a>
+      <p class="side-label">Revision</p>
+      <a class="side-link" href="chemistry-notes.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h12a2 2 0 0 1 2 2v14H7a2 2 0 0 1-2-2z"/><path d="M9 8h6M9 12h6"/></svg> Revision notes</a>
+      <p class="side-label">Practice</p>
+      <a class="side-link" href="chemistry-quizzes.html"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg> Topic quizzes</a>
+    </aside>
 
-  <main>
-    <section class="paper">
-      <h2 class="paper-title">Paper 1 <small>Topics C1–C5</small></h2>
-      <ul class="topic-grid">
-        <li class="card"><span class="code">C1</span><span class="topic-name">Atomic structure and the periodic table</span></li>
-        <li class="card"><span class="code">C2</span><span class="topic-name">Bonding, structure and the properties of matter</span></li>
-        <li class="card"><span class="code">C3</span><span class="topic-name">Quantitative chemistry</span></li>
-        <li class="card"><span class="code">C4</span><span class="topic-name">Chemical changes</span></li>
-        <li class="card"><span class="code">C5</span><span class="topic-name">Energy changes</span></li>
-      </ul>
-    </section>
+    <main>
+      <p class="eyebrow">AQA GCSE · 8462 Triple · 8464 Combined</p>
+      <h1 class="hub-title"><span class="accent-text">Chemistry</span></h1>
+      <p class="hub-intro">Everything for GCSE Chemistry in one place. Revise with short notes, then test yourself with topic quizzes.</p>
 
-    <section class="paper">
-      <h2 class="paper-title">Paper 2 <small>Topics C6–C10</small></h2>
-      <ul class="topic-grid">
-        <li class="card"><span class="code">C6</span><span class="topic-name">The rate and extent of chemical change</span></li>
-        <li class="card"><span class="code">C7</span><span class="topic-name">Organic chemistry</span></li>
-        <li class="card"><span class="code">C8</span><span class="topic-name">Chemical analysis</span></li>
-        <li class="card"><span class="code">C9</span><span class="topic-name">Chemistry of the atmosphere</span></li>
-        <li class="card"><span class="code">C10</span><span class="topic-name">Using resources</span></li>
-      </ul>
-    </section>
-  </main>
+      <p class="tip"><b>On the way:</b> Chemistry notes and quizzes are being written.
+        In the meantime, <a class="accent-link" href="biology-notes.html">B1 Cell biology</a> is ready to revise.</p>
+
+      <h2 class="section-title">Revise &amp; practise</h2>
+      <p class="section-intro">Learn the content, then find out what you still need to work on.</p>
+      <div class="resource-grid">
+        <a class="card resource" href="chemistry-notes.html">
+          <span class="resource-top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h12a2 2 0 0 1 2 2v14H7a2 2 0 0 1-2-2z"/><path d="M9 8h6M9 12h6"/></svg><span class="pills"><span class="pill study">Study</span></span></span>
+          <h3>Revision notes</h3>
+          <p>Short, focused notes for each part of the specification, with diagrams and worked examples.</p>
+          <span class="go">Open notes →</span>
+        </a>
+        <a class="card resource" href="chemistry-quizzes.html">
+          <span class="resource-top"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg><span class="pills"><span class="pill practice">Practice</span></span></span>
+          <h3>Topic quizzes</h3>
+          <p>Quick multiple-choice quizzes for each subtopic. Your best score is saved.</p>
+          <span class="go">Start a quiz →</span>
+        </a>
+      </div>
+
+      <h2 class="section-title">The exams</h2>
+      <p class="section-intro">Two papers, each 1 hour 45 minutes (Triple) or 1 hour 15 minutes (Combined).</p>
+      <div class="stat-row">
+        <div class="card stat">
+          <span class="label">Paper 1 · C1–C5</span>
+          <ul class="paper-list">
+            <li><span class="code">C1</span> Atomic structure and the periodic table</li>
+            <li><span class="code">C2</span> Bonding, structure and the properties of matter</li>
+            <li><span class="code">C3</span> Quantitative chemistry</li>
+            <li><span class="code">C4</span> Chemical changes</li>
+            <li><span class="code">C5</span> Energy changes</li>
+          </ul>
+        </div>
+        <div class="card stat">
+          <span class="label">Paper 2 · C6–C10</span>
+          <ul class="paper-list">
+            <li><span class="code">C6</span> The rate and extent of chemical change</li>
+            <li><span class="code">C7</span> Organic chemistry</li>
+            <li><span class="code">C8</span> Chemical analysis</li>
+            <li><span class="code">C9</span> Chemistry of the atmosphere</li>
+            <li><span class="code">C10</span> Using resources</li>
+          </ul>
+        </div>
+      </div>
+    </main>
+  </div>
 
   <footer>
     Made while learning to code with Claude
   </footer>
+  <script src="progress.js"></script>
 </body>
 </html>

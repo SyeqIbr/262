@@ -1,23 +1,22 @@
 <!DOCTYPE html>
 <!--
-  LESSON 3: Links and multiple pages
-  ----------------------------------
-  New things in this lesson:
-    - All the CSS moved into style.css, shared by every page
-    - A navigation bar at the top of every page
-    - Links! An <a> tag with href="biology.html" takes you to biology.html
+  HOMEPAGE
+  --------
+  The first page students see. It introduces the site, shows the three
+  subjects (and which topics are ready), and explains how to use it.
+
+  Remember: all the design lives in style.css, and progress.js makes
+  every page open at the top.
 -->
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>GCSE Science Revision</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Unbounded:wght@600;800&display=swap" rel="stylesheet">
-
-  <!-- This one line loads ALL of our design from style.css -->
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -26,10 +25,6 @@
   <div class="glow two"></div>
   <div class="glow three"></div>
 
-  <!--
-    The navigation bar. Each subject link also has its subject class
-    (e.g. "biology") so it glows in that colour when you hover over it.
-  -->
   <nav class="nav">
     <a class="brand" href="index.html">GCSE Science</a>
     <a class="nav-link biology" href="biology.html">Biology</a>
@@ -37,74 +32,78 @@
     <a class="nav-link physics" href="physics.html">Physics</a>
   </nav>
 
-  <header>
+  <header class="hero">
     <p class="eyebrow">AQA GCSE · Combined &amp; Triple Science</p>
     <h1>Revise <span class="gradient-text">smarter</span>,<br>not longer.</h1>
     <p class="intro">
-      Every topic from the AQA specification, organised by paper.
-      Pick a subject to start revising.
+      Clear notes with diagrams, then quick quizzes to check you've got it.
+      Every topic follows the AQA specification.
     </p>
+    <div class="hero-actions">
+      <a class="button" href="biology-notes.html">Start with B1 Cell biology</a>
+      <a class="button ghost" href="#subjects">Choose a subject</a>
+    </div>
   </header>
 
   <main>
-    <section class="subjects">
+    <!-- id="subjects" is where the "Choose a subject" button jumps to -->
+    <section class="home-section" id="subjects">
+      <h2 class="section-title">Subjects</h2>
+      <p class="section-intro">Highlighted topics are ready to revise. More are on the way.</p>
 
-      <article class="card biology">
-        <!--
-          The link: <a href="...">text</a>
-          href = where the link goes. "biology.html" means
-          "the file called biology.html in the same folder as this one".
-        -->
-        <h2><a class="subject-link" href="biology.html">Biology <span class="arrow">→</span></a></h2>
-        <p class="spec">AQA 8461 · 8464</p>
-        <ul class="topics">
-          <li><span class="code">B1</span> Cell biology</li>
-          <li><span class="code">B2</span> Organisation</li>
-          <li><span class="code">B3</span> Infection and response</li>
-          <li><span class="code">B4</span> Bioenergetics</li>
-          <li><span class="code">B5</span> Homeostasis and response</li>
-          <li><span class="code">B6</span> Inheritance, variation and evolution</li>
-          <li><span class="code">B7</span> Ecology</li>
-        </ul>
-      </article>
+      <div class="subjects">
+        <!-- The whole card is one link. class="biology" gives it the green accent. -->
+        <a class="card subject-card biology" href="biology.html">
+          <h3>Biology</h3>
+          <p class="meta">AQA 8461 · 8464 · 7 topics</p>
+          <div class="chips">
+            <span class="chip ready">B1</span><span class="chip">B2</span><span class="chip">B3</span>
+            <span class="chip">B4</span><span class="chip">B5</span><span class="chip">B6</span>
+            <span class="chip">B7</span>
+          </div>
+          <p class="status">6 notes · 3 quizzes ready <span class="arrow">→</span></p>
+        </a>
 
-      <article class="card chemistry">
-        <h2><a class="subject-link" href="chemistry.html">Chemistry <span class="arrow">→</span></a></h2>
-        <p class="spec">AQA 8462 · 8464</p>
-        <ul class="topics">
-          <li><span class="code">C1</span> Atomic structure and the periodic table</li>
-          <li><span class="code">C2</span> Bonding, structure and the properties of matter</li>
-          <li><span class="code">C3</span> Quantitative chemistry</li>
-          <li><span class="code">C4</span> Chemical changes</li>
-          <li><span class="code">C5</span> Energy changes</li>
-          <li><span class="code">C6</span> The rate and extent of chemical change</li>
-          <li><span class="code">C7</span> Organic chemistry</li>
-          <li><span class="code">C8</span> Chemical analysis</li>
-          <li><span class="code">C9</span> Chemistry of the atmosphere</li>
-          <li><span class="code">C10</span> Using resources</li>
-        </ul>
-      </article>
+        <a class="card subject-card chemistry" href="chemistry.html">
+          <h3>Chemistry</h3>
+          <p class="meta">AQA 8462 · 8464 · 10 topics</p>
+          <div class="chips">
+            <span class="chip">C1</span><span class="chip">C2</span><span class="chip">C3</span>
+            <span class="chip">C4</span><span class="chip">C5</span><span class="chip">C6</span>
+            <span class="chip">C7</span><span class="chip">C8</span><span class="chip">C9</span>
+            <span class="chip">C10</span>
+          </div>
+          <p class="status">Coming soon <span class="arrow">→</span></p>
+        </a>
 
-      <article class="card physics">
-        <h2><a class="subject-link" href="physics.html">Physics <span class="arrow">→</span></a></h2>
-        <p class="spec">AQA 8463 · 8464</p>
-        <ul class="topics">
-          <li><span class="code">P1</span> Energy</li>
-          <li><span class="code">P2</span> Electricity</li>
-          <li><span class="code">P3</span> Particle model of matter</li>
-          <li><span class="code">P4</span> Atomic structure</li>
-          <li><span class="code">P5</span> Forces</li>
-          <li><span class="code">P6</span> Waves</li>
-          <li><span class="code">P7</span> Magnetism and electromagnetism</li>
-          <li><span class="code">P8</span> Space physics <span class="tag">Triple only</span></li>
-        </ul>
-      </article>
+        <a class="card subject-card physics" href="physics.html">
+          <h3>Physics</h3>
+          <p class="meta">AQA 8463 · 8464 · 8 topics</p>
+          <div class="chips">
+            <span class="chip">P1</span><span class="chip">P2</span><span class="chip">P3</span>
+            <span class="chip">P4</span><span class="chip">P5</span><span class="chip">P6</span>
+            <span class="chip">P7</span><span class="chip">P8</span>
+          </div>
+          <p class="status">Coming soon <span class="arrow">→</span></p>
+        </a>
+      </div>
+    </section>
 
+    <section class="home-section">
+      <h2 class="section-title">How it works</h2>
+      <p class="section-intro">Short sessions, done often, beat one long cram.</p>
+      <!-- A real sequence, so it's a numbered list (CSS draws the numbers) -->
+      <ol class="flow">
+        <li class="step-bio"><b>Read a note</b><p>Each note covers one part of the spec, with diagrams, worked examples and key words.</p></li>
+        <li class="step-chem"><b>Take the quiz</b><p>A few quick questions straight after, while it's fresh. You see the right answer and why.</p></li>
+        <li class="step-phys"><b>Track your progress</b><p>Your best scores fill the progress rings, so you can see which topics need another go.</p></li>
+      </ol>
     </section>
   </main>
 
   <footer>
     Made while learning to code with Claude
   </footer>
+  <script src="progress.js"></script>
 </body>
 </html>

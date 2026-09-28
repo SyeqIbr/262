@@ -1482,3 +1482,185 @@ summary .row-meta + .chev {
   max-width: 480px;
   margin: 0 auto;
 }
+
+/* ======================================================
+   Polish pass
+   ====================================================== */
+
+/* Quiz: a tick or cross on the marked answers, not just a colour
+   (clearer, and helps colour-blind students too) */
+.option.correct::after,
+.option.wrong::after {
+  float: right;
+  margin-left: 10px;
+  font-weight: 600;
+}
+.option.correct::after { content: "✓"; color: #4ade80; }
+.option.wrong::after   { content: "✗"; color: #f87171; }
+
+/* Overview progress boxes sit side by side, even on phones */
+.stat-row.progress {
+  grid-template-columns: 1fr 1fr;
+}
+
+/* Phones: the three menu items share the row equally, icon above label,
+   so nothing gets cut off. */
+@media (max-width: 860px) {
+  .sidebar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    overflow: visible;
+    padding-bottom: 0;
+  }
+  .side-link {
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 6px;
+    font-size: 0.85rem;
+    text-align: center;
+    white-space: normal;
+  }
+}
+
+/* ======================================================
+   LESSON 7: The new homepage
+   ====================================================== */
+
+/* A default accent, for pages that aren't about one subject */
+:root {
+  --accent: var(--biology);
+}
+
+.accent-link {
+  color: var(--biology);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.hero {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 88px 20px 56px;
+}
+
+.hero .intro {
+  margin-bottom: 28px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* Buttons that are links */
+a.button {
+  display: inline-block;
+}
+
+.button.ghost {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  font-weight: 400;
+}
+
+.button.ghost:hover {
+  border-color: var(--text);
+}
+
+.home-section {
+  margin-bottom: 56px;
+}
+
+/* Subject cards */
+.subject-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 260px;
+}
+
+.subject-card h3 {
+  font-family: "Unbounded", sans-serif;
+  font-weight: 600;
+  font-size: 1.5rem;
+  margin: 0;
+  color: var(--accent);
+}
+
+.subject-card .meta {
+  margin: -8px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* Little topic code chips: ready ones glow, the rest are faint */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  font-family: "Unbounded", sans-serif;
+  font-size: 0.7rem;
+  padding: 4px 8px;
+  border-radius: 7px;
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+
+.chip.ready {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.subject-card .status {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+.subject-card .status .arrow {
+  margin-left: auto;
+  color: var(--accent);
+  font-size: 1.2rem;
+  transition: transform 0.3s;
+}
+
+.subject-card:hover .status .arrow {
+  transform: translateX(6px);
+}
+
+/* The how-it-works steps take one subject colour each */
+.flow .step-bio  { --accent: var(--biology); }
+.flow .step-chem { --accent: var(--chemistry); }
+.flow .step-phys { --accent: var(--physics); }
+
+.flow p {
+  margin: 0;
+  color: var(--muted);
+}
+
+/* Let a long topic name wrap instead of pushing its row wider */
+.locked > span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+}
+
+.accordion {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (max-width: 520px) {
+  .locked {
+    gap: 10px;
+    padding: 12px 14px;
+  }
+}

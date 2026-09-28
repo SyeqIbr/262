@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<!--
+  CHEMISTRY TOPIC QUIZZES: one quiz per subtopic, with progress rings.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Chemistry Quizzes · GCSE Science</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Unbounded:wght@600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="chemistry">
+  <div class="glow one"></div>
+  <div class="glow two"></div>
+  <div class="glow three"></div>
+
+  <nav class="nav">
+    <a class="brand" href="index.html">GCSE Science</a>
+    <a class="nav-link biology" href="biology.html">Biology</a>
+    <a class="nav-link chemistry" href="chemistry.html" aria-current="page">Chemistry</a>
+    <a class="nav-link physics" href="physics.html">Physics</a>
+  </nav>
+
+  <div class="app">
+    <!-- The side menu. On phones, CSS turns it into a row of three buttons. -->
+    <aside class="sidebar" aria-label="Chemistry menu">
+      <p class="side-label">Course</p>
+      <a class="side-link" href="chemistry.html"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg> Overview</a>
+      <p class="side-label">Revision</p>
+      <a class="side-link" href="chemistry-notes.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h12a2 2 0 0 1 2 2v14H7a2 2 0 0 1-2-2z"/><path d="M9 8h6M9 12h6"/></svg> Revision notes</a>
+      <p class="side-label">Practice</p>
+      <a class="side-link" href="chemistry-quizzes.html" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg> Topic quizzes</a>
+    </aside>
+
+    <main>
+      <p class="eyebrow">Chemistry · Practice</p>
+      <h1 class="hub-title">Topic quizzes</h1>
+      <p class="hub-intro">One quick quiz per subtopic. The rings fill up with your best scores, so you can see which areas need more work.</p>
+
+      <div class="accordion">
+        <div class="locked">
+          <span class="code">C1</span>
+          <span>Atomic structure and the periodic table</span>
+          <span class="pill">Coming soon</span>
+        </div>
+        <div class="locked">
+          <span class="code">C2</span>
+          <span>Bonding, structure and the properties of matter</span>
+          <span class="pill">Coming soon</span>
+        </div>
+        <div class="locked">
+          <span class="code">C3</span>
+          <span>Quantitative chemistry</span>
+          <span class="pill">Coming soon</span>
+        </div>
+        <div class="locked">
+          <span class="code">C4</span>
+          <span>Chemical changes</span>
+          <span class="pill">Coming soon</span>
+        </div>
+        <div class="locked">
+          <span class="code">C5</span>
+          <span>Energy changes</span>
+          <span class="pill">Coming soon</span>
+        </div>
+        <div class="locked">
+          <span class="code">C6</span>
+          <span>The rate and extent of chemical change</span>
+          <span class="pill">Coming soon</span>
+        </div>
+        <div class="locked">
+          <span class="code">C7</span>
+          <span>Organic chemistry</span>
+          <span class="pill">Coming soon</span>
+        </div>
+        <div class="locked">
+          <span class="code">C8</span>
+          <span>Chemical analysis</span>
+          <span class="pill">Coming soon</span>
+        </div>
+        <div class="locked">
+          <span class="code">C9</span>
+          <span>Chemistry of the atmosphere</span>
+          <span class="pill">Coming soon</span>
+        </div>
+        <div class="locked">
+          <span class="code">C10</span>
+          <span>Using resources</span>
+          <span class="pill">Coming soon</span>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <footer>
+    Made while learning to code with Claude
+  </footer>
+  <script src="progress.js"></script>
+</body>
+</html>
