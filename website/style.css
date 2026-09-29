@@ -47,6 +47,12 @@
 .chemistry { --accent: var(--chemistry); --accent-glow: var(--chemistry-glow); }
 .physics   { --accent: var(--physics);   --accent-glow: var(--physics-glow); }
 
+/* Anything with the "hidden" attribute stays hidden, even if a class
+   below gives it a display value (like display: flex). */
+[hidden] {
+  display: none !important;
+}
+
 /* ---------- 2. The page itself ---------- */
 body {
   font-family: var(--font-body);
@@ -3173,3 +3179,322 @@ html[data-mode="light"] details.topic {
 .topic-list li.ready .status { color: var(--accent); }
 .side-link .soon-pill { border: none; padding: 0; font-style: italic; }
 html[data-mode="light"] .demo { box-shadow: none; }
+
+/* ======================================================
+   LESSON 11: Your sky (sky.html)
+   The sky is always a night sky, even in light mode.
+   ====================================================== */
+.sky-page,
+.nav .sky-link {
+  --accent: #c4b5fd;              /* lavender, for starlight */
+}
+
+.sky-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 20px 64px;
+}
+
+.sky-head h1 {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  margin: 0 0 8px;
+}
+
+.sky-head .intro {
+  margin: 0 0 8px;
+}
+
+.sky-stats {
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--accent);
+  margin: 0 0 24px;
+}
+
+/* "Your next star" */
+.next-step {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 20px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--accent) 7%, var(--surface));
+}
+
+.next-label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--accent);
+}
+
+.next-step b {
+  font-size: 1.05rem;
+}
+
+/* Sky beside the panel on big screens, stacked on small ones */
+.sky-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 1000px) {
+  .sky-layout { grid-template-columns: minmax(0, 1fr); }
+}
+
+.sky-frame {
+  --sky-biology: #4ade80;
+  --sky-chemistry: #fb923c;
+  --sky-physics: #60a5fa;
+  --moon-none: #4b5059;
+  --moon-good: #4ade80;
+  --moon-warn: #facc15;
+  --moon-bad: #f87171;
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: radial-gradient(ellipse at 50% 0%, #141a2b, #07080c 75%);
+  border: 1px solid #1d2230;
+}
+
+.star-panel {
+  --sky-biology: #4ade80;
+  --sky-chemistry: #fb923c;
+  --sky-physics: #60a5fa;
+  --moon-none: #4b5059;
+  --moon-good: #4ade80;
+  --moon-warn: #facc15;
+  --moon-bad: #f87171;
+}
+
+.sky {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.sky .bg { fill: #cfd6ff; animation: twinkle var(--dur) ease-in-out infinite alternate; animation-delay: var(--delay); }
+@keyframes twinkle { from { opacity: 0.12; } to { opacity: 0.8; } }
+
+.sky .cluster { fill: var(--c); font: 700 16px var(--font-display); text-anchor: middle; opacity: 0.85; }
+.sky .cluster.left { text-anchor: start; }
+
+.sky .link { stroke: var(--c); stroke-width: 1.5; opacity: 0.7; }
+
+.sky .star { cursor: pointer; }
+.sky .star:focus { outline: none; }
+.sky .star .core { fill: #6b7280; }
+.sky .star.stage-1 .core { fill: #d8dce6; }
+.sky .star.stage-2 .core,
+.sky .star.stage-3 .core,
+.sky .star.stage-4 .core { fill: #ffffff; }
+.sky .star .halo { fill: var(--c); opacity: 0.3; }
+.sky .star.stage-4 .halo { opacity: 0.5; }
+.sky .star .sparkle { stroke: #ffffff; stroke-width: 1.5; opacity: 0.8; stroke-linecap: round; }
+.sky .star.forming .core { fill: #3b3f47; }
+.sky .star.forming .ring { fill: none; stroke: #3b3f47; stroke-width: 1.2; stroke-dasharray: 2 3; }
+.sky .star .code { fill: #8d93a0; font: 500 13px var(--font-mono); }
+.sky .star:not(.forming) .code { fill: var(--c); }
+.sky .star.forming .code { fill: #4b5059; }
+.sky .star .orbit { fill: none; stroke: rgba(255, 255, 255, 0.12); stroke-width: 1; }
+.sky .star .moons { animation: orbit 40s linear infinite; }
+@keyframes orbit { to { transform: rotate(360deg); } }
+.sky .star .moon { stroke: #07080c; stroke-width: 1; }
+
+/* Hover, keyboard focus and the selected star get a ring */
+.sky .star:hover .halo,
+.sky .star:focus-visible .halo { opacity: 0.6; }
+.sky .star.selected .halo { opacity: 0.7; }
+.sky .star.selected .core { stroke: #ffffff; stroke-width: 1.5; }
+
+/* The star to work on next pulses gently */
+.sky .pulse { fill: none; stroke: var(--c); stroke-width: 1.5; transform-box: fill-box; transform-origin: center; animation: pulse-ring 2s ease-out infinite; }
+@keyframes pulse-ring { from { transform: scale(0.6); opacity: 0.9; } to { transform: scale(1.8); opacity: 0; } }
+
+/* A star that just got brighter flashes */
+.sky .star.upgraded .halo { transform-box: fill-box; transform-origin: center; animation: flash 1.2s ease-out 3; }
+@keyframes flash { 50% { transform: scale(1.6); opacity: 0.9; } }
+
+.sky .shooting { stroke: #ffffff; stroke-width: 2; stroke-linecap: round; stroke-dasharray: 40 400; animation: shoot 1.4s ease-out forwards; }
+@keyframes shoot { from { stroke-dashoffset: 40; opacity: 1; } to { stroke-dashoffset: -160; opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .sky .bg, .sky .star .moons, .sky .pulse, .sky .star.upgraded .halo { animation: none; }
+}
+
+/* Brightness key under the sky */
+.sky-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  padding: 12px 16px;
+  font-size: 0.8rem;
+  color: #8d93a0;
+  border-top: 1px solid #1d2230;
+}
+
+.sky-key span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sky-key i {
+  display: inline-block;
+  border-radius: 50%;
+  background: #ffffff;
+}
+
+/* ----- The panel ----- */
+.star-panel {
+  padding: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  min-height: 200px;
+}
+
+.panel-empty {
+  color: var(--muted);
+  margin: 0;
+}
+
+.panel-head .code {
+  display: inline-block;
+  font-size: 0.8rem;
+  padding: 2px 8px;
+  margin-bottom: 8px;
+}
+
+.panel-head h2 {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.panel-sub {
+  margin: 2px 0 14px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.meter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.meter span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--border-strong);
+}
+
+.meter span.on {
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+}
+
+.meter b {
+  margin-left: 6px;
+}
+
+.panel-note {
+  color: var(--text-2);
+  margin: 8px 0 16px;
+}
+
+.sub-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--border);
+}
+
+.sub-rows li {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.sub-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.moon-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.sub-facts {
+  margin: 2px 0 8px 18px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.sub-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-left: 18px;
+}
+
+.sub-links a {
+  font-size: 0.85rem;
+  padding: 4px 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-small);
+}
+
+.sub-links a:hover,
+.sub-links a:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
+  outline: none;
+}
+
+.sky-options {
+  margin-top: 16px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.sky-options input {
+  accent-color: #c4b5fd;
+  margin-right: 6px;
+}
+
+.sky-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  z-index: 50;
+  max-width: calc(100vw - 32px);
+  padding: 12px 18px;
+  border-radius: var(--radius);
+  background: #1b1f2c;
+  color: #ffffff;
+  border: 1px solid #c4b5fd;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Phones: the four menu links share one row */
+@media (max-width: 520px) {
+  .nav .nav-link {
+    flex: 1;
+    margin: 0;
+    padding: 6px 2px;
+    font-size: 0.9rem;
+    text-align: center;
+  }
+}
