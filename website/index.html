@@ -39,12 +39,15 @@
     </button>
   </nav>
 
+  <!-- The whole top of the homepage is one night sky -->
+  <section class="sky-hero">
   <main class="sky-main">
     <header class="home-head">
       <div>
-        <h1>Revise smarter,<br>not longer.</h1>
-        <p class="intro">AQA GCSE Biology, Chemistry and Physics. Every topic is a star:
-          read the notes and blurt what you remember to make it brighter.</p>
+        <h1>Join the dots.</h1>
+        <p class="intro">Every topic in AQA GCSE Biology, Chemistry and Physics is a star.
+          Read the notes, blurt what you remember and get it marked to make each one shine,
+          until every subject is a full constellation.</p>
       </div>
     </header>
 
@@ -77,18 +80,19 @@
 
     <p class="sky-options"><label><input type="checkbox" id="example">Show an example sky (what a term of revision could look like)</label></p>
   </main>
+  </section>
 
   <div class="home-below">
     <section class="home-section" id="how">
       <div class="hero-split">
         <div>
-          <h2 class="section-title">How it works</h2>
-          <!-- A real sequence, so it's a numbered list (CSS draws the numbers) -->
-          <ol class="how-grid">
-            <li><b>Read the notes</b><p>Short notes on one part of the spec, with diagrams, worked examples and key words.</p></li>
-            <li><b>Blurt it</b><p>Close the notes and answer 20, 25 or 30 fresh questions from memory.</p></li>
-            <li><b>Get it marked</b><p>Each answer comes back green, amber or red, with what you missed and a model answer.</p></li>
-            <li><b>Watch your sky</b><p>Every note and blurt makes a star brighter, until each subject is a full constellation.</p></li>
+          <h2 class="section-title">How a star gets brighter</h2>
+          <!-- A real sequence, so it's a numbered list. Each step shows the star it earns. -->
+          <ol class="how-grid star-steps">
+            <li><span class="glyph stage-2" aria-hidden="true"></span><b>Read the notes</b><p>Short notes with diagrams and worked examples. Read them all and your star is <i>Shining</i>.</p></li>
+            <li><span class="glyph stage-3" aria-hidden="true"></span><b>Blurt it</b><p>Close the notes and answer 20, 25 or 30 fresh questions from memory. Now it's <i>Bright</i>.</p></li>
+            <li><span class="glyph stage-4" aria-hidden="true"></span><b>Get it marked</b><p>Green, amber or red for every answer, with what you missed. 80% or more and it's <i>Blazing</i>.</p></li>
+            <li><span class="glyph joined" aria-hidden="true"></span><b>Join the dots</b><p>Light up the stars in a subject and they join into its constellation.</p></li>
           </ol>
         </div>
 
@@ -113,20 +117,20 @@
     </section>
 
     <section class="home-section" id="subjects">
-      <h2 class="section-title">Every topic</h2>
-      <p class="section-intro">The full AQA specification. Topics with notes are in colour; the rest are on the way.</p>
+      <h2 class="section-title">All 25 stars</h2>
+      <p class="section-intro">Every topic in the AQA specification, with how bright it is for you. Topics with notes are in colour; the rest are on the way.</p>
       <div class="subject-columns">
         <div class="subject-col biology">
           <h3><a href="biology.html">Biology</a></h3>
           <p class="meta">AQA 8461 · 8464 Combined</p>
           <ul class="topic-list">
-            <li class="ready"><a href="biology-notes.html"><span class="code">B1</span><span class="name">Cell biology</span><span class="status">6 notes</span></a></li>
-            <li><span class="code">B2</span><span class="name">Organisation</span><span class="status">soon</span></li>
-            <li><span class="code">B3</span><span class="name">Infection and response</span><span class="status">soon</span></li>
-            <li><span class="code">B4</span><span class="name">Bioenergetics</span><span class="status">soon</span></li>
-            <li><span class="code">B5</span><span class="name">Homeostasis and response</span><span class="status">soon</span></li>
-            <li><span class="code">B6</span><span class="name">Inheritance, variation and evolution</span><span class="status">soon</span></li>
-            <li><span class="code">B7</span><span class="name">Ecology</span><span class="status">soon</span></li>
+            <li class="ready"><a href="biology-notes.html"><span class="mini-star" data-star="B1"></span><span class="code">B1</span><span class="name">Cell biology</span><span class="status">6 notes</span></a></li>
+            <li><span class="mini-star" data-star="B2"></span><span class="code">B2</span><span class="name">Organisation</span><span class="status">soon</span></li>
+            <li><span class="mini-star" data-star="B3"></span><span class="code">B3</span><span class="name">Infection and response</span><span class="status">soon</span></li>
+            <li><span class="mini-star" data-star="B4"></span><span class="code">B4</span><span class="name">Bioenergetics</span><span class="status">soon</span></li>
+            <li><span class="mini-star" data-star="B5"></span><span class="code">B5</span><span class="name">Homeostasis and response</span><span class="status">soon</span></li>
+            <li><span class="mini-star" data-star="B6"></span><span class="code">B6</span><span class="name">Inheritance, variation and evolution</span><span class="status">soon</span></li>
+            <li><span class="mini-star" data-star="B7"></span><span class="code">B7</span><span class="name">Ecology</span><span class="status">soon</span></li>
           </ul>
           <a class="open-link" href="biology.html">Open Biology →</a>
         </div>
@@ -135,16 +139,16 @@
           <h3><a href="chemistry.html">Chemistry</a></h3>
           <p class="meta">AQA 8462 · 8464 Combined</p>
           <ul class="topic-list">
-            <li><span class="code">C1</span><span class="name">Atomic structure and the periodic table</span><span class="status">soon</span></li>
-            <li><span class="code">C2</span><span class="name">Bonding, structure and the properties of matter</span><span class="status">soon</span></li>
-            <li><span class="code">C3</span><span class="name">Quantitative chemistry</span><span class="status">soon</span></li>
-            <li><span class="code">C4</span><span class="name">Chemical changes</span><span class="status">soon</span></li>
-            <li><span class="code">C5</span><span class="name">Energy changes</span><span class="status">soon</span></li>
-            <li><span class="code">C6</span><span class="name">The rate and extent of chemical change</span><span class="status">soon</span></li>
-            <li><span class="code">C7</span><span class="name">Organic chemistry</span><span class="status">soon</span></li>
-            <li><span class="code">C8</span><span class="name">Chemical analysis</span><span class="status">soon</span></li>
-            <li><span class="code">C9</span><span class="name">Chemistry of the atmosphere</span><span class="status">soon</span></li>
-            <li><span class="code">C10</span><span class="name">Using resources</span><span class="status">soon</span></li>
+            <li><span class="mini-star" data-star="C1"></span><span class="code">C1</span><span class="name">Atomic structure and the periodic table</span><span class="status">soon</span></li>
+            <li><span class="mini-star" data-star="C2"></span><span class="code">C2</span><span class="name">Bonding, structure and the properties of matter</span><span class="status">soon</span></li>
+            <li><span class="mini-star" data-star="C3"></span><span class="code">C3</span><span class="name">Quantitative chemistry</span><span class="status">soon</span></li>
+            <li><span class="mini-star" data-star="C4"></span><span class="code">C4</span><span class="name">Chemical changes</span><span class="status">soon</span></li>
+            <li><span class="mini-star" data-star="C5"></span><span class="code">C5</span><span class="name">Energy changes</span><span class="status">soon</span></li>
+            <li><span class="mini-star" data-star="C6"></span><span class="code">C6</span><span class="name">The rate and extent of chemical change</span><span class="status">soon</span></li>
+            <li><span class="mini-star" data-star="C7"></span><span class="code">C7</span><span class="name">Organic chemistry</span><span class="status">soon</span></li>
+            <li><span class="mini-star" data-star="C8"></span><span class="code">C8</span><span class="name">Chemical analysis</span><span class="status">soon</span></li>
+            <li><span class="mini-star" data-star="C9"></span><span class="code">C9</span><span class="name">Chemistry of the atmosphere</span><span class="status">soon</span></li>
+            <li><span class="mini-star" data-star="C10"></span><span class="code">C10</span><span class="name">Using resources</span><span class="status">soon</span></li>
           </ul>
           <a class="open-link" href="chemistry.html">Open Chemistry →</a>
         </div>
@@ -153,14 +157,14 @@
           <h3><a href="physics.html">Physics</a></h3>
           <p class="meta">AQA 8463 · 8464 Combined</p>
           <ul class="topic-list">
-            <li><span class="code">P1</span><span class="name">Energy</span><span class="status">soon</span></li>
-            <li><span class="code">P2</span><span class="name">Electricity</span><span class="status">soon</span></li>
-            <li><span class="code">P3</span><span class="name">Particle model of matter</span><span class="status">soon</span></li>
-            <li><span class="code">P4</span><span class="name">Atomic structure</span><span class="status">soon</span></li>
-            <li><span class="code">P5</span><span class="name">Forces</span><span class="status">soon</span></li>
-            <li><span class="code">P6</span><span class="name">Waves</span><span class="status">soon</span></li>
-            <li><span class="code">P7</span><span class="name">Magnetism and electromagnetism</span><span class="status">soon</span></li>
-            <li><span class="code">P8</span><span class="name">Space physics <span class="tag">Triple only</span></span><span class="status">soon</span></li>
+            <li><span class="mini-star" data-star="P1"></span><span class="code">P1</span><span class="name">Energy</span><span class="status">soon</span></li>
+            <li><span class="mini-star" data-star="P2"></span><span class="code">P2</span><span class="name">Electricity</span><span class="status">soon</span></li>
+            <li><span class="mini-star" data-star="P3"></span><span class="code">P3</span><span class="name">Particle model of matter</span><span class="status">soon</span></li>
+            <li><span class="mini-star" data-star="P4"></span><span class="code">P4</span><span class="name">Atomic structure</span><span class="status">soon</span></li>
+            <li><span class="mini-star" data-star="P5"></span><span class="code">P5</span><span class="name">Forces</span><span class="status">soon</span></li>
+            <li><span class="mini-star" data-star="P6"></span><span class="code">P6</span><span class="name">Waves</span><span class="status">soon</span></li>
+            <li><span class="mini-star" data-star="P7"></span><span class="code">P7</span><span class="name">Magnetism and electromagnetism</span><span class="status">soon</span></li>
+            <li><span class="mini-star" data-star="P8"></span><span class="code">P8</span><span class="name">Space physics <span class="tag">Triple only</span></span><span class="status">soon</span></li>
           </ul>
           <a class="open-link" href="physics.html">Open Physics →</a>
         </div>

@@ -242,6 +242,15 @@
       g.dataset.code = topic.code;
     });
 
+    // The little stars next to each topic in "All 25 stars" match the sky
+    document.querySelectorAll("[data-star]").forEach(function (mini) {
+      const p = progress[mini.dataset.star];
+      if (!p) return;
+      const formingLook = p.forming && !p.manual;
+      mini.className = "mini-star stage-" + p.stage + (formingLook ? " forming" : "") + (p.manual ? " self-set" : "");
+      mini.title = formingLook ? "Still forming" : STAGES[p.stage] + (p.manual ? " (set by you)" : "");
+    });
+
     // Numbers at the top
     const lit = DATA.topics.filter(function (t) { return progress[t.code].stage >= 1; }).length;
     const blazing = DATA.topics.filter(function (t) { return progress[t.code].stage === 4; }).length;
@@ -379,7 +388,7 @@
     const confirmArea = make("div");
 
     if (p.manual) {
-      wrap.append(btn("Go back to my tracked progress", "button ghost", function () {
+      wrap.append(btn("Go back to my tracked progress", "button ghost set-star", function () {
         askFirst(confirmArea,
           "Go back to your tracked progress for " + topic.code + "? The star will show " + STAGES[p.tracked] + " again.",
           "Yes, go back",
@@ -397,7 +406,7 @@
     const tracked = p.tracked || 0;
     if (tracked >= 4) return wrap;          // already blazing: nothing brighter to set
 
-    const open = btn("Set this star myself", "link-button", function () {
+    const open = btn("✦ Set this star myself", "button ghost set-star", function () {
       open.hidden = true;
       chooser.hidden = false;
       chooser.querySelector("button").focus();
@@ -422,7 +431,7 @@
         }));
       })(s);
     }
-    chooser.append(options, btn("Cancel", "link-button", function () {
+    chooser.append(options, btn("Cancel", "button ghost", function () {
       chooser.hidden = true; open.hidden = false; confirmArea.innerHTML = "";
     }));
     wrap.append(open, chooser, confirmArea);
