@@ -21,6 +21,9 @@
       if (get("look:colour")) look.dataset.colour = get("look:colour");
       if (get("look:trail") === "off") look.dataset.trail = "off";
       if (get("look:sky") === "off") look.dataset.sky = "off";
+      // Arriving from another page: show its name straight away (appearance.js fades it out)
+      var arrive = JSON.parse(sessionStorage.getItem("arrive") || "null");
+      if (arrive) { look.dataset.arrive = arrive[0]; look.dataset.arriveSub = arrive[1]; sessionStorage.removeItem("arrive"); }
     } catch (e) {}
   </script>
 
@@ -91,6 +94,7 @@
     </div>
     <p class="footer-small">Made while learning to code with Claude · Your progress is saved on this device</p>
   </footer>
+  <script src="../page-names.js"></script>
   <script src="../appearance.js"></script>
   <script>
     // Details blurt.js needs. "notes" is what Claude writes questions from.

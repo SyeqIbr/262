@@ -4554,20 +4554,6 @@ html[data-colour="rose"]   { --star: #f9a8d4; --star-mid: #f472b6; --star-deep: 
 html[data-colour="gold"]   { --star: #fcd34d; --star-mid: #fbbf24; --star-deep: #b45309; --star-pale: #fef3c7; --star-wash: #f8f0dc; }
 html[data-colour="ice"]    { --star: #93c5fd; --star-mid: #60a5fa; --star-deep: #1d4ed8; --star-pale: #dbeafe; --star-wash: #e4edf9; }
 
-/* ----- Custom cursors (the pictures are made in appearance.js) ----- */
-html[data-cursor],
-html[data-cursor] body { cursor: var(--cursor); }
-html[data-cursor] a,
-html[data-cursor] button,
-html[data-cursor] label,
-html[data-cursor] summary,
-html[data-cursor] [role="button"],
-html[data-cursor] .sky .star { cursor: var(--cursor-hover); }
-/* Typing boxes keep the normal text cursor, so you can see where you're typing */
-html[data-cursor] textarea,
-html[data-cursor] input[type="text"],
-html[data-cursor] input[type="search"] { cursor: text; }
-
 /* ----- "Moving sky" switched off: everything holds still ----- */
 html[data-sky="off"] .sky .bg,
 html[data-sky="off"] .sky .glint,
@@ -4647,7 +4633,7 @@ html[data-mode="light"] .look-panel { box-shadow: 0 24px 60px -24px rgba(15, 23,
 .look-options { display: grid; gap: 8px; }
 .look-options.modes   { grid-template-columns: repeat(3, 1fr); }
 .look-options.colours { grid-template-columns: repeat(5, 1fr); }
-.look-options.cursors { grid-template-columns: repeat(4, 1fr); }
+.look-options.cursors { grid-template-columns: repeat(2, 1fr); }
 
 .look-option {
   position: relative;
@@ -4780,3 +4766,169 @@ html[data-mode="light"] .look-switch input:checked + .look-track { background: v
 .look-switch input { width: 1px; height: 1px; margin: 0; clip-path: inset(50%); }
 /* The chosen swatch grows and glows instead of turning */
 .look-option:has(input:checked) .swatch { transform: scale(1.25); filter: drop-shadow(0 0 5px var(--swatch)); }
+
+/* ======================================================
+   LESSON 18: The spinning star cursor and page names
+   ====================================================== */
+
+/* ----- Hide the real cursor while our star is drawn instead ----- */
+html.star-cursor-on[data-cursor="star"],
+html.star-cursor-on[data-cursor="star"] * { cursor: none !important; }
+/* ...except in typing boxes, where you need to see exactly where you're typing */
+html.star-cursor-on[data-cursor="star"] textarea,
+html.star-cursor-on[data-cursor="star"] input[type="text"],
+html.star-cursor-on[data-cursor="star"] input[type="search"],
+html.star-cursor-on[data-cursor="star"] input:not([type]) { cursor: text !important; }
+
+.star-cursor,
+.cursor-label {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 500;
+  pointer-events: none;
+  display: none;
+}
+html.star-cursor-on[data-cursor="star"] .star-cursor,
+html.star-cursor-on[data-cursor="star"] .cursor-label { display: block; }
+
+/* The star is centred on the mouse point */
+.star-cursor .spin {
+  display: block;
+  width: 26px;
+  height: 26px;
+  margin: -13px 0 0 -13px;
+  animation: cursor-spin 6s linear infinite;
+  transition: width 0.2s, height 0.2s, margin 0.2s, opacity 0.2s;
+}
+.star-cursor svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: var(--star);
+  stroke: #0b0c10;
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--star) 70%, transparent));
+  transition: fill 0.2s, transform 0.12s;
+}
+@keyframes cursor-spin { to { transform: rotate(360deg); } }
+
+/* Over something clickable: bigger, brighter, spinning faster */
+.star-cursor.over-link .spin { width: 36px; height: 36px; margin: -18px 0 0 -18px; animation-duration: 1.6s; }
+.star-cursor.over-link svg { fill: #ffffff; filter: drop-shadow(0 0 6px var(--star)) drop-shadow(0 0 12px var(--star)); }
+/* Clicking: a quick squeeze */
+.star-cursor.pressed svg { transform: scale(0.7); }
+/* Over a typing box, or off the page: step out of the way */
+.star-cursor.over-text .spin,
+.star-cursor.away .spin { opacity: 0; }
+
+html[data-mode="light"] .star-cursor svg { fill: var(--star-mid); }
+html[data-mode="light"] .star-cursor.over-link svg { fill: var(--star); }
+
+/* The label: where a link goes */
+.cursor-label {
+  padding: 4px 10px;
+  font: 600 0.8rem var(--font-body);
+  white-space: nowrap;
+  color: #0b0c10;
+  background: var(--star);
+  border-radius: 999px;
+  box-shadow: 0 6px 18px -6px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  scale: 0.8;
+  transition: opacity 0.15s, scale 0.15s;
+}
+.cursor-label.show { opacity: 1; scale: 1; }
+html[data-mode="light"] .cursor-label { color: #ffffff; background: var(--star-deep); }
+
+/* The panel's preview of the star spins too */
+.cursor-pic { display: block; width: 28px; height: 28px; animation: cursor-spin 6s linear infinite; }
+.cursor-pic svg { width: 100%; height: 100%; fill: var(--star); stroke: #0b0c10; stroke-width: 1.4; stroke-linejoin: round; }
+html[data-mode="light"] .cursor-pic svg { fill: var(--star-mid); }
+
+@media (prefers-reduced-motion: reduce) {
+  .star-cursor .spin, .cursor-pic { animation: none; }
+}
+
+/* ----- The page-name overlay -----
+   Leaving a page: appearance.js adds a .page-overlay element.
+   Arriving: the <head> script sets data-arrive on <html>, and html::before
+   and html::after draw the same overlay before the page has even loaded.
+   Both look identical, so the change of page feels like one smooth move. */
+.page-overlay,
+html[data-arrive]::after {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 24px;
+  text-align: center;
+  color: #eef0f6;
+  background: radial-gradient(ellipse at 50% 40%, #1c2440 0%, #0d101a 55%, #07080c 90%);
+}
+html[data-mode="light"] .page-overlay,
+html[data-mode="light"][data-arrive]::after {
+  color: #15171b;
+  background: radial-gradient(ellipse at 50% 40%, var(--star-wash) 0%, #f6f7f8 70%);
+}
+
+.page-overlay { animation: overlay-in 0.22s ease-out; }
+@keyframes overlay-in { from { opacity: 0; } }
+
+.page-overlay svg {
+  width: 30px;
+  height: 30px;
+  margin-bottom: 10px;
+  fill: var(--star);
+  animation: cursor-spin 1.2s linear infinite;
+}
+.page-overlay small,
+html[data-arrive]::before {
+  font: 500 0.8rem var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--star);
+}
+.page-overlay b,
+html[data-arrive]::after {
+  font: 800 clamp(2rem, 7vw, 4rem) var(--font-display);
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+html[data-mode="light"] .page-overlay small,
+html[data-mode="light"][data-arrive]::before { color: var(--star-deep); }
+
+/* Arriving: the big name, then the small line above it */
+html[data-arrive]::after { content: attr(data-arrive); }
+html[data-arrive]::before {
+  content: attr(data-arrive-sub);
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: calc(50% - clamp(2rem, 7vw, 4rem) * 0.55 - 26px);
+  z-index: 1001;
+  text-align: center;
+}
+html.arrive-out[data-arrive]::after,
+html.arrive-out[data-arrive]::before { animation: overlay-out 0.5s ease-in forwards; }
+@keyframes overlay-out { to { opacity: 0; visibility: hidden; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .page-overlay, .page-overlay svg { animation: none; }
+}
+
+/* Leaving and arriving overlays line up exactly: the name sits in the
+   middle, and the small line is placed above it the same way in both */
+html[data-arrive]::after { line-height: 1.05; }
+.page-overlay small {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: calc(50% - clamp(2rem, 7vw, 4rem) * 0.55 - 26px);
+  text-align: center;
+}

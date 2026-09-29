@@ -6,8 +6,8 @@
 
     Mode        Night, Day, or Auto (match the device)
     Starlight   the colour of every star detail (5 themes)
-    Cursor      the normal arrow, or a star, comet or planet
-    Effects     star trail behind the mouse; moving sky
+    Cursor      the normal arrow, or a spinning star (Lesson 18)
+    Effects     star trail; moving sky; page names when you change page
 
   How it works:
   - Every choice is saved in localStorage ("mode", "look:colour", ...).
@@ -38,28 +38,8 @@
     ["ice",      "Ice",      "#93c5fd", "#1d4ed8"],
   ];
 
-  // Cursors are little SVG pictures. The browser needs them as a "data URL":
-  // the picture's code squeezed into a url("data:image/svg+xml,...").
-  // Each cursor has a normal look and a brighter "you can click this" look.
-  function cursorSvg(kind, colour, hover) {
-    const glow = hover ? '<circle cx="16" cy="16" r="11" fill="' + colour + '" opacity=".25"/>' : "";
-    const shapes = {
-      star: glow + '<path d="M16 3l2.8 10.2L29 16l-10.2 2.8L16 29l-2.8-10.2L3 16l10.2-2.8z" fill="' +
-        (hover ? "#fff" : colour) + '" stroke="#0b0c10" stroke-width="1.4" stroke-linejoin="round"/>',
-      comet: '<path d="M8 8L27 22" stroke="' + colour + '" stroke-width="' + (hover ? 5 : 4) + '" stroke-linecap="round" opacity=".45"/>' +
-        '<path d="M8 8L21 17" stroke="' + colour + '" stroke-width="2.5" stroke-linecap="round" opacity=".8"/>' +
-        '<circle cx="7" cy="7" r="' + (hover ? 5.5 : 4.5) + '" fill="' + (hover ? "#fff" : colour) + '" stroke="#0b0c10" stroke-width="1.4"/>',
-      planet: glow + '<circle cx="16" cy="16" r="' + (hover ? 7.5 : 6.5) + '" fill="' + (hover ? "#fff" : colour) + '" stroke="#0b0c10" stroke-width="1.4"/>' +
-        '<ellipse cx="16" cy="16" rx="13" ry="4" fill="none" stroke="#0b0c10" stroke-width="3.2" transform="rotate(-20 16 16)"/>' +
-        '<ellipse cx="16" cy="16" rx="13" ry="4" fill="none" stroke="' + colour + '" stroke-width="1.6" transform="rotate(-20 16 16)"/>',
-    };
-    return '<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">' + shapes[kind] + "</svg>";
-  }
-  const HOTSPOT = { star: "16 16", comet: "7 7", planet: "16 16" };
-
-  function cursorUrl(kind, colour, hover) {
-    return 'url("data:image/svg+xml,' + encodeURIComponent(cursorSvg(kind, colour, hover)) + '") ' + HOTSPOT[kind];
-  }
+  // The star picture, used for the cursor and its preview in the panel
+  const STAR_SVG = '<svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2l3.2 10.8L30 16l-10.8 3.2L16 30l-3.2-10.8L2 16l10.8-3.2z"/></svg>';
 
   // ---------- Applying choices ----------
   function currentColour() {
@@ -78,25 +58,17 @@
     if (c[0] === "lavender") delete root.dataset.colour; else root.dataset.colour = c[0];
   }
 
-  // The cursor needs the actual colour in its picture, so it's set from here
-  // as two CSS variables that the stylesheet uses.
+  // The star cursor is drawn by the page (see "The star cursor" below), so
+  // here we only record the choice. Older saved choices (comet, planet) become star.
   function applyCursor() {
     const kind = load("look:cursor") || "normal";
-    if (kind === "normal") {
-      delete root.dataset.cursor;
-      root.style.removeProperty("--cursor");
-      root.style.removeProperty("--cursor-hover");
-      return;
-    }
-    const colour = currentColour()[2];
-    root.dataset.cursor = kind;
-    root.style.setProperty("--cursor", cursorUrl(kind, colour, false) + ", auto");
-    root.style.setProperty("--cursor-hover", cursorUrl(kind, colour, true) + ", pointer");
+    if (kind === "normal") delete root.dataset.cursor; else root.dataset.cursor = "star";
   }
 
   function applyFlags() {
     if (load("look:trail") === "off") root.dataset.trail = "off"; else delete root.dataset.trail;
     if (load("look:sky") === "off") root.dataset.sky = "off"; else delete root.dataset.sky;
+    if (load("look:names") === "off") root.dataset.names = "off"; else delete root.dataset.names;
   }
 
   function applyAll() { applyMode(); applyColour(); applyCursor(); applyFlags(); }
@@ -132,7 +104,6 @@
       input.addEventListener("change", function () {
         save(key, o.value);
         applyAll();
-        refreshCursorPreviews();
       });
       const pic = document.createElement("span");
       pic.className = "look-pic";
@@ -196,27 +167,17 @@
 
   const cursors = radioGroup("look-cursor", "look:cursor", "normal", [
     { value: "normal", label: "Normal", pic: '<svg viewBox="0 0 32 32"><path d="M9 5v20l5.5-5.5 3.5 8 3-1.3-3.5-7.8H25z" fill="#fff" stroke="#0b0c10" stroke-width="1.4" stroke-linejoin="round"/></svg>' },
-    { value: "star", label: "Star", pic: "" },
-    { value: "comet", label: "Comet", pic: "" },
-    { value: "planet", label: "Planet", pic: "" },
+    { value: "star", label: "Spinning star", pic: '<span class="cursor-pic">' + STAR_SVG + "</span>" },
   ], "cursors");
-
-  // The cursor pictures use the chosen starlight colour, so redraw them when it changes
-  function refreshCursorPreviews() {
-    const colour = currentColour()[2];
-    cursors.querySelectorAll(".look-option").forEach(function (option) {
-      const kind = option.querySelector("input").value;
-      if (kind !== "normal") option.querySelector(".look-pic").innerHTML = cursorSvg(kind, colour, false);
-    });
-  }
-  refreshCursorPreviews();
+  // Old saved choices (comet, planet) show as Star
+  if (!cursors.querySelector("input:checked")) cursors.querySelector('input[value="star"]').checked = true;
 
   const reset = document.createElement("button");
   reset.type = "button";
   reset.className = "look-reset";
   reset.textContent = "Reset to the original look";
   reset.addEventListener("click", function () {
-    ["mode", "look:colour", "look:cursor", "look:trail", "look:sky"].forEach(function (k) {
+    ["mode", "look:colour", "look:cursor", "look:trail", "look:sky", "look:names"].forEach(function (k) {
       try { localStorage.removeItem(k); } catch (e) {}
     });
     applyAll();
@@ -224,7 +185,6 @@
       i.checked = ["dark", "lavender", "normal"].indexOf(i.value) !== -1;
     });
     panel.querySelectorAll("input[role=switch]").forEach(function (i) { i.checked = true; });
-    refreshCursorPreviews();
   });
 
   panel.append(
@@ -236,6 +196,7 @@
     section("Effects", [
       toggle("look:trail", "Star trail", "Tiny stars follow the mouse"),
       toggle("look:sky", "Moving sky", "Shooting stars, twinkling and drift"),
+      toggle("look:names", "Page names", "Show where you're going when you change page"),
     ]),
     reset
   );
@@ -267,6 +228,121 @@
   document.addEventListener("keydown", function (e) {
     if (e.key === "Escape") close(true);
   });
+
+  // ---------- Page names (Lesson 18) ----------
+  // Every page's friendly name comes from page-names.js, e.g.
+  // "biology/b1-microscopy.html" -> ["Microscopy", "Biology"].
+  // This script sits in the site's top folder, so its own address tells us
+  // where the site starts, and we can turn any link into a key for that list.
+  const scriptSrc = (document.currentScript && document.currentScript.src) || "";
+  const siteRoot = scriptSrc.slice(0, scriptSrc.lastIndexOf("/") + 1);
+  function nameFor(link) {
+    if (!link || !link.href || link.target === "_blank" || !siteRoot) return null;
+    const url = new URL(link.href, location.href);
+    const here = new URL(location.href);
+    if (url.origin !== here.origin || !url.href.startsWith(siteRoot)) return null;
+    if (url.pathname === here.pathname && url.hash) return null;       // a jump within this page
+    let key = url.pathname.slice(new URL(siteRoot).pathname.length) || "index.html";
+    return (window.PAGE_NAMES || {})[key] || null;
+  }
+
+  // The overlay: the name of the page you're going to, in big letters.
+  function overlay(name, sub) {
+    const box = document.createElement("div");
+    box.className = "page-overlay";
+    box.setAttribute("aria-hidden", "true");
+    box.innerHTML = '<small></small><b></b>';
+    box.querySelector("small").textContent = sub;
+    box.querySelector("b").textContent = name;
+    return box;
+  }
+
+  // Leaving: show the name, then go (a short pause so you can see it)
+  document.addEventListener("click", function (e) {
+    const link = e.target.closest && e.target.closest("a[href]");
+    if (!link || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    if (root.dataset.names === "off") return;
+    const name = nameFor(link);
+    if (!name) return;
+    e.preventDefault();
+    try { sessionStorage.setItem("arrive", JSON.stringify(name)); } catch (err) {}
+    document.body.append(overlay(name[0], name[1]));
+    const wait = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 260;
+    setTimeout(function () { location.href = link.href; }, wait);
+  });
+
+  // Arriving: the <head> script already shows the name (data-arrive on <html>),
+  // so the new page starts covered. Fade it away.
+  function arrive() {
+    if (!root.dataset.arrive) return;
+    root.classList.add("arrive-out");
+    setTimeout(function () {
+      delete root.dataset.arrive;
+      delete root.dataset.arriveSub;
+      root.classList.remove("arrive-out");
+    }, 600);
+  }
+  requestAnimationFrame(function () { setTimeout(arrive, 180); });
+  // Coming back with the Back button can restore the old page as it was left,
+  // overlay and all, so clear it away.
+  window.addEventListener("pageshow", function (e) {
+    if (e.persisted) document.querySelectorAll(".page-overlay").forEach(function (o) { o.remove(); });
+  });
+
+  // ---------- The star cursor (Lesson 18) ----------
+  // A browser can't animate a normal cursor, so when the star is chosen we
+  // hide the real one (cursor: none) and draw our own star that follows the
+  // mouse. That star can spin, grow over links and pulse when you click.
+  // Next to it, a small label says where a link goes.
+  const hasMouse = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  if (hasMouse) {
+    const star = document.createElement("div");
+    star.className = "star-cursor";
+    star.setAttribute("aria-hidden", "true");
+    star.innerHTML = '<span class="spin">' + STAR_SVG + "</span>";
+    const label = document.createElement("div");
+    label.className = "cursor-label";
+    label.setAttribute("aria-hidden", "true");
+    document.body.append(star, label);
+
+    let x = -100, y = -100, queued = false;
+    function place() {
+      queued = false;
+      star.style.transform = "translate(" + x + "px," + y + "px)";
+      label.style.transform = "translate(" + (x + 20) + "px," + (y + 16) + "px)";
+    }
+
+    document.addEventListener("pointermove", function (e) {
+      if (e.pointerType !== "mouse") return;
+      x = e.clientX; y = e.clientY;
+      // The class that hides the real cursor is only added once our star is
+      // actually moving, so if anything goes wrong the normal cursor stays.
+      root.classList.add("star-cursor-on");
+      if (!queued) { queued = true; requestAnimationFrame(place); }
+
+      // What's under the mouse?
+      const t = e.target;
+      const typing = t.closest && t.closest("textarea, input[type=text], input[type=search], input:not([type])");
+      const clickable = t.closest && t.closest("a[href], button, label, summary, [role=button], select");
+      star.classList.toggle("over-text", !!typing);
+      star.classList.toggle("over-link", !!clickable && !typing);
+
+      // The label: a page name for links, or the topic for a star in the sky
+      let text = "";
+      const link = t.closest && t.closest("a[href]");
+      const name = nameFor(link);
+      if (name) text = name[0];
+      const skyStar = t.closest && t.closest(".sky .star");
+      if (skyStar) text = (skyStar.getAttribute("aria-label") || "").split(":")[0];
+      if (text !== label.textContent) label.textContent = text;
+      label.classList.toggle("show", !!text && root.dataset.cursor === "star");
+    }, { passive: true });
+
+    document.addEventListener("pointerdown", function () { star.classList.add("pressed"); });
+    document.addEventListener("pointerup", function () { star.classList.remove("pressed"); });
+    document.documentElement.addEventListener("pointerleave", function () { star.classList.add("away"); label.classList.remove("show"); });
+    document.documentElement.addEventListener("pointerenter", function () { star.classList.remove("away"); });
+  }
 
   // ---------- The star trail behind the mouse (moved here from progress.js) ----------
   // Every time the mouse travels about 16px, a small four-point star appears,
