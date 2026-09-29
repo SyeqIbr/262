@@ -1,3 +1,21 @@
+/* ======================================================
+   LESSON 17: The starlight colour
+   Every lavender "starlight" detail on the site uses these variables,
+   so a colour theme (Appearance panel) can change them all at once.
+     --star       the main starlight colour (on dark backgrounds)
+     --star-mid   a slightly stronger version
+     --star-deep  a deep version, readable on white (light mode)
+     --star-pale  an almost-white tint
+     --star-wash  a very pale background tint (light mode hero)
+   ====================================================== */
+:root {
+  --star: #c4b5fd;
+  --star-mid: #a78bfa;
+  --star-deep: #7c3aed;
+  --star-pale: #e9e3ff;
+  --star-wash: #ece8fb;
+}
+
 /*
   LESSON 3: One stylesheet, many pages
   ------------------------------------
@@ -30,7 +48,7 @@
   --dots: rgba(255, 255, 255, 0.07);      /* the halftone dot texture */
   --track: rgba(255, 255, 255, 0.12);     /* empty part of progress rings */
   --input-bg: rgba(255, 255, 255, 0.02);
-  --pill-study: #c4b5fd;
+  --pill-study: var(--star);
   --pill-practice: #7dd3fc;
   --pill-ai: #fbbf24;
   --glow-strength: 0.22;
@@ -1327,11 +1345,11 @@ summary .row-meta + .chev {
 .diagram .edge  { fill: color-mix(in srgb, var(--accent) 8%, transparent); stroke: var(--accent); stroke-width: 2; }
 .diagram .wall  { fill: none; stroke: #a3a88f; stroke-width: 5; }
 .diagram .thin  { fill: none; stroke: var(--accent); stroke-width: 1.5; }
-.diagram .nuc   { fill: color-mix(in srgb, #c4b5fd 35%, transparent); stroke: #c4b5fd; stroke-width: 1.5; }
+.diagram .nuc   { fill: color-mix(in srgb, var(--star) 35%, transparent); stroke: var(--star); stroke-width: 1.5; }
 .diagram .mito  { fill: color-mix(in srgb, #fb923c 30%, transparent); stroke: #fb923c; stroke-width: 1.2; }
 .diagram .chlo  { fill: color-mix(in srgb, var(--good) 45%, transparent); stroke: var(--good); stroke-width: 1.2; }
 .diagram .vac   { fill: color-mix(in srgb, #60a5fa 18%, transparent); stroke: #60a5fa; stroke-width: 1.2; }
-.diagram .dna   { fill: none; stroke: #c4b5fd; stroke-width: 1.8; }
+.diagram .dna   { fill: none; stroke: var(--star); stroke-width: 1.8; }
 .diagram .ribo  { fill: var(--text); }
 .diagram .particle { fill: var(--accent); }
 .diagram .membrane { stroke: var(--muted); stroke-width: 2; stroke-dasharray: 6 5; }
@@ -2449,7 +2467,7 @@ html[data-mode="light"] {
   --dots: rgba(30, 41, 59, 0.06);
   --track: rgba(30, 41, 59, 0.1);
   --input-bg: #ffffff;
-  --pill-study: #6d28d9;
+  --pill-study: var(--star-deep);
   --pill-practice: #0369a1;
   --pill-ai: #b45309;
   color-scheme: light;
@@ -3186,7 +3204,7 @@ html[data-mode="light"] .demo { box-shadow: none; }
    ====================================================== */
 .sky-page,
 .nav .sky-link {
-  --accent: #c4b5fd;              /* lavender, for starlight */
+  --accent: var(--star);              /* lavender, for starlight */
 }
 
 .sky-main {
@@ -3469,7 +3487,7 @@ html[data-mode="light"] .demo { box-shadow: none; }
 }
 
 .sky-options input {
-  accent-color: #c4b5fd;
+  accent-color: var(--star);
   margin-right: 6px;
 }
 
@@ -3484,7 +3502,7 @@ html[data-mode="light"] .demo { box-shadow: none; }
   border-radius: var(--radius);
   background: #1b1f2c;
   color: #ffffff;
-  border: 1px solid #c4b5fd;
+  border: 1px solid var(--star);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
@@ -3518,13 +3536,13 @@ html[data-mode="light"] .demo { box-shadow: none; }
 
 .brand .logo path {
   fill: none;
-  stroke: #c4b5fd;
+  stroke: var(--star);
   stroke-width: 1.4;
   opacity: 0.7;
 }
 
 .brand .logo circle {
-  fill: #c4b5fd;
+  fill: var(--star);
 }
 
 /* Stars set by the student: a dashed ring around them */
@@ -3777,7 +3795,7 @@ header.home-head {
    bigger at each stage. */
 .glyph,
 .mini-star {
-  --c: #c4b5fd;
+  --c: var(--star);
   display: inline-block;
   border-radius: 50%;
   background: #6b7280;
@@ -3825,11 +3843,11 @@ header.home-head {
 
 .star-steps i {
   font-style: normal;
-  color: #c4b5fd;
+  color: var(--star);
   font-weight: 600;
 }
 
-html[data-mode="light"] .star-steps i { color: #6d28d9; }
+html[data-mode="light"] .star-steps i { color: var(--star-deep); }
 
 /* Mini stars in the topic lists: brightness matches the sky */
 .mini-star {
@@ -3878,7 +3896,7 @@ html[data-mode="light"] .mini-star.stage-4 { background: var(--c); }
 
 .brand .logo .logo-lines {
   fill: none;
-  stroke: #c4b5fd;
+  stroke: var(--star);
   stroke-width: 1.3;
   stroke-linejoin: round;
   opacity: 0.6;
@@ -3891,16 +3909,16 @@ html[data-mode="light"] .mini-star.stage-4 { background: var(--c); }
   opacity: 0.85;
 }
 
-.brand .logo circle { fill: #c4b5fd; }
-.brand .logo .logo-big { fill: #ffffff; filter: drop-shadow(0 0 3px #c4b5fd); }
+.brand .logo circle { fill: var(--star); }
+.brand .logo .logo-big { fill: #ffffff; filter: drop-shadow(0 0 3px var(--star)); }
 
 .brand:hover .logo .logo-lines { opacity: 1; }
 
 html[data-mode="light"] .brand .logo circle,
-html[data-mode="light"] .brand .logo .logo-lines { fill: #7c3aed; stroke: #7c3aed; }
+html[data-mode="light"] .brand .logo .logo-lines { fill: var(--star-deep); stroke: var(--star-deep); }
 html[data-mode="light"] .brand .logo .logo-lines { fill: none; }
-html[data-mode="light"] .brand .logo .logo-spark { stroke: #7c3aed; }
-html[data-mode="light"] .brand .logo .logo-big { fill: #7c3aed; filter: none; }
+html[data-mode="light"] .brand .logo .logo-spark { stroke: var(--star-deep); }
+html[data-mode="light"] .brand .logo .logo-big { fill: var(--star-deep); filter: none; }
 
 @media (max-width: 520px) {
   .brand { font-size: 1.2rem; }
@@ -3918,18 +3936,18 @@ html[data-mode="light"] .brand .logo .logo-big { fill: #7c3aed; filter: none; }
 .nav-icon {
   width: 15px;
   height: 15px;
-  fill: #c4b5fd;
+  fill: var(--star);
   flex-shrink: 0;
 }
 
-html[data-mode="light"] .nav-icon { fill: #7c3aed; }
+html[data-mode="light"] .nav-icon { fill: var(--star-deep); }
 
 /* "How it works" is in the menu on bigger screens only */
 @media (max-width: 720px) {
   .nav .wide-only { display: none; }
 }
 
-.nav .how-link { --accent: #c4b5fd; }
+.nav .how-link { --accent: var(--star); }
 
 /* ----- The sky, centre stage ----- */
 .sky-hero .home-head {
@@ -3988,7 +4006,7 @@ html[data-mode="light"] .nav-icon { fill: #7c3aed; }
 
 .mix-card b { display: block; }
 .mix-card span { color: var(--muted); font-size: 0.92rem; }
-.mix-card:hover, .mix-card:focus-visible { border-color: #c4b5fd; outline: none; }
+.mix-card:hover, .mix-card:focus-visible { border-color: var(--star); outline: none; }
 
 .sky-side .sky-options { margin: 0; }
 
@@ -4144,7 +4162,7 @@ header.how-head {
   margin: 0 0 24px;
 }
 
-.mix-page { --accent: #c4b5fd; }
+.mix-page { --accent: var(--star); }
 
 .pick-soon {
   display: flex;
@@ -4187,7 +4205,7 @@ html[data-mode="light"] .mini-star.stage-1 { background: var(--c); }
 }
 .sky-key b { color: #eef0f6; font-weight: 600; }
 .key-star {
-  --c: #c4b5fd;
+  --c: var(--star);
   width: 10px;
   height: 10px;
   margin-right: 4px;
@@ -4238,26 +4256,26 @@ html[data-mode="light"] .mini-star.stage-1 { background: var(--c); }
   background: #ffffff;
   /* a four-point star shape, cut out with clip-path */
   clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
-  filter: drop-shadow(0 0 6px #c4b5fd) drop-shadow(0 0 12px #c4b5fd);
+  filter: drop-shadow(0 0 6px var(--star)) drop-shadow(0 0 12px var(--star));
 }
 .burst-spark {
   width: 5px;
   height: 5px;
   margin: -2.5px 0 0 -2.5px;
   border-radius: 50%;
-  background: #e9e3ff;
-  box-shadow: 0 0 6px #c4b5fd;
+  background: var(--star-pale);
+  box-shadow: 0 0 6px var(--star);
 }
 
 /* "My sky" in the menu glows when a star lands in it */
 .nav .sky-link.sky-glow { animation: sky-glow 1.6s ease-out; }
 .nav .sky-link.sky-glow .nav-icon { animation: sky-icon 1.6s ease-out; }
 @keyframes sky-glow {
-  0%   { box-shadow: 0 0 0 0 rgba(196, 181, 253, 0.7); background: rgba(196, 181, 253, 0.25); }
-  100% { box-shadow: 0 0 0 14px rgba(196, 181, 253, 0); }
+  0%   { box-shadow: 0 0 0 0 color-mix(in srgb, var(--star) 70%, transparent); background: color-mix(in srgb, var(--star) 25%, transparent); }
+  100% { box-shadow: 0 0 0 14px color-mix(in srgb, var(--star) 0%, transparent); }
 }
 @keyframes sky-icon {
-  0%   { transform: scale(1.8) rotate(45deg); filter: drop-shadow(0 0 6px #c4b5fd); }
+  0%   { transform: scale(1.8) rotate(45deg); filter: drop-shadow(0 0 6px var(--star)); }
   100% { transform: scale(1) rotate(0); }
 }
 
@@ -4284,8 +4302,8 @@ html[data-mode="light"] .mini-star.stage-1 { background: var(--c); }
   pointer-events: none;
 }
 .footer-sky circle { fill: #cfd6ff; animation: twinkle var(--dur) ease-in-out infinite alternate; animation-delay: var(--delay); }
-.footer-sky .f-lines { fill: none; stroke: #c4b5fd; stroke-width: 1; opacity: 0.35; }
-.footer-sky .f-bright { fill: #ffffff; animation: none; filter: drop-shadow(0 0 3px #c4b5fd); }
+.footer-sky .f-lines { fill: none; stroke: var(--star); stroke-width: 1; opacity: 0.35; }
+.footer-sky .f-bright { fill: #ffffff; animation: none; filter: drop-shadow(0 0 3px var(--star)); }
 
 .footer-inner {
   position: relative;
@@ -4302,8 +4320,8 @@ html[data-mode="light"] .mini-star.stage-1 { background: var(--c); }
 .footer-brand p { margin: 10px 0 0; max-width: 32ch; font-size: 0.95rem; }
 
 /* The logo keeps its night colours on the dark footer, even in light mode */
-html[data-mode="light"] .site-footer .brand .logo circle { fill: #c4b5fd; }
-html[data-mode="light"] .site-footer .brand .logo .logo-lines { fill: none; stroke: #c4b5fd; }
+html[data-mode="light"] .site-footer .brand .logo circle { fill: var(--star); }
+html[data-mode="light"] .site-footer .brand .logo .logo-lines { fill: none; stroke: var(--star); }
 html[data-mode="light"] .site-footer .brand .logo .logo-big { fill: #ffffff; }
 
 .footer-links {
@@ -4319,7 +4337,7 @@ html[data-mode="light"] .site-footer .brand .logo .logo-big { fill: #ffffff; }
   margin-bottom: 2px;
 }
 .footer-links a { color: #c7ccd9; text-decoration: none; font-size: 0.95rem; }
-.footer-links a:hover { color: #c4b5fd; }
+.footer-links a:hover { color: var(--star); }
 
 .footer-small {
   position: relative;
@@ -4406,10 +4424,10 @@ html[data-mode="light"] .sky-hero {
   --muted: #676d77;
   color: var(--text);
   border-bottom: 1px solid var(--border);
-  background: linear-gradient(180deg, #ece8fb 0%, #f3f1fb 40%, #f6f7f8 100%);
+  background: linear-gradient(180deg, var(--star-wash) 0%, color-mix(in srgb, var(--star-wash) 50%, #f6f7f8) 40%, #f6f7f8 100%);
 }
 html[data-mode="light"] .sky-hero .home-head h1 { color: #15171b; }
-html[data-mode="light"] .sky-hero .sky-stats { color: #6d28d9; }
+html[data-mode="light"] .sky-hero .sky-stats { color: var(--star-deep); }
 html[data-mode="light"] .sky-hero .sky-frame {
   background: radial-gradient(ellipse at 50% 0%, #141a2b, #07080c 75%);
   border-color: #1d2230;
@@ -4417,16 +4435,16 @@ html[data-mode="light"] .sky-hero .sky-frame {
 }
 html[data-mode="light"] .sky-hero .star-panel { background: #ffffff; }
 html[data-mode="light"] .sky-hero .next-step { background: #ffffff; }
-html[data-mode="light"] .sky-hero .next-step .next-label { color: #6d28d9; }
-html[data-mode="light"] .sky-hero { --on-accent: #ffffff; --accent: #7c3aed; }
-html[data-mode="light"] .sky-hero .button:not(.ghost):not(.undo-star):not(.danger) { background: #7c3aed; border-color: #7c3aed; color: #ffffff; }
+html[data-mode="light"] .sky-hero .next-step .next-label { color: var(--star-deep); }
+html[data-mode="light"] .sky-hero { --on-accent: #ffffff; --accent: var(--star-deep); }
+html[data-mode="light"] .sky-hero .button:not(.ghost):not(.undo-star):not(.danger) { background: var(--star-deep); border-color: var(--star-deep); color: #ffffff; }
 
 /* Step stars: a coloured centre, so they show up on a light page */
-html[data-mode="light"] .glyph { --c: #7c3aed; background: #c9ccd2; }
+html[data-mode="light"] .glyph { --c: var(--star-deep); background: #c9ccd2; }
 html[data-mode="light"] .glyph.stage-1,
 html[data-mode="light"] .glyph.stage-2,
 html[data-mode="light"] .glyph.joined,
-html[data-mode="light"] .glyph.joined::before { background: #7c3aed; }
+html[data-mode="light"] .glyph.joined::before { background: var(--star-deep); }
 html[data-mode="light"] .mini-star.stage-2 { background: var(--c); }
 
 /* ----- The star trail behind the mouse (progress.js) ----- */
@@ -4438,11 +4456,11 @@ html[data-mode="light"] .mini-star.stage-2 { background: var(--c); }
   pointer-events: none;
   background: #ffffff;
   clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
-  filter: drop-shadow(0 0 3px #c4b5fd);
+  filter: drop-shadow(0 0 3px var(--star));
 }
-.trail-star.tint { background: #c4b5fd; }
-html[data-mode="light"] .trail-star { background: #7c3aed; filter: none; }
-html[data-mode="light"] .trail-star.tint { background: #a78bfa; }
+.trail-star.tint { background: var(--star); }
+html[data-mode="light"] .trail-star { background: var(--star-deep); filter: none; }
+html[data-mode="light"] .trail-star.tint { background: var(--star-mid); }
 
 /* ----- Mixed blurting: a feature card ----- */
 .mix-card.feature {
@@ -4484,9 +4502,9 @@ html[data-mode="light"] .trail-star.tint { background: #a78bfa; }
   padding: 2px 7px;
   border-radius: 999px;
   color: #0b0c10 !important;
-  background: #c4b5fd;
+  background: var(--star);
 }
-html[data-mode="light"] .new-pill { background: #7c3aed; color: #ffffff !important; }
+html[data-mode="light"] .new-pill { background: var(--star-deep); color: #ffffff !important; }
 
 /* Three overlapping orbs: Biology + Chemistry + Physics */
 .mix-orbs { position: relative; width: 52px; height: 40px; }
@@ -4525,3 +4543,240 @@ html[data-mode="light"] .star-panel {
   --sky-chemistry: #c2410c;
   --sky-physics: #1d4ed8;
 }
+
+/* ======================================================
+   LESSON 17: Appearance (the palette button and its panel)
+   ====================================================== */
+
+/* ----- Colour themes: each one just swaps the starlight variables ----- */
+html[data-colour="aurora"] { --star: #5eead4; --star-mid: #2dd4bf; --star-deep: #0f766e; --star-pale: #ccfbf1; --star-wash: #e0f5f1; }
+html[data-colour="rose"]   { --star: #f9a8d4; --star-mid: #f472b6; --star-deep: #be185d; --star-pale: #fce7f3; --star-wash: #f9e6ef; }
+html[data-colour="gold"]   { --star: #fcd34d; --star-mid: #fbbf24; --star-deep: #b45309; --star-pale: #fef3c7; --star-wash: #f8f0dc; }
+html[data-colour="ice"]    { --star: #93c5fd; --star-mid: #60a5fa; --star-deep: #1d4ed8; --star-pale: #dbeafe; --star-wash: #e4edf9; }
+
+/* ----- Custom cursors (the pictures are made in appearance.js) ----- */
+html[data-cursor],
+html[data-cursor] body { cursor: var(--cursor); }
+html[data-cursor] a,
+html[data-cursor] button,
+html[data-cursor] label,
+html[data-cursor] summary,
+html[data-cursor] [role="button"],
+html[data-cursor] .sky .star { cursor: var(--cursor-hover); }
+/* Typing boxes keep the normal text cursor, so you can see where you're typing */
+html[data-cursor] textarea,
+html[data-cursor] input[type="text"],
+html[data-cursor] input[type="search"] { cursor: text; }
+
+/* ----- "Moving sky" switched off: everything holds still ----- */
+html[data-sky="off"] .sky .bg,
+html[data-sky="off"] .sky .glint,
+html[data-sky="off"] .footer-sky circle { animation: none; }
+html[data-sky="off"] .sky .layer { transform: none !important; }
+
+/* ----- The palette button ----- */
+.look-toggle svg { width: 22px; height: 22px; overflow: visible; }
+.look-toggle .pal { fill: none; stroke: currentColor; stroke-width: 1.6; }
+.look-toggle .paint { stroke: none; }
+.look-toggle .paint.b { fill: #4ade80; }
+.look-toggle .paint.c { fill: #fb923c; }
+.look-toggle .paint.p { fill: #60a5fa; }
+.look-toggle .spark {
+  fill: var(--star);
+  stroke: none;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: spark-twinkle 2.6s ease-in-out infinite;
+}
+@keyframes spark-twinkle {
+  0%, 100% { transform: scale(0.7) rotate(0deg); opacity: 0.7; }
+  50%      { transform: scale(1.15) rotate(45deg); opacity: 1; }
+}
+.look-toggle:hover .spark,
+.look-toggle[aria-expanded="true"] .spark { animation-duration: 0.9s; }
+.look-toggle[aria-expanded="true"] { color: var(--text); border-color: var(--star); }
+html[data-mode="light"] .look-toggle .spark { fill: var(--star-deep); }
+
+/* ----- The panel ----- */
+.look-panel {
+  position: fixed;
+  top: 70px;
+  right: 16px;
+  z-index: 150;
+  width: min(380px, calc(100vw - 32px));
+  max-height: calc(100vh - 90px);
+  overflow-y: auto;
+  padding: 18px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.6);
+  transform-origin: top right;
+  animation: look-open 0.18s ease-out;
+}
+@keyframes look-open { from { opacity: 0; transform: scale(0.96) translateY(-6px); } }
+html[data-mode="light"] .look-panel { box-shadow: 0 24px 60px -24px rgba(15, 23, 42, 0.35); }
+
+.look-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+.look-head h2 { margin: 0; font-size: 1.15rem; }
+.look-close {
+  width: 32px;
+  height: 32px;
+  font-size: 1.4rem;
+  line-height: 1;
+  color: var(--muted);
+  background: none;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.look-close:hover { color: var(--text); background: color-mix(in srgb, var(--text) 8%, transparent); }
+
+.look-section { padding: 14px 0; border-top: 1px solid var(--border); }
+.look-section:first-of-type { border-top: none; }
+.look-section h3 {
+  margin: 0 0 10px;
+  font: 500 0.72rem var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+/* Options: the radio circle is hidden; the whole tile is what you click */
+.look-options { display: grid; gap: 8px; }
+.look-options.modes   { grid-template-columns: repeat(3, 1fr); }
+.look-options.colours { grid-template-columns: repeat(5, 1fr); }
+.look-options.cursors { grid-template-columns: repeat(4, 1fr); }
+
+.look-option {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-small);
+  cursor: pointer;
+  font-size: 0.82rem;
+  color: var(--text-2);
+  transition: border-color 0.15s, background 0.15s;
+}
+.look-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.look-option:hover { border-color: var(--border-strong); }
+.look-option:has(input:checked) {
+  border-color: var(--star);
+  background: color-mix(in srgb, var(--star) 12%, transparent);
+  color: var(--text);
+}
+.look-option:has(input:focus-visible) { outline: 2px solid var(--star); outline-offset: 2px; }
+html[data-mode="light"] .look-option:has(input:checked) { border-color: var(--star-deep); }
+
+.look-pic { display: grid; place-items: center; height: 36px; }
+.look-pic svg { width: 28px; height: 28px; }
+
+/* Little mode pictures: a night sky, a day sky, and half-and-half */
+.mode-pic {
+  position: relative;
+  width: 52px;
+  height: 34px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.mode-pic.night { background: radial-gradient(ellipse at 50% 0%, #1c2440, #07080c 80%); }
+.mode-pic.night i { position: absolute; width: 2px; height: 2px; border-radius: 50%; background: #fff; }
+.mode-pic.night i:nth-child(1) { left: 10px; top: 8px; }
+.mode-pic.night i:nth-child(2) { left: 30px; top: 18px; width: 3px; height: 3px; box-shadow: 0 0 4px var(--star); }
+.mode-pic.night i:nth-child(3) { left: 42px; top: 7px; }
+.mode-pic.day { background: linear-gradient(180deg, #dbeafe, #f6f7f8); }
+.mode-pic.day i { position: absolute; left: 18px; top: 8px; width: 14px; height: 14px; border-radius: 50%; background: #facc15; box-shadow: 0 0 8px #fde68a; }
+.mode-pic.auto { background: linear-gradient(135deg, #0d101a 50%, #eef2f8 50%); }
+.mode-pic.auto i { position: absolute; left: 19px; top: 10px; width: 12px; height: 12px; border-radius: 50%; background: linear-gradient(135deg, #e5e7eb 50%, #facc15 50%); }
+
+/* Colour swatches, cut into a four-point star shape */
+.swatch {
+  width: 28px;
+  height: 28px;
+  background: var(--swatch);
+  clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%);
+  transition: transform 0.2s;
+}
+.look-option:has(input:checked) .swatch { transform: scale(1.2) rotate(45deg); }
+html[data-mode="light"] .swatch { background: var(--swatch-deep); }
+
+/* On / off switches */
+.look-switch {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  cursor: pointer;
+}
+.look-switch > span:first-child { flex: 1; display: flex; flex-direction: column; }
+.look-switch b { font-weight: 600; font-size: 0.95rem; }
+.look-switch small { color: var(--muted); font-size: 0.82rem; }
+.look-switch input { position: absolute; opacity: 0; pointer-events: none; }
+.look-track {
+  position: relative;
+  width: 42px;
+  height: 24px;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: var(--border-strong);
+  transition: background 0.2s;
+}
+.look-track::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: transform 0.2s;
+}
+.look-switch input:checked + .look-track { background: var(--star-mid); }
+.look-switch input:checked + .look-track::after { transform: translateX(18px); }
+.look-switch input:focus-visible + .look-track { outline: 2px solid var(--star); outline-offset: 2px; }
+html[data-mode="light"] .look-switch input:checked + .look-track { background: var(--star-deep); }
+
+.look-reset {
+  display: block;
+  margin: 6px auto 0;
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--muted);
+  background: none;
+  border: none;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+.look-reset:hover { color: var(--text); }
+
+/* Cursors and the trail need a mouse: hide them on touch screens */
+@media (hover: none), (pointer: coarse) {
+  .look-panel .mouse-only { display: none; }
+}
+
+/* On phones the panel drops down full width under the menu */
+@media (max-width: 520px) {
+  .look-panel { top: 56px; right: 12px; left: 12px; width: auto; max-height: calc(100vh - 140px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .look-toggle .spark, .look-panel { animation: none; }
+}
+
+/* Fully hide the radio circles (a 1px dot could still peek through) */
+.look-option input,
+.look-switch input { width: 1px; height: 1px; margin: 0; clip-path: inset(50%); }
+/* The chosen swatch grows and glows instead of turning */
+.look-option:has(input:checked) .swatch { transform: scale(1.25); filter: drop-shadow(0 0 5px var(--swatch)); }

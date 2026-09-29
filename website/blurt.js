@@ -621,7 +621,9 @@ function celebrate() {
   canvas.height = window.innerHeight;
   document.body.append(canvas);
   const ctx = canvas.getContext("2d");
-  const colours = ["#4ade80", "#fb923c", "#60a5fa", "#facc15", "#c4b5fd"];
+  // The last colour is the student's chosen starlight colour (Appearance panel)
+  const star = getComputedStyle(document.documentElement).getPropertyValue("--star").trim() || "#c4b5fd";
+  const colours = ["#4ade80", "#fb923c", "#60a5fa", "#facc15", star];
   const pieces = [];
   for (let i = 0; i < 150; i++) {
     pieces.push({

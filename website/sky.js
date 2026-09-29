@@ -46,6 +46,8 @@
   ];
   // Can the page move things about? Not if the student asked for less motion.
   const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  // The "Moving sky" switch in the Appearance panel sets <html data-sky="off">
+  function skyStill() { return reduceMotion || document.documentElement.dataset.sky === "off"; }
 
   // Where each star sits (wide screens). On narrow screens we swap x and y,
   // which stacks the three subjects on top of each other.
@@ -239,7 +241,7 @@
   if (finePointer && !reduceMotion) {
     let queued = false;
     window.addEventListener("pointermove", function (e) {
-      drift = [e.clientX / window.innerWidth - 0.5, e.clientY / window.innerHeight - 0.5];
+      drift = skyStill() ? [0, 0] : [e.clientX / window.innerWidth - 0.5, e.clientY / window.innerHeight - 0.5];
       // requestAnimationFrame: update at most once per screen refresh
       if (!queued) { queued = true; requestAnimationFrame(function () { queued = false; applyDrift(); }); }
     });
@@ -249,7 +251,7 @@
   // A streak with a fading tail: a gradient line plus a bright head,
   // moved across the sky with the Web Animations API (element.animate).
   function shootingStar(big) {
-    if (reduceMotion || !layers.shooting) return;
+    if (skyStill() || !layers.shooting) return;
     const vb = svg.viewBox.baseVal, W = vb.width, H = vb.height;
     const angle = 20 + Math.random() * 25;                 // degrees below horizontal
     const len = big ? 140 : 70 + Math.random() * 50;
