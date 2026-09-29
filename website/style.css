@@ -49,7 +49,7 @@
 
 /* ---------- 2. The page itself ---------- */
 body {
-  font-family: "Outfit", system-ui, sans-serif;
+  font-family: var(--font-body);
   color: var(--text);
   background: var(--background);
   margin: 0;
@@ -130,7 +130,7 @@ body::before {
 }
 
 .nav .brand {
-  font-family: "Unbounded", sans-serif;
+  font-family: var(--font-display);
   font-weight: 600;
   font-size: 0.9rem;
   margin-right: auto;     /* pushes the subject links to the right */
@@ -141,7 +141,7 @@ body::before {
   color: var(--muted);
   font-size: 0.95rem;
   padding: 6px 14px;
-  border-radius: 999px;
+  border-radius: var(--radius-small);
   border: 1px solid transparent;
   white-space: nowrap;
   transition: color 0.2s, border-color 0.2s;
@@ -188,14 +188,13 @@ header {
 
 .eyebrow {                 /* the small label above the big heading */
   color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
+  letter-spacing: 0;
   font-size: 0.8rem;
   margin: 0 0 12px;
 }
 
 h1 {
-  font-family: "Unbounded", sans-serif;
+  font-family: var(--font-display);
   font-weight: 800;
   font-size: clamp(2.2rem, 6vw, 4.2rem);  /* grows with the screen, within limits */
   line-height: 1.05;
@@ -238,7 +237,7 @@ main {
 .card {
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 20px;
+  border-radius: var(--radius);
   padding: 28px;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -252,7 +251,7 @@ main {
 }
 
 .card h2 {
-  font-family: "Unbounded", sans-serif;
+  font-family: var(--font-display);
   font-weight: 600;
   font-size: 1.4rem;
   margin: 0 0 4px;
@@ -304,7 +303,7 @@ main {
 }
 
 .code {                    /* the little "B1" / "C1" / "P1" badge */
-  font-family: "Unbounded", sans-serif;
+  font-family: var(--font-display);
   font-size: 0.75rem;
   min-width: 40px;
   text-align: center;
@@ -320,7 +319,7 @@ main {
   font-size: 0.7rem;
   color: var(--muted);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-small);
   padding: 2px 10px;
   white-space: nowrap;
 }
@@ -334,14 +333,14 @@ main {
   display: flex;
   align-items: baseline;
   gap: 12px;
-  font-family: "Unbounded", sans-serif;
+  font-family: var(--font-display);
   font-weight: 600;
   font-size: 1.1rem;
   margin: 0 0 20px;
 }
 
 .paper-title small {
-  font-family: "Outfit", sans-serif;
+  font-family: var(--font-body);
   font-weight: 400;
   font-size: 0.9rem;
   color: var(--muted);
@@ -435,7 +434,7 @@ footer {
   font-size: 0.9rem;
   padding: 6px 14px;
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-small);
   color: var(--muted);
   transition: color 0.2s, border-color 0.2s;
 }
@@ -454,7 +453,7 @@ footer {
 }
 
 .notes h2 {
-  font-family: "Unbounded", sans-serif;
+  font-family: var(--font-display);
   font-weight: 600;
   font-size: 1.35rem;
   margin: 0 0 16px;
@@ -493,7 +492,7 @@ footer {
   overflow-x: auto;        /* on phones, a wide table scrolls by itself */
   margin: 16px 0;
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius);
 }
 
 table {
@@ -527,12 +526,12 @@ td.no  { color: var(--muted); }
   margin: 20px 0;
   padding: 20px 24px;
   border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
-  border-radius: 16px;
+  border-radius: var(--radius);
   background: color-mix(in srgb, var(--accent) 6%, transparent);
 }
 
 .formula .equation {
-  font-family: "Unbounded", sans-serif;
+  font-family: var(--font-display);
   font-size: clamp(1rem, 3.5vw, 1.3rem);
   color: var(--text);
   margin: 0 0 8px;
@@ -555,7 +554,7 @@ td.no  { color: var(--muted); }
 }
 
 .ladder .unit {
-  font-family: "Unbounded", sans-serif;
+  font-family: var(--font-display);
   font-size: 0.9rem;
   padding: 8px 14px;
   border-radius: 10px;
@@ -583,7 +582,7 @@ td.no  { color: var(--muted); }
 
 /* ----- Quiz ----- */
 .quiz-score {
-  font-family: "Unbounded", sans-serif;
+  font-family: var(--font-display);
   font-size: 0.95rem;
   color: var(--accent);
   margin: 0 0 20px;
@@ -593,7 +592,7 @@ td.no  { color: var(--muted); }
   margin: 0 0 20px;
   padding: 22px;
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: var(--radius);
   background: var(--surface);
 }
 
@@ -657,7 +656,7 @@ td.no  { color: var(--muted); }
   color: var(--on-accent);
   background: var(--accent);
   border: none;
-  border-radius: 999px;
+  border-radius: var(--radius-small);
   padding: 12px 24px;
   cursor: pointer;
 }
@@ -705,8 +704,7 @@ td.no  { color: var(--muted); }
 
 .side-label {
   font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: 0;
   color: var(--muted);
   margin: 18px 12px 6px;
 }
@@ -756,7 +754,7 @@ a.side-link:focus-visible {
   font-style: normal;
   font-size: 0.7rem;
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-small);
   padding: 1px 8px;
 }
 
@@ -790,7 +788,7 @@ a.side-link:focus-visible {
 }
 
 .section-title {
-  font-family: "Unbounded", sans-serif;
+  font-family: var(--font-display);
   font-weight: 600;
   font-size: 1.1rem;
   margin: 40px 0 6px;
@@ -820,7 +818,7 @@ a.side-link:focus-visible {
 
 .stat .value {
   display: block;
-  font-family: "Unbounded", sans-serif;
+  font-family: var(--font-display);
   font-size: 1.3rem;
   margin-top: 4px;
   font-variant-numeric: tabular-nums;
@@ -944,7 +942,7 @@ a.side-link:focus-visible {
 
 details.topic {
   border: 1px solid var(--border);
-  border-radius: 18px;
+  border-radius: var(--radius);
   background: var(--surface);
   overflow: hidden;
 }
@@ -963,7 +961,7 @@ details.topic > summary::-webkit-details-marker { display: none; }
 details.topic > summary:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: -2px;
-  border-radius: 18px;
+  border-radius: var(--radius);
 }
 
 .topic-head {
@@ -1203,7 +1201,7 @@ a.quiz-row:focus-visible {
   gap: 2px;
   padding: 16px 20px;
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius);
   transition: border-color 0.2s;
 }
 
@@ -1250,16 +1248,15 @@ summary .row-meta + .chev {
   margin: 8px 0 8px;
   padding: 20px 24px;
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: var(--radius);
   background: var(--surface);
 }
 
 .key-points h2 {
-  font-family: "Outfit", sans-serif;
+  font-family: var(--font-body);
   font-size: 0.8rem;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: 0;
   color: var(--muted);
   margin: 0 0 10px;
 }
@@ -1297,7 +1294,7 @@ summary .row-meta + .chev {
   margin: 0;
   padding: 16px 12px 12px;
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: var(--radius);
   background: var(--surface);
 }
 
@@ -1319,7 +1316,7 @@ summary .row-meta + .chev {
 }
 
 /* Colours inside the SVG drawings */
-.diagram text   { fill: var(--text); font: 12px "Outfit", system-ui, sans-serif; }
+.diagram text   { fill: var(--text); font: 12px var(--font-body); }
 .diagram .line  { stroke: var(--muted); stroke-width: 1; }
 .diagram .edge  { fill: color-mix(in srgb, var(--accent) 8%, transparent); stroke: var(--accent); stroke-width: 2; }
 .diagram .wall  { fill: none; stroke: #a3a88f; stroke-width: 5; }
@@ -1352,7 +1349,7 @@ summary .row-meta + .chev {
   margin: 0;
   padding: 18px;
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius);
   background: var(--surface);
 }
 
@@ -1364,7 +1361,7 @@ summary .row-meta + .chev {
   height: 28px;
   margin-bottom: 10px;
   border-radius: 50%;
-  font-family: "Unbounded", sans-serif;
+  font-family: var(--font-display);
   font-size: 0.8rem;
   color: var(--on-accent);
   background: var(--accent);
@@ -1381,14 +1378,13 @@ summary .row-meta + .chev {
   margin: 20px 0;
   padding: 18px 22px;
   border: 1px dashed color-mix(in srgb, var(--accent) 45%, transparent);
-  border-radius: 14px;
+  border-radius: var(--radius);
 }
 
 .worked .label {
   display: block;
   font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: 0;
   color: var(--accent);
   margin-bottom: 6px;
 }
@@ -1418,7 +1414,7 @@ summary .row-meta + .chev {
   display: grid;
   grid-template-columns: minmax(130px, max-content) 1fr;
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius);
   overflow: hidden;
 }
 
@@ -1455,8 +1451,7 @@ summary .row-meta + .chev {
   padding: 16px 20px 4px;
   font-size: 0.8rem;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0;
   color: var(--muted);
 }
 
@@ -1472,7 +1467,7 @@ summary .row-meta + .chev {
   gap: 14px;
   padding: 14px 20px;
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius);
   color: var(--muted);
 }
 
@@ -1600,7 +1595,7 @@ a.button {
 }
 
 .subject-card h3 {
-  font-family: "Unbounded", sans-serif;
+  font-family: var(--font-display);
   font-weight: 600;
   font-size: 1.5rem;
   margin: 0;
@@ -1621,7 +1616,7 @@ a.button {
 }
 
 .chip {
-  font-family: "Unbounded", sans-serif;
+  font-family: var(--font-display);
   font-size: 0.7rem;
   padding: 4px 8px;
   border-radius: 7px;
@@ -1709,7 +1704,7 @@ a.button {
   margin: 8px 0 24px;
   padding: 28px;
   border: 1px solid var(--border);
-  border-radius: 20px;
+  border-radius: var(--radius);
   background: var(--surface);
 }
 
@@ -1718,7 +1713,7 @@ a.button {
 }
 
 .blurt-h {
-  font-family: "Unbounded", sans-serif;
+  font-family: var(--font-display);
   font-weight: 600;
   font-size: 1.2rem;
   margin: 0 0 8px;
@@ -1771,7 +1766,7 @@ a.button {
   padding: 4px;
   gap: 4px;
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-small);
 }
 
 .segment {
@@ -1780,7 +1775,7 @@ a.button {
   color: var(--muted);
   background: transparent;
   border: none;
-  border-radius: 999px;
+  border-radius: var(--radius-small);
   padding: 8px 20px;
   cursor: pointer;
 }
@@ -1798,7 +1793,7 @@ a.button {
 /* Progress while Claude works */
 .progress-bar {
   height: 8px;
-  border-radius: 999px;
+  border-radius: var(--radius-small);
   background: var(--border);
   overflow: hidden;
   margin-bottom: 20px;
@@ -1823,7 +1818,7 @@ a.button {
 
 /* ----- Questions ----- */
 .blurt-section {
-  font-family: "Unbounded", sans-serif;
+  font-family: var(--font-display);
   font-weight: 600;
   font-size: 1.05rem;
   color: var(--accent);
@@ -1883,7 +1878,7 @@ a.button {
   margin-top: 24px;
   padding: 12px 12px 12px 20px;
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-small);
   background: var(--glass-strong);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -1929,7 +1924,7 @@ a.button {
   background:
     radial-gradient(closest-side, var(--background) 82%, transparent 83%),
     conic-gradient(var(--accent) calc(var(--p) * 1%), var(--border) 0);
-  font-family: "Unbounded", sans-serif;
+  font-family: var(--font-display);
   font-size: 1.1rem;
 }
 
@@ -1964,7 +1959,7 @@ a.button {
   font-size: 0.8rem;
   font-weight: 600;
   padding: 4px 10px;
-  border-radius: 999px;
+  border-radius: var(--radius-small);
   border: 1px solid;
 }
 
@@ -1991,7 +1986,7 @@ a.button {
   font-size: 0.8rem;
   font-weight: 600;
   padding: 2px 10px;
-  border-radius: 999px;
+  border-radius: var(--radius-small);
   white-space: nowrap;
   font-variant-numeric: tabular-nums;
 }
@@ -2041,7 +2036,7 @@ a.button {
   height: 48px;
   display: grid;
   place-items: center;
-  border-radius: 14px;
+  border-radius: var(--radius);
   background: var(--accent);
   color: var(--on-accent);
 }
@@ -2084,7 +2079,7 @@ a.button {
   margin-left: auto;
   font-size: 0.65rem;
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-small);
   padding: 1px 7px;
   color: var(--muted);
 }
@@ -2134,7 +2129,7 @@ a.button {
   font-size: 0.9rem;
   padding: 6px 14px;
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-small);
   color: var(--muted);
 }
 
@@ -2191,7 +2186,7 @@ a.button {
   margin: 0;
   padding: 20px;
   border: 1px solid var(--border);
-  border-radius: 20px;
+  border-radius: var(--radius);
   background: var(--glass);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
@@ -2249,7 +2244,7 @@ a.button {
   height: 44px;
   display: grid;
   place-items: center;
-  border-radius: 14px;
+  border-radius: var(--radius);
   color: var(--accent);
   background: color-mix(in srgb, var(--accent) 14%, transparent);
 }
@@ -2279,7 +2274,7 @@ a.button {
   position: relative;
   padding: 22px;
   border: 1px solid var(--border);
-  border-radius: 18px;
+  border-radius: var(--radius);
   background: var(--surface);
 }
 
@@ -2288,7 +2283,7 @@ a.button {
   position: absolute;
   top: 18px;
   right: 20px;
-  font-family: "Unbounded", sans-serif;
+  font-family: var(--font-display);
   font-size: 1.6rem;
   color: var(--border);
 }
@@ -2325,7 +2320,7 @@ a.button {
   font-size: 0.65rem;
   font-weight: 400;
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-small);
   padding: 1px 7px;
   color: var(--muted);
 }
@@ -2546,15 +2541,14 @@ html[data-mode="light"] .mode-toggle .moon { display: block; }
   gap: 16px;
   padding: 18px 22px;
   border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
-  border-radius: 18px;
+  border-radius: var(--radius);
   background: color-mix(in srgb, var(--accent) 7%, var(--surface));
 }
 
 .continue-label {
   display: block;
   font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: 0;
   color: var(--accent);
   margin-bottom: 2px;
 }
@@ -2691,7 +2685,7 @@ html[data-mode="light"] .mode-toggle .moon { display: block; }
   margin: 0;
   padding: 10px 12px;
   border: 1px solid transparent;
-  border-radius: 14px;
+  border-radius: var(--radius);
   transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 
@@ -2761,3 +2755,421 @@ html[data-mode="light"] .mode-toggle .moon { display: block; }
 .notes h2 {
   scroll-margin-top: 100px;
 }
+
+/* ======================================================
+   LESSON 10: A calmer, less generic look
+   ------------------------------------------------------
+   Friends said the site "looks AI". These rules remove the usual
+   giveaways: glowing blobs, dot textures, gradient text, glassy blurred
+   boxes, pill-shaped labels, and cards that lift and glow on hover.
+   What's left is plain type, clear lines and a few deliberate colours.
+   ====================================================== */
+:root {
+  --font-display: "Schibsted Grotesk", system-ui, sans-serif;  /* headings */
+  --font-body: "Hanken Grotesk", system-ui, sans-serif;        /* everything else */
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;       /* codes like B1 */
+  --radius: 8px;
+  --radius-small: 6px;
+  --background: #0f1012;
+  --surface: #16171a;
+  --border: #2a2c31;
+  --border-strong: #3a3d44;
+  --text: #ecedef;
+  --text-2: #c3c6cc;
+  --muted: #8d9199;
+  --glass: #0f1012;
+  --glass-strong: #16171a;
+}
+
+html[data-mode="light"] {
+  --background: #f6f7f8;
+  --surface: #ffffff;
+  --border: #e1e3e7;
+  --border-strong: #c9ccd2;
+  --text: #15171b;
+  --text-2: #3a3f47;
+  --muted: #676d77;
+  --glass: #f6f7f8;
+  --glass-strong: #ffffff;
+}
+
+body {
+  font-family: var(--font-body);
+}
+
+/* No glowing blobs, no dot texture */
+.glow { display: none; }
+body::before { content: none; }
+
+/* Headings: sturdy and tight, no gradients */
+h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.gradient-text {
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  color: inherit;
+}
+
+.section-title,
+.card h2,
+.notes h2,
+.blurt-h,
+.blurt-section,
+.paper-title {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* Small labels: plain muted text in normal case */
+.eyebrow,
+.side-label,
+.sub-label,
+.continue-label,
+.worked .label,
+.key-points h2 {
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+/* Codes (B1, C4...), question numbers and scores look like references */
+.code,
+.chip,
+.q-num,
+.rag-square,
+.row-meta,
+.score-ring span {
+  font-family: var(--font-mono);
+  font-weight: 500;
+}
+
+.code {
+  border-radius: 4px;
+  background: transparent;
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+}
+
+/* Boxes: solid, flat, no blur, no lifting or glowing on hover */
+.card,
+.blurt-card,
+.question,
+.diagram,
+details.topic,
+.key-points,
+.demo,
+.nav,
+.tabbar,
+.readbar-menu,
+.toc-rail:hover ol,
+.toc-rail:focus-within ol {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.card:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: var(--border-strong);
+}
+
+html[data-mode="light"] .card,
+html[data-mode="light"] .question,
+html[data-mode="light"] .blurt-card,
+html[data-mode="light"] details.topic {
+  box-shadow: none;
+}
+
+/* The nav: solid, with an underline for the page you're on */
+.nav {
+  background: var(--background);
+}
+
+.nav .nav-link {
+  border: none;
+  border-radius: 0;
+  padding: 6px 2px;
+  margin: 0 10px;
+}
+
+.nav .nav-link:hover {
+  border: none;
+  color: var(--text);
+}
+
+.nav .nav-link[aria-current="page"] {
+  color: var(--text);
+  box-shadow: inset 0 -2px 0 var(--accent);
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+/* Buttons: squarer, no pill shape */
+.button,
+.segmented,
+.segment {
+  border-radius: var(--radius-small);
+}
+
+/* Labels like "Study" / "Practice" / "AI marked" are gone */
+.pills { display: none; }
+
+/* "Triple only" and "Coming soon" become quiet text, not pills */
+.tag,
+.soon-pill,
+.locked .pill {
+  border: none;
+  padding: 0;
+  background: none;
+  font-style: italic;
+  color: var(--muted);
+}
+
+/* No icons sitting in tinted squares */
+.subject-icon,
+.step-icon { display: none; }
+
+.blurt-cta .cta-icon {
+  background: transparent;
+  color: var(--accent);
+  width: auto;
+  height: auto;
+}
+
+/* The homepage example sits straight, like a real screenshot */
+.demo {
+  transform: none;
+  box-shadow: none;
+  background: var(--surface);
+}
+
+/* Rings, bars and rating chips: flatter */
+.rating-chip {
+  border-radius: var(--radius-small);
+  min-width: 104px;
+}
+
+.blurt-bar {
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.tabbar {
+  background: var(--background);
+}
+
+/* ----- New homepage and overview layouts: lists, not card grids ----- */
+.subject-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 32px;
+}
+
+.subject-col {
+  border-top: 2px solid var(--accent);
+  padding-top: 16px;
+}
+
+.subject-col h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.35rem;
+  margin: 0;
+}
+
+.subject-col h3 a:hover,
+.subject-col h3 a:focus-visible {
+  color: var(--accent);
+}
+
+.subject-col .meta {
+  margin: 2px 0 12px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* A topic list with the status on the right */
+.topic-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.topic-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+}
+
+.topic-list .code {
+  min-width: 36px;
+  font-size: 0.75rem;
+  padding: 2px 0;
+}
+
+.topic-list .name {
+  flex: 1;
+  min-width: 0;
+}
+
+.topic-list .status {
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.topic-list li.ready {
+  color: var(--text);
+}
+
+.topic-list li.ready .status {
+  color: var(--accent);
+}
+
+.topic-list a {
+  display: contents;       /* the link wraps the row's parts without changing the layout */
+}
+
+.topic-list li.ready:hover .name {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.subject-col .open-link {
+  display: inline-block;
+  margin-top: 12px;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* How it works: four plain columns under a line */
+.how-grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+  counter-reset: step;
+}
+
+.how-grid li {
+  counter-increment: step;
+  border-top: 1px solid var(--border-strong);
+  padding-top: 14px;
+}
+
+.how-grid li::before {
+  content: counter(step);
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.how-grid b {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.how-grid p {
+  margin: 0;
+  color: var(--muted);
+}
+
+/* Overview: resources as a list of rows */
+.resource-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--border);
+}
+
+.resource-list a,
+.resource-list .row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.resource-list b {
+  font-size: 1.05rem;
+}
+
+.resource-list p {
+  grid-column: 1;
+  margin: 0;
+  color: var(--muted);
+}
+
+.resource-list .arrow {
+  grid-row: 1 / span 2;
+  grid-column: 2;
+  align-self: center;
+  color: var(--accent);
+  font-size: 1.2rem;
+}
+
+.resource-list a:hover b,
+.resource-list a:focus-visible b {
+  color: var(--accent);
+}
+
+.resource-list .row {
+  color: var(--muted);
+}
+
+/* Overview numbers: plain, big and side by side */
+.numbers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 40px;
+  margin: 0 0 8px;
+}
+
+.numbers div {
+  display: flex;
+  flex-direction: column;
+}
+
+.numbers .value {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.6rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.numbers .label {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.paper-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+}
+
+.paper-columns h3 {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0 0 6px;
+}
+
+/* Final touches */
+.topic-list li .status { color: var(--muted); }
+.topic-list li.ready .status { color: var(--accent); }
+.side-link .soon-pill { border: none; padding: 0; font-style: italic; }
+html[data-mode="light"] .demo { box-shadow: none; }

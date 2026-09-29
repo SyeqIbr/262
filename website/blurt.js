@@ -409,7 +409,7 @@ function renderAnswering() {
   const intro = el("div", "blurt-card slim");
   intro.append(el("p", "blurt-p", state.retryOf
     ? "Retry round: just the " + total + " question" + (total === 1 ? "" : "s") +
-      " you didn't get fully right last time. You've got this!"
+      " you didn't get fully right last time."
     : total + " questions. Answer from memory: no peeking! " +
       "Your answers save as you type, so you can come back later."));
   box.append(intro);
@@ -505,8 +505,8 @@ function renderResults() {
   text.append(tally);
   if (percent >= 80) {
     text.append(el("p", "celebrate-text", percent === 100
-      ? "Perfect score! Every single one correct. 🎉"
-      : "Brilliant work! That section is really sinking in. 🎉"));
+      ? "Perfect score: every single one correct."
+      : "Brilliant work. This subtopic is really sinking in."));
   }
   if (state.summary) text.append(el("p", "blurt-p", state.summary));
   card.append(score, text);

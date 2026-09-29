@@ -9,7 +9,7 @@
   <title>Chemistry · GCSE Science Revision</title>
   <!-- Paint the page straight away (dark, or light if chosen), so there's no flash between pages -->
   <meta name="color-scheme" content="dark light">
-  <style>html { background: #0b0c10; } html[data-mode="light"] { background: #e9edf4; }</style>
+  <style>html { background: #0f1012; } html[data-mode="light"] { background: #f6f7f8; }</style>
   <script>
     // Switch on light mode before the page draws, if the student chose it
     try { if (localStorage.getItem("mode") === "light") document.documentElement.dataset.mode = "light"; } catch (e) {}
@@ -17,15 +17,11 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Unbounded:wght@600;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&family=Schibsted+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body class="chemistry">
-  <div class="glow one"></div>
-  <div class="glow two"></div>
-  <div class="glow three"></div>
-
   <nav class="nav">
     <a class="brand" href="index.html">GCSE Science</a>
     <a class="nav-link biology" href="biology.html">Biology</a>
@@ -61,49 +57,33 @@
         In the meantime, <a class="accent-link" href="biology-notes.html">B1 Cell biology</a> is ready to revise and blurt.</p>
 
       <h2 class="section-title">Revise &amp; practise</h2>
-      <p class="section-intro">Learn the content, then find out what you still need to work on.</p>
-      <div class="resource-grid">
-        <a class="card resource" href="chemistry-notes.html">
-          <span class="resource-top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h12a2 2 0 0 1 2 2v14H7a2 2 0 0 1-2-2z"/><path d="M9 8h6M9 12h6"/></svg><span class="pills"><span class="pill study">Study</span></span></span>
-          <h3>Revision notes</h3>
-          <p>Short, focused notes for each part of the specification, with diagrams and worked examples.</p>
-          <span class="go">Open notes →</span>
-        </a>
-        <a class="card resource" href="chemistry-blurting.html">
-          <span class="resource-top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13 7 4 4"/></svg><span class="pills"><span class="pill practice">Practice</span><span class="pill ai">AI marked</span></span></span>
-          <h3>Blurting</h3>
-          <p>20–30 fresh questions per subtopic. Answer from memory, then get every answer marked with feedback.</p>
-          <span class="go">Start blurting →</span>
-        </a>
-        <a class="card resource" href="chemistry-exam.html">
-          <span class="resource-top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4M9 12h6M9 16h6"/></svg><span class="pills"><span class="pill">Coming soon</span></span></span>
-          <h3>Exam questions</h3>
-          <p>Real past paper questions, organised by topic, with mark schemes.</p>
-          <span class="go">Take a look →</span>
-        </a>
-      </div>
+      <ul class="resource-list">
+        <li><a href="chemistry-notes.html"><b>Revision notes</b><p>Short notes for each part of the spec, with diagrams and worked examples.</p><span class="arrow">→</span></a></li>
+        <li><a href="chemistry-blurting.html"><b>Blurting</b><p>20–30 fresh questions per subtopic. Answer from memory, then get every answer marked.</p><span class="arrow">→</span></a></li>
+        <li><a href="chemistry-exam.html"><b>Exam questions</b><p>Real past paper questions by topic, with mark schemes. Coming soon.</p><span class="arrow">→</span></a></li>
+      </ul>
 
       <h2 class="section-title">The exams</h2>
       <p class="section-intro">Two papers, each 1 hour 45 minutes (Triple) or 1 hour 15 minutes (Combined).</p>
-      <div class="stat-row">
-        <div class="card stat">
-          <span class="label">Paper 1 · C1–C5</span>
-          <ul class="paper-list">
-            <li><span class="code">C1</span> Atomic structure and the periodic table</li>
-            <li><span class="code">C2</span> Bonding, structure and the properties of matter</li>
-            <li><span class="code">C3</span> Quantitative chemistry</li>
-            <li><span class="code">C4</span> Chemical changes</li>
-            <li><span class="code">C5</span> Energy changes</li>
+      <div class="paper-columns">
+        <div>
+          <h3>Paper 1</h3>
+          <ul class="topic-list">
+            <li><span class="code">C1</span><span class="name">Atomic structure and the periodic table</span></li>
+            <li><span class="code">C2</span><span class="name">Bonding, structure and the properties of matter</span></li>
+            <li><span class="code">C3</span><span class="name">Quantitative chemistry</span></li>
+            <li><span class="code">C4</span><span class="name">Chemical changes</span></li>
+            <li><span class="code">C5</span><span class="name">Energy changes</span></li>
           </ul>
         </div>
-        <div class="card stat">
-          <span class="label">Paper 2 · C6–C10</span>
-          <ul class="paper-list">
-            <li><span class="code">C6</span> The rate and extent of chemical change</li>
-            <li><span class="code">C7</span> Organic chemistry</li>
-            <li><span class="code">C8</span> Chemical analysis</li>
-            <li><span class="code">C9</span> Chemistry of the atmosphere</li>
-            <li><span class="code">C10</span> Using resources</li>
+        <div>
+          <h3>Paper 2</h3>
+          <ul class="topic-list">
+            <li><span class="code">C6</span><span class="name">The rate and extent of chemical change</span></li>
+            <li><span class="code">C7</span><span class="name">Organic chemistry</span></li>
+            <li><span class="code">C8</span><span class="name">Chemical analysis</span></li>
+            <li><span class="code">C9</span><span class="name">Chemistry of the atmosphere</span></li>
+            <li><span class="code">C10</span><span class="name">Using resources</span></li>
           </ul>
         </div>
       </div>
