@@ -246,18 +246,29 @@
     return (window.PAGE_NAMES || {})[key] || null;
   }
 
-  // The overlay: the name of the page you're going to, in big letters.
-  function overlay(name, sub) {
+  // The loading card (Lesson 19): a small night sky floating above the page,
+  // with the logo, the name of the page you're going to, a ringed planet,
+  // a moon, twinkling dots and a couple of shooting stars. The page behind
+  // is dimmed and softly blurred.
+  function loadingCard(name, sub) {
     const box = document.createElement("div");
     box.className = "page-overlay";
     box.setAttribute("aria-hidden", "true");
-    box.innerHTML = '<small></small><b></b>';
+    const logo = document.querySelector(".nav .brand .logo");
+    box.innerHTML =
+      '<div class="load-card">' +
+        '<i class="load-dots"></i>' +
+        '<i class="load-shoot one"></i><i class="load-shoot two"></i>' +
+        '<i class="load-planet"></i><i class="load-moon"></i>' +
+        '<span class="load-brand">' + (logo ? logo.outerHTML : "") + '<span>Constellate</span></span>' +
+        '<small></small><b></b>' +
+      "</div>";
     box.querySelector("small").textContent = sub;
     box.querySelector("b").textContent = name;
     return box;
   }
 
-  // Leaving: show the name, then go (a short pause so you can see it)
+  // Leaving: show the card, then go (a short pause so you can see it)
   document.addEventListener("click", function (e) {
     const link = e.target.closest && e.target.closest("a[href]");
     if (!link || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
@@ -265,26 +276,29 @@
     const name = nameFor(link);
     if (!name) return;
     e.preventDefault();
-    try { sessionStorage.setItem("arrive", JSON.stringify(name)); } catch (err) {}
-    document.body.append(overlay(name[0], name[1]));
-    const wait = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 260;
+    const card = loadingCard(name[0], name[1]);
+    // The new page gets the same card, already showing (class "arriving")
+    try {
+      const saved = card.cloneNode(true);
+      saved.classList.add("arriving");
+      sessionStorage.setItem("arrive-card", saved.outerHTML);
+    } catch (err) {}
+    document.body.append(card);
+    const wait = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 320;
     setTimeout(function () { location.href = link.href; }, wait);
   });
 
-  // Arriving: the <head> script already shows the name (data-arrive on <html>),
-  // so the new page starts covered. Fade it away.
+  // Arriving: the <head> script already put the card up. Hold it a moment,
+  // then let it float away.
   function arrive() {
-    if (!root.dataset.arrive) return;
-    root.classList.add("arrive-out");
-    setTimeout(function () {
-      delete root.dataset.arrive;
-      delete root.dataset.arriveSub;
-      root.classList.remove("arrive-out");
-    }, 600);
+    document.querySelectorAll(".page-overlay.arriving").forEach(function (card) {
+      card.classList.add("leaving");
+      setTimeout(function () { card.remove(); }, 450);
+    });
   }
-  requestAnimationFrame(function () { setTimeout(arrive, 180); });
+  requestAnimationFrame(function () { setTimeout(arrive, 300); });
   // Coming back with the Back button can restore the old page as it was left,
-  // overlay and all, so clear it away.
+  // card and all, so clear it away.
   window.addEventListener("pageshow", function (e) {
     if (e.persisted) document.querySelectorAll(".page-overlay").forEach(function (o) { o.remove(); });
   });

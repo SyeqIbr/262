@@ -20,9 +20,11 @@
       if (get("look:colour")) look.dataset.colour = get("look:colour");
       if (get("look:trail") === "off") look.dataset.trail = "off";
       if (get("look:sky") === "off") look.dataset.sky = "off";
-      // Arriving from another page: show its name straight away (appearance.js fades it out)
-      var arrive = JSON.parse(sessionStorage.getItem("arrive") || "null");
-      if (arrive) { look.dataset.arrive = arrive[0]; look.dataset.arriveSub = arrive[1]; sessionStorage.removeItem("arrive"); }
+      // Arriving from another page: the page we just left saved its "loading card".
+      // Put the same card straight back up, before anything else is drawn,
+      // so the change of page looks like one smooth move. appearance.js fades it out.
+      var card = sessionStorage.getItem("arrive-card");
+      if (card) { sessionStorage.removeItem("arrive-card"); look.insertAdjacentHTML("beforeend", card); }
     } catch (e) {}
   </script>
 
