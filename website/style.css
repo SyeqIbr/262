@@ -4157,3 +4157,196 @@ header.how-head {
 }
 
 .pick-soon .code { opacity: 0.6; }
+
+/* ======================================================
+   LESSON 15: A simpler key, a livelier sky, a starry footer
+   ====================================================== */
+
+/* ----- Three stages instead of five -----
+   stage-0 Faint, stage-1 Shining, stage-2 Blazing. These rules come last
+   in the file, so they win over the older five-stage rules above. */
+.sky .star.stage-1 .core,
+.sky .star.stage-2 .core { fill: #ffffff; }
+.sky .star.stage-1 .halo { opacity: 0.32; }
+.sky .star.stage-2 .halo { opacity: 0.55; }
+.sky .star.stage-2 .core { filter: drop-shadow(0 0 4px #ffffff); }
+.sky .star.stage-2 .sparkle { stroke-width: 1.6; }
+
+.glyph.stage-1 { background: #fff; box-shadow: 0 0 0 5px color-mix(in srgb, var(--c) 25%, transparent); }
+.glyph.stage-1.brighter { box-shadow: 0 0 0 7px color-mix(in srgb, var(--c) 30%, transparent), 0 0 12px var(--c); }
+.glyph.stage-2 { background: #fff; box-shadow: 0 0 0 9px color-mix(in srgb, var(--c) 40%, transparent), 0 0 24px 4px var(--c); }
+
+.mini-star.stage-1 { background: #fff; box-shadow: 0 0 0 2px color-mix(in srgb, var(--c) 35%, transparent); }
+.mini-star.stage-2 { background: #fff; box-shadow: 0 0 0 4px color-mix(in srgb, var(--c) 50%, transparent), 0 0 12px 2px var(--c); }
+html[data-mode="light"] .mini-star.stage-1 { background: var(--c); }
+
+/* The key: three little stars drawn with CSS */
+.sky-key {
+  gap: 10px 26px;
+  justify-content: center;
+}
+.sky-key b { color: #eef0f6; font-weight: 600; }
+.key-star {
+  --c: #c4b5fd;
+  width: 10px;
+  height: 10px;
+  margin-right: 4px;
+}
+.key-star.stage-0 { width: 5px; height: 5px; background: #6b7280 !important; }
+.key-star.stage-1 { box-shadow: 0 0 0 4px color-mix(in srgb, var(--c) 30%, transparent); }
+.key-star.stage-2 { width: 12px; height: 12px; box-shadow: 0 0 0 6px color-mix(in srgb, var(--c) 40%, transparent), 0 0 16px 3px var(--c); }
+
+/* ----- The livelier sky ----- */
+/* The Milky Way: blurred blobs, kept very faint so the stars stay the stars */
+.sky .nebula { opacity: 0.22; }
+
+/* Layers glide (rather than jump) when the mouse moves */
+.sky .layer { transition: transform 0.8s cubic-bezier(.2,.7,.3,1); }
+
+/* Near stars are a touch brighter; glints twinkle by growing and shrinking */
+.sky .layer.near .bg { fill: #ffffff; }
+.sky .glint {
+  stroke: #ffffff;
+  stroke-width: 0.8;
+  stroke-linecap: round;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: glint var(--dur) ease-in-out infinite alternate;
+}
+@keyframes glint { from { opacity: 0.1; transform: scale(0.5); } to { opacity: 0.8; transform: scale(1); } }
+
+.sky .shooting-star { pointer-events: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sky .glint { animation: none; }
+  .sky .layer { transition: none; }
+}
+
+/* ----- The star burst (progress.js) ----- */
+.burst-star,
+.burst-spark {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 200;
+  pointer-events: none;
+}
+.burst-star {
+  width: 22px;
+  height: 22px;
+  margin: -11px 0 0 -11px;
+  background: #ffffff;
+  /* a four-point star shape, cut out with clip-path */
+  clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
+  filter: drop-shadow(0 0 6px #c4b5fd) drop-shadow(0 0 12px #c4b5fd);
+}
+.burst-spark {
+  width: 5px;
+  height: 5px;
+  margin: -2.5px 0 0 -2.5px;
+  border-radius: 50%;
+  background: #e9e3ff;
+  box-shadow: 0 0 6px #c4b5fd;
+}
+
+/* "My sky" in the menu glows when a star lands in it */
+.nav .sky-link.sky-glow { animation: sky-glow 1.6s ease-out; }
+.nav .sky-link.sky-glow .nav-icon { animation: sky-icon 1.6s ease-out; }
+@keyframes sky-glow {
+  0%   { box-shadow: 0 0 0 0 rgba(196, 181, 253, 0.7); background: rgba(196, 181, 253, 0.25); }
+  100% { box-shadow: 0 0 0 14px rgba(196, 181, 253, 0); }
+}
+@keyframes sky-icon {
+  0%   { transform: scale(1.8) rotate(45deg); filter: drop-shadow(0 0 6px #c4b5fd); }
+  100% { transform: scale(1) rotate(0); }
+}
+
+/* ----- The starry footer ----- */
+.site-footer {
+  /* the same dark "night" colours as the sky, in light mode too */
+  --text: #eef0f6;
+  --muted: #8f96a8;
+  position: relative;
+  overflow: hidden;
+  text-align: left;
+  padding: 48px 20px 28px;
+  margin-top: 56px;
+  color: var(--muted);
+  border-top: 1px solid #1d2230;
+  background: radial-gradient(ellipse at 50% 120%, #1c2440 0%, #0d101a 50%, #07080c 80%);
+}
+
+.footer-sky {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.footer-sky circle { fill: #cfd6ff; animation: twinkle var(--dur) ease-in-out infinite alternate; animation-delay: var(--delay); }
+.footer-sky .f-lines { fill: none; stroke: #c4b5fd; stroke-width: 1; opacity: 0.35; }
+.footer-sky .f-bright { fill: #ffffff; animation: none; filter: drop-shadow(0 0 3px #c4b5fd); }
+
+.footer-inner {
+  position: relative;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 28px 48px;
+}
+
+.footer-brand .brand { color: #eef0f6; font-size: 1.6rem; }
+.footer-brand .brand .logo { width: 48px; height: 48px; }
+.footer-brand p { margin: 10px 0 0; max-width: 32ch; font-size: 0.95rem; }
+
+/* The logo keeps its night colours on the dark footer, even in light mode */
+html[data-mode="light"] .site-footer .brand .logo circle { fill: #c4b5fd; }
+html[data-mode="light"] .site-footer .brand .logo .logo-lines { fill: none; stroke: #c4b5fd; }
+html[data-mode="light"] .site-footer .brand .logo .logo-big { fill: #ffffff; }
+
+.footer-links {
+  display: flex;
+  gap: 48px;
+}
+.footer-links div { display: flex; flex-direction: column; gap: 8px; }
+.footer-links b {
+  color: #eef0f6;
+  font: 500 0.72rem var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 2px;
+}
+.footer-links a { color: #c7ccd9; text-decoration: none; font-size: 0.95rem; }
+.footer-links a:hover { color: #c4b5fd; }
+
+.footer-small {
+  position: relative;
+  max-width: 1100px;
+  margin: 36px auto 0;
+  padding-top: 16px;
+  border-top: 1px solid #1d2230;
+  font-size: 0.8rem;
+}
+
+@media (max-width: 520px) {
+  .footer-links { gap: 36px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .footer-sky circle { animation: none; }
+}
+
+/* Soft, blurred glows (a solid disc looked like a sticker, not a star) */
+.sky .star .halo { filter: blur(5px); }
+.sky .star.stage-1 .halo { opacity: 0.45; }
+.sky .star.stage-2 .halo { opacity: 0.7; }
+.sky .star:hover .halo,
+.sky .star:focus-visible .halo,
+.sky .star.selected .halo { opacity: 0.85; }
+
+/* The footer's little constellation only fits beside the text on wide screens */
+@media (max-width: 900px) {
+  .footer-sky .f-lines,
+  .footer-sky .f-bright { display: none; }
+}

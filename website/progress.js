@@ -142,9 +142,67 @@ if (continueBox) {
   }
 }
 
+// LESSON 15: a star burst when you make progress.
+// A small star pops out of the page, then flies up into "My sky" in the
+// menu, which glows. It shows that what you just did made your sky brighter.
+// Other scripts (like blurt.js) can call window.starBurst(element) too.
+window.starBurst = function (fromElement) {
+  const target = document.querySelector(".nav .sky-link");
+  if (!target || !fromElement) return;
+  const glow = function () {
+    target.classList.remove("sky-glow");
+    void target.offsetWidth;                 // restart the glow animation
+    target.classList.add("sky-glow");
+  };
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { glow(); return; }
+
+  const from = fromElement.getBoundingClientRect();
+  const to = (target.querySelector(".nav-icon") || target).getBoundingClientRect();
+  const x0 = from.left + from.width / 2, y0 = from.top + Math.min(from.height / 2, 60);
+  const x1 = to.left + to.width / 2, y1 = to.top + to.height / 2;
+
+  // The star, plus a ring of tiny sparks that burst outwards
+  const star = document.createElement("span");
+  star.className = "burst-star";
+  star.setAttribute("aria-hidden", "true");
+  document.body.append(star);
+  for (let i = 0; i < 8; i++) {
+    const spark = document.createElement("span");
+    spark.className = "burst-spark";
+    spark.setAttribute("aria-hidden", "true");
+    document.body.append(spark);
+    const angle = (i / 8) * Math.PI * 2;
+    spark.animate([
+      { transform: "translate(" + x0 + "px," + y0 + "px) scale(1)", opacity: 1 },
+      { transform: "translate(" + (x0 + Math.cos(angle) * 44) + "px," + (y0 + Math.sin(angle) * 44) + "px) scale(0.2)", opacity: 0 },
+    ], { duration: 650, easing: "cubic-bezier(.2,.7,.3,1)" }).onfinish = function () { spark.remove(); };
+  }
+  // Pop in, pause, then curve up to the menu (the middle keyframe bends the path)
+  const midX = (x0 + x1) / 2 + 60, midY = Math.min(y0, y1) + (y0 - y1) * 0.25;
+  star.animate([
+    { transform: "translate(" + x0 + "px," + y0 + "px) scale(0.2) rotate(0deg)", opacity: 0 },
+    { transform: "translate(" + x0 + "px," + y0 + "px) scale(1.4) rotate(90deg)", opacity: 1, offset: 0.25 },
+    { transform: "translate(" + midX + "px," + midY + "px) scale(1) rotate(200deg)", opacity: 1, offset: 0.6 },
+    { transform: "translate(" + x1 + "px," + y1 + "px) scale(0.4) rotate(360deg)", opacity: 0.9 },
+  ], { duration: 1300, easing: "ease-in-out" }).onfinish = function () { star.remove(); glow(); };
+};
+
 // 1. On a note page, <body data-note="..."> marks that note as read.
+//    If it's the first time, a star flies up to your sky when you reach
+//    the end of the note (the Previous / Next buttons).
 if (document.body.dataset.note) {
+  const firstTime = !isRead(document.body.dataset.note);
   saveValue("read:" + document.body.dataset.note, "1");
+  const end = document.querySelector(".pager");
+  if (firstTime && end && "IntersectionObserver" in window) {
+    const watcher = new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting) {
+        watcher.disconnect();
+        window.starBurst(end);
+      }
+    }, { threshold: 0.6 });
+    watcher.observe(end);
+  }
 }
 
 // 2. Fill in the dot of every note link you've already read.

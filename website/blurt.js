@@ -308,6 +308,10 @@ async function mark() {
     render();
     box.scrollIntoView({ block: "start" });
     if (percent >= 80) celebrate();
+    // A finished blurt feeds your sky (mixed blurts and retries don't count)
+    if (!state.retryOf && CONFIG.id !== "blurt-mix" && window.starBurst) {
+      setTimeout(function () { window.starBurst(box.querySelector(".score-ring") || box); }, 700);
+    }
   } catch (error) {
     state.stage = "answering";
     render();

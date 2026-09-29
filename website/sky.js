@@ -1,19 +1,21 @@
 /*
-  LESSON 11–12: Your sky
-  ----------------------
+  LESSON 11–12, simplified in LESSON 15: Your sky
+  ----------------------------------------------
   Every topic is a star. Its brightness comes from what the student has
   actually done (read notes and blurt scores, saved by progress.js and
-  blurt.js in localStorage), in five stages:
+  blurt.js in localStorage). There are just three stages, so the key is
+  easy to learn at a glance:
 
-    0 Faint     nothing done yet
-    1 Glimmer   at least one note read
-    2 Shining   every note in the topic read
-    3 Bright    every subtopic blurted at least once
-    4 Blazing   every subtopic's best blurt is 80% or more
+    0 Faint     not started yet
+    1 Shining   started: at least one note read or one blurt done
+    2 Blazing   every subtopic's best blurt is 80% or more
 
   Topics without notes yet are "forming" (a dotted ring).
   Lit stars in the same subject join up into a constellation.
-  Each subtopic is a small moon orbiting its star, coloured by best blurt.
+
+  LESSON 15 also adds life to the sky: a soft Milky Way, background stars
+  in three layers that drift as the mouse moves (parallax), and the odd
+  shooting star.
 
   NEW: students can set a star brighter themselves (e.g. a topic they
   already know from class). They must confirm first, self-set stars get
@@ -35,14 +37,15 @@
   const exampleSwitch = document.getElementById("example");
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const STAGES = ["Faint", "Glimmer", "Shining", "Bright", "Blazing"];
+  const STAGES = ["Faint", "Shining", "Blazing"];
+  const TOP = STAGES.length - 1;       // the brightest stage (2)
   const HINTS = [
-    "Read a note to make it glimmer.",
-    "Read every note in this topic to make it shine.",
-    "Blurt every subtopic to make it bright.",
+    "Read a note or try a blurt to make it shine.",
     "Get 80% or more in every subtopic's blurt to make it blaze.",
     "This star is blazing. Blurt it again now and then to keep it that way.",
   ];
+  // Can the page move things about? Not if the student asked for less motion.
+  const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
   // Where each star sits (wide screens). On narrow screens we swap x and y,
   // which stacks the three subjects on top of each other.
@@ -71,24 +74,38 @@
   try { manual = JSON.parse(load("sky:manual")) || {}; } catch (e) { manual = {}; }
   function saveManual() { save("sky:manual", JSON.stringify(manual)); }
 
+  // Before Lesson 15 there were five stages (0–4). Saved values from then
+  // are converted once to the new three: 1, 2 and 3 become Shining, 4 Blazing.
+  if (load("sky:v") !== "3") {
+    const OLD_TO_NEW = [0, 1, 1, 1, 2];
+    ["sky:manual", "sky:seen"].forEach(function (key) {
+      let obj = {};
+      try { obj = JSON.parse(load(key)) || {}; } catch (e) {}
+      for (const code in obj) obj[code] = OLD_TO_NEW[obj[code]] === undefined ? TOP : OLD_TO_NEW[obj[code]];
+      save(key, JSON.stringify(obj));
+    });
+    try { manual = JSON.parse(load("sky:manual")) || {}; } catch (e) { manual = {}; }
+    save("sky:v", "3");
+  }
+
   // ---------- Progress ----------
   // What the site has actually tracked for one topic
   function trackedOf(topic) {
     if (topic.subtopics.length === 0) return { forming: true, stage: 0, subs: [] };
-    let read = 0, total = 0, blurted = 0, secure = 0;
+    let read = 0, blurted = 0, secure = 0;
     const subs = topic.subtopics.map(function (s) {
       const r = s.notes.filter(function (n) { return load("read:" + n.id) === "1"; }).length;
       const bestRaw = load("best:" + s.blurt.id);
       const best = bestRaw === null ? null : Number(bestRaw);
-      read += r; total += s.notes.length;
+      read += r;
       if (best !== null) blurted++;
       if (best !== null && best >= 80) secure++;
       const nextNote = s.notes.find(function (n) { return load("read:" + n.id) !== "1"; });
       return { s: s, read: r, total: s.notes.length, best: best, nextNote: nextNote };
     });
     const n = topic.subtopics.length;
-    const stage = secure === n ? 4 : blurted === n ? 3 : read === total ? 2 : read > 0 ? 1 : 0;
-    return { forming: false, stage: stage, subs: subs };
+    const stage = secure === n ? 2 : read > 0 || blurted > 0 ? 1 : 0;
+    return { forming: false, stage: stage, subs: subs, secure: secure };
   }
 
   // What the sky shows: tracked progress, unless the student set it higher
@@ -111,12 +128,12 @@
   }
 
   // A made-up sky, to show what a term of revision could look like
-  const EXAMPLE = { B1: 4, B2: 3, B3: 2, B4: 1, B5: 1, C1: 3, C2: 2, C3: 1, C4: 1, P1: 4, P2: 3, P3: 1, P5: 2 };
+  const EXAMPLE = { B1: 2, B2: 1, B3: 1, B4: 1, B5: 1, C1: 2, C2: 1, C3: 1, C4: 1, P1: 2, P2: 1, P3: 1, P5: 1 };
   function exampleProgress(topic) {
     const stage = EXAMPLE[topic.code] || 0;
-    const bests = [[92, 85, 88], [81, 64, 90], [70, null, 55], [null, null, null], [null, null, null]][4 - stage] || [null, null, null];
+    const bests = [[null, null, null], [81, 64, null], [92, 85, 88]][stage];
     const subs = bests.map(function (b, i) {
-      return { s: { label: "Subtopic " + (i + 1) }, read: stage >= 2 || (stage === 1 && i === 0) ? 1 : 0, total: 1, best: b };
+      return { s: { label: "Subtopic " + (i + 1) }, read: stage === 2 || i < 2 ? 1 : 0, total: 1, best: b };
     });
     return { forming: false, stage: stage, subs: stage === 0 ? [] : subs, example: true };
   }
@@ -150,11 +167,112 @@
     const p = POS[code];
     return tall ? [p[1], p[0]] : p;
   }
-  function moonColour(best) {
+  // Red / amber / green for a best blurt score (used by the dots in the panel)
+  function scoreColour(best) {
     if (best === null || best === undefined) return "var(--moon-none)";
     if (best >= 80) return "var(--moon-good)";
     if (best >= 50) return "var(--moon-warn)";
     return "var(--moon-bad)";
+  }
+
+  // ---------- The backdrop: Milky Way + three layers of background stars ----------
+  // Each layer moves a different amount with the mouse. Far things move a
+  // little, near things move more, and your brain reads that as depth.
+  // The topic stars never move, so they're always where you tap.
+  const DEPTH = { far: 4, mid: 9, near: 16 };     // how far each layer can drift
+  let layers = {};
+  let drift = [0, 0];                            // where the mouse is, from -0.5 to 0.5
+
+  function drawBackdrop(W, H) {
+    // Soft blur for the Milky Way, defined once per drawing
+    const defs = el("defs", {});
+    const blur = el("filter", { id: "nebula-blur", x: "-50%", y: "-50%", width: "200%", height: "200%" }, defs);
+    el("feGaussianBlur", { stdDeviation: 28 }, blur);
+    const shoot = el("linearGradient", { id: "shoot-tail", x1: "0", x2: "1", y1: "0", y2: "0" }, defs);
+    el("stop", { offset: "0", "stop-color": "#ffffff", "stop-opacity": "0" }, shoot);
+    el("stop", { offset: "1", "stop-color": "#ffffff", "stop-opacity": "0.9" }, shoot);
+
+    let seed = 11;
+    const rnd = function () { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+    layers = {};
+    ["far", "mid", "near"].forEach(function (name) { layers[name] = el("g", { class: "layer " + name }); });
+
+    // The Milky Way: a few big blurred blobs along a diagonal band
+    const band = el("g", { class: "nebula", filter: "url(#nebula-blur)" }, layers.far);
+    const blobs = [[0.08, 0.85, "#6d5bd0"], [0.28, 0.62, "#3b6fd8"], [0.5, 0.45, "#8b5cf6"], [0.72, 0.3, "#2f7fb8"], [0.93, 0.12, "#6d5bd0"]];
+    blobs.forEach(function (b) {
+      const x = tall ? b[1] * W : b[0] * W, y = tall ? b[0] * H : b[1] * H;
+      el("ellipse", { cx: x.toFixed(0), cy: y.toFixed(0), rx: (tall ? 110 : 150), ry: (tall ? 150 : 70), fill: b[2] }, band);
+    });
+
+    // Background stars, in the same places every time. They reach a little
+    // past the edges so drifting never shows a gap.
+    const counts = { far: 110, mid: 45, near: 14 };
+    const sizes = { far: [0.3, 0.7], mid: [0.6, 1.1], near: [1, 1.6] };
+    ["far", "mid", "near"].forEach(function (name) {
+      for (let i = 0; i < counts[name]; i++) {
+        const r = sizes[name][0] + rnd() * (sizes[name][1] - sizes[name][0]);
+        const x = rnd() * (W + 40) - 20, y = rnd() * (H + 40) - 20;
+        const s = el("circle", { class: "bg", cx: x.toFixed(1), cy: y.toFixed(1), r: r.toFixed(2) }, layers[name]);
+        s.style.setProperty("--dur", (2 + rnd() * 4).toFixed(2) + "s");
+        s.style.setProperty("--delay", (-rnd() * 5).toFixed(2) + "s");
+        // A few near stars get a little four-point glint
+        if (name === "near" && i % 3 === 0) {
+          const g = el("path", { class: "glint", d: "M" + x.toFixed(1) + " " + (y - 5).toFixed(1) + " v10 M" + (x - 5).toFixed(1) + " " + y.toFixed(1) + " h10" }, layers[name]);
+          g.style.setProperty("--dur", (3 + rnd() * 3).toFixed(2) + "s");
+        }
+      }
+    });
+
+    layers.shooting = el("g", { class: "shooting-layer" });
+    applyDrift();
+  }
+
+  function applyDrift() {
+    for (const name in DEPTH) {
+      if (!layers[name]) continue;
+      layers[name].style.transform = "translate(" + (drift[0] * DEPTH[name]).toFixed(1) + "px, " + (drift[1] * DEPTH[name]).toFixed(1) + "px)";
+    }
+  }
+
+  // Follow the mouse (only with a real mouse, and only if motion is welcome)
+  if (finePointer && !reduceMotion) {
+    let queued = false;
+    window.addEventListener("pointermove", function (e) {
+      drift = [e.clientX / window.innerWidth - 0.5, e.clientY / window.innerHeight - 0.5];
+      // requestAnimationFrame: update at most once per screen refresh
+      if (!queued) { queued = true; requestAnimationFrame(function () { queued = false; applyDrift(); }); }
+    });
+  }
+
+  // ---------- Shooting stars ----------
+  // A streak with a fading tail: a gradient line plus a bright head,
+  // moved across the sky with the Web Animations API (element.animate).
+  function shootingStar(big) {
+    if (reduceMotion || !layers.shooting) return;
+    const vb = svg.viewBox.baseVal, W = vb.width, H = vb.height;
+    const angle = 20 + Math.random() * 25;                 // degrees below horizontal
+    const len = big ? 140 : 70 + Math.random() * 50;
+    const x0 = W * (0.05 + Math.random() * 0.6), y0 = H * (Math.random() * 0.35);
+    const dist = big ? 360 : 180 + Math.random() * 160;
+    const rad = angle * Math.PI / 180;
+    const g = el("g", { class: "shooting-star" }, layers.shooting);
+    el("line", { x1: -len, y1: 0, x2: 0, y2: 0, stroke: "url(#shoot-tail)", "stroke-width": big ? 2.4 : 1.6, "stroke-linecap": "round" }, g);
+    el("circle", { cx: 0, cy: 0, r: big ? 2.4 : 1.6, fill: "#ffffff" }, g);
+    const at = function (d) { return "translate(" + (x0 + Math.cos(rad) * d).toFixed(1) + "px, " + (y0 + Math.sin(rad) * d).toFixed(1) + "px) rotate(" + angle + "deg)"; };
+    const run = g.animate(
+      [{ transform: at(0), opacity: 0 }, { opacity: 1, offset: 0.15 }, { transform: at(dist), opacity: 0 }],
+      { duration: big ? 1400 : 900 + Math.random() * 500, easing: "cubic-bezier(.3,.1,.6,1)" });
+    run.onfinish = function () { g.remove(); };
+  }
+
+  // Every 6–16 seconds, one streaks past. Rare enough to feel like a treat.
+  function scheduleShootingStars() {
+    if (reduceMotion) return;
+    setTimeout(function () {
+      if (!document.hidden) shootingStar(false);
+      scheduleShootingStars();
+    }, 6000 + Math.random() * 10000);
   }
 
   function draw() {
@@ -163,14 +281,7 @@
     svg.setAttribute("viewBox", "0 0 " + W + " " + H);
     while (svg.firstChild) svg.firstChild.remove();
 
-    // Background stars, in the same places every time
-    let seed = 11;
-    const rnd = function () { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
-    for (let i = 0; i < (tall ? 120 : 130); i++) {
-      const s = el("circle", { class: "bg", cx: (rnd() * W).toFixed(1), cy: (rnd() * H).toFixed(1), r: (rnd() * 1.2 + 0.3).toFixed(2) });
-      s.style.setProperty("--dur", (2 + rnd() * 4).toFixed(2) + "s");
-      s.style.setProperty("--delay", (-rnd() * 5).toFixed(2) + "s");
-    }
+    drawBackdrop(W, H);
 
     // Subject names
     const labels = tall
@@ -212,27 +323,15 @@
       // An invisible, fingertip-sized circle, so even tiny stars are easy to tap
       el("circle", { class: "hit", cx: x, cy: y, r: 22 }, g);
       if (next && next.topic.code === topic.code) el("circle", { class: "pulse", cx: x, cy: y, r: 16 }, g);
-      el("circle", { class: "halo", cx: x, cy: y, r: [0, 10, 14, 18, 24][p.stage] }, g);
+      el("circle", { class: "halo", cx: x, cy: y, r: [0, 15, 24][p.stage] }, g);
       if (formingLook) el("circle", { class: "ring", cx: x, cy: y, r: 7 }, g);
-      if (p.manual) el("circle", { class: "self-ring", cx: x, cy: y, r: [9, 14, 18, 22, 28][p.stage] }, g);
-      el("circle", { class: "core", cx: x, cy: y, r: formingLook ? 2 : [2.5, 3.5, 4.5, 5.5, 7][p.stage] }, g);
-      if (p.stage === 4) {
-        el("path", { class: "sparkle", d: "M" + x + " " + (y - 16) + " V" + (y + 16) + " M" + (x - 16) + " " + y + " H" + (x + 16) }, g);
+      if (p.manual) el("circle", { class: "self-ring", cx: x, cy: y, r: [9, 19, 28][p.stage] }, g);
+      el("circle", { class: "core", cx: x, cy: y, r: formingLook ? 2 : [2.5, 4.5, 7][p.stage] }, g);
+      if (p.stage === TOP) {
+        el("path", { class: "sparkle", d: "M" + x + " " + (y - 18) + " V" + (y + 18) + " M" + (x - 18) + " " + y + " H" + (x + 18) }, g);
       }
 
-      // Moons: one per subtopic, orbiting slowly
-      if (p.subs.length) {
-        el("circle", { class: "orbit", cx: x, cy: y, r: 26 }, g);
-        const moons = el("g", { class: "moons" }, g);
-        moons.style.transformOrigin = x + "px " + y + "px";
-        p.subs.forEach(function (sp, i) {
-          const a = (i / p.subs.length) * Math.PI * 2 - Math.PI / 2;
-          const m = el("circle", { class: "moon", cx: (x + Math.cos(a) * 26).toFixed(1), cy: (y + Math.sin(a) * 26).toFixed(1), r: 3.5 }, moons);
-          m.style.fill = moonColour(sp.best);
-        });
-      }
-
-      el("text", { class: "code", x: x + (p.subs.length ? 32 : 11), y: y - 8 }, g).textContent = topic.code;
+      el("text", { class: "code", x: x + [10, 14, 20][p.stage], y: y - [8, 10, 14][p.stage] }, g).textContent = topic.code;
 
       function open() { selected = topic.code; showPanel(topic); draw(); focusStar(topic.code); }
       g.addEventListener("click", open);
@@ -253,7 +352,7 @@
 
     // Numbers at the top
     const lit = DATA.topics.filter(function (t) { return progress[t.code].stage >= 1; }).length;
-    const blazing = DATA.topics.filter(function (t) { return progress[t.code].stage === 4; }).length;
+    const blazing = DATA.topics.filter(function (t) { return progress[t.code].stage === TOP; }).length;
     const mine = DATA.topics.filter(function (t) { return progress[t.code].manual; }).length;
     stats.textContent = lit + " of " + DATA.topics.length + " stars lit · " + blazing + " blazing" +
       (mine ? " · " + mine + " set by you" : "");
@@ -331,9 +430,9 @@
     panel.append(head);
 
     if (!formingLook) {
-      // Brightness meter: five dots
+      // Brightness meter: one dot per stage
       const meter = make("div", "meter");
-      for (let i = 0; i < 5; i++) meter.append(make("span", i <= p.stage ? "on" : ""));
+      for (let i = 0; i < STAGES.length; i++) meter.append(make("span", i <= p.stage ? "on" : ""));
       meter.append(make("b", "", STAGES[p.stage] + (p.manual ? " (set by you)" : "")));
       panel.append(meter);
     }
@@ -347,7 +446,9 @@
       panel.append(make("p", "panel-note", "This star is still forming: notes for " + topic.name +
         " are on the way. If you already know it from class, you can light it up yourself."));
     } else {
-      panel.append(make("p", "panel-note", HINTS[p.stage]));
+      let hint = HINTS[p.stage];
+      if (p.stage === 1) hint += " So far: " + p.secure + " of " + p.subs.length + " at 80% or more.";
+      panel.append(make("p", "panel-note", hint));
     }
 
     if (p.forming && p.manual) {
@@ -361,7 +462,7 @@
         const li = make("li");
         const top = make("div", "sub-top");
         const dot = make("span", "moon-dot");
-        dot.style.background = moonColour(sp.best);
+        dot.style.background = scoreColour(sp.best);
         top.append(dot, make("b", "", sp.s.label));
         li.append(top, make("p", "sub-facts", "Notes " + sp.read + " / " + sp.total + " · " +
           (sp.best === null ? "not blurted yet" : "best blurt " + sp.best + "%")));
@@ -404,7 +505,7 @@
     }
 
     const tracked = p.tracked || 0;
-    if (tracked >= 4) return wrap;          // already blazing: nothing brighter to set
+    if (tracked >= TOP) return wrap;          // already blazing: nothing brighter to set
 
     const open = btn("✦ Set this star myself", "button ghost set-star", function () {
       open.hidden = true;
@@ -415,7 +516,7 @@
     chooser.hidden = true;
     chooser.append(make("p", "blurt-small", "Already know this topic? Pick how bright it should be:"));
     const options = make("div", "chooser-options");
-    for (let s = tracked + 1; s <= 4; s++) {
+    for (let s = tracked + 1; s <= TOP; s++) {
       (function (stage) {
         options.append(btn(STAGES[stage], "chooser-option", function () {
           askFirst(confirmArea,
@@ -456,10 +557,7 @@
     showToast(t.code + " " + t.name + " got brighter: it's now " + STAGES[brighter[0][1]] + ".");
     const g = svg.querySelector('[data-code="' + t.code + '"]');
     if (g) g.classList.add("upgraded");
-    if (reduceMotion) return;
-    const W = tall ? 420 : 900;
-    const trail = el("line", { class: "shooting", x1: W * 0.15, y1: 20, x2: W * 0.15 + 120, y2: 60 });
-    setTimeout(function () { trail.remove(); }, 1600);
+    shootingStar(true);
   }
 
   // ---------- Start ----------
@@ -485,4 +583,6 @@
   draw();
   lastTall = tall;
   celebrate();   // after drawing, so the shooting star isn't wiped straight away
+  setTimeout(function () { shootingStar(false); }, 2500);   // one early on, so it's noticed
+  scheduleShootingStars();
 })();
