@@ -226,12 +226,98 @@
       .play .draw { animation: none; stroke-dashoffset: 0; }
       .el { transition: none; }
     }
+
+    /* ---------- shared bits for ideas 04–08 ---------- */
+    .concept-head .where { flex-basis: 100%; margin: 4px 0 0; font-size: 0.92rem; color: var(--text); max-width: 72ch; }
+    .concept-head .where b { font-weight: 600; color: var(--bio); }
+    .box { padding: 32px; background: #0c0d0f; border: 1px solid var(--line); }
+    @media (max-width: 820px) { .box { padding: 18px; } }
+    .box h3 { font-family: var(--display); font-size: clamp(1.6rem, 4vw, 2.4rem); line-height: 1.1; margin: 0 0 6px; letter-spacing: -0.02em; }
+    .box .lede { color: var(--muted); margin: 0 0 20px; }
+    .info { margin: 14px 0 0; min-height: 1.6em; font-family: var(--mono); font-size: 0.85rem; }
+    .scroll-x { overflow-x: auto; }
+
+    /* ---------- 04. CIRCUIT ---------- */
+    .circuit { display: block; width: 100%; min-width: 640px; height: auto; }
+    .circuit .wire { stroke: #4a4e56; stroke-width: 3; fill: none; stroke-linecap: round; }
+    .circuit .plate { stroke: #c9ccd2; stroke-width: 4; }
+    .circuit .sign { fill: var(--muted); font: 500 16px var(--mono); }
+    .circuit .lever { stroke: #c9ccd2; stroke-width: 3; stroke-linecap: round; transition: transform 0.3s; }
+    .circuit .contact { fill: #c9ccd2; }
+    .circuit .bulb circle { fill: #16181b; stroke: #6b7079; stroke-width: 2.5; transition: fill 0.3s, stroke 0.3s; }
+    .circuit .bulb line { stroke: #6b7079; stroke-width: 2; }
+    .circuit .branch.on .bulb circle { fill: #fde68a; stroke: #fbbf24; }
+    .circuit .branch.on .bulb line { stroke: #b45309; }
+    .circuit .branch.on .bulb { filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.8)); }
+    .circuit .label { fill: var(--muted); font: 500 16px var(--mono); text-anchor: middle; }
+    .circuit .branch.on .label { fill: var(--bio); }
+    .circuit .branch { cursor: pointer; }
+    .circuit .branch:focus { outline: none; }
+    .circuit .hit { fill: transparent; }
+    .circuit .branch:focus-visible .hit { stroke: var(--bio); stroke-width: 2; }
+    .circuit .flow { fill: none; stroke: var(--bio); stroke-width: 3; stroke-dasharray: 4 14; stroke-linecap: round; animation: flow 0.7s linear infinite; pointer-events: none; }
+    @keyframes flow { to { stroke-dashoffset: -18; } }
+
+    /* ---------- 05. CONSTELLATION ---------- */
+    .sky { display: block; width: 100%; min-width: 600px; height: auto; border-radius: 6px; background: radial-gradient(ellipse at 50% 0%, #141a2b, #07080c 70%); }
+    .sky .bg { fill: #cfd6ff; animation: twinkle var(--dur) ease-in-out infinite alternate; animation-delay: var(--delay); }
+    @keyframes twinkle { from { opacity: 0.12; } to { opacity: 0.8; } }
+    .sky .star { cursor: pointer; }
+    .sky .star:focus { outline: none; }
+    .sky .star .core { fill: #6b7280; transition: fill 0.3s; }
+    .sky .star.done .core { fill: #ffffff; }
+    .sky .star .halo { fill: var(--c); opacity: 0; transition: opacity 0.3s; }
+    .sky .star.done .halo { opacity: 0.35; }
+    .sky .star:focus-visible .halo, .sky .star:hover .halo { opacity: 0.6; }
+    .sky .star text { fill: var(--muted); font: 500 13px var(--mono); }
+    .sky .star.done text { fill: var(--c); }
+    .sky .link { stroke: var(--c); stroke-width: 1.5; opacity: 0.75; }
+    .sky .link.new { stroke-dasharray: var(--len); stroke-dashoffset: var(--len); animation: drawline 0.8s ease forwards; }
+    @keyframes drawline { to { stroke-dashoffset: 0; } }
+    .sky .cluster { fill: var(--c); font: 700 16px var(--display); text-anchor: middle; opacity: 0.85; }
+
+    /* ---------- 06. DNA ---------- */
+    .dna-canvas { display: block; width: 100%; height: 220px; cursor: crosshair; }
+    .rag-key { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 8px; font-size: 0.85rem; color: var(--muted); }
+    .rag-key i { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+
+    /* ---------- 07. TITRATION ---------- */
+    .titration { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 300px); gap: 32px; align-items: center; }
+    @media (max-width: 720px) { .titration { grid-template-columns: minmax(0, 1fr); } }
+    .ti-score { font-family: var(--display); font-weight: 800; font-size: clamp(3rem, 9vw, 5rem); line-height: 1; margin: 8px 0 6px; font-variant-numeric: tabular-nums; }
+    .ti-score small { font-size: 0.4em; color: var(--muted); font-weight: 600; }
+    .ti-verdict { font-weight: 600; margin: 0 0 20px; min-height: 1.6em; }
+    .ti-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+    .ti-buttons button { font: 500 0.85rem var(--mono); color: var(--text); background: none; border: 1px solid var(--line); border-radius: 4px; padding: 8px 12px; cursor: pointer; }
+    .ti-buttons button:hover, .ti-buttons button:focus-visible { border-color: #ec4899; outline: none; }
+    .ti-svg { display: block; width: 100%; max-width: 300px; height: auto; justify-self: center; }
+    .ti-svg .glass { fill: rgba(255, 255, 255, 0.03); stroke: #9aa0a8; stroke-width: 2.5; }
+    .ti-svg .tick { stroke: #9aa0a8; stroke-width: 1.5; }
+    .ti-svg .tap { fill: #6b7079; }
+    .ti-svg .reagent { fill: rgba(190, 215, 255, 0.35); }
+    .ti-svg #fl-liquid { fill: rgba(200, 220, 255, 0.18); transition: fill 0.8s; }
+    .ti-svg .drop { fill: rgba(190, 215, 255, 0.8); animation: drip 0.45s ease-in forwards; }
+    @keyframes drip { from { transform: translateY(0); } to { transform: translateY(var(--fall)); opacity: 0.4; } }
+
+    /* ---------- 08. OSCILLOSCOPE ---------- */
+    .crt { border-radius: 10px; background: #06130c; border: 8px solid #1a1c1f; box-shadow: inset 0 0 40px rgba(0, 0, 0, 0.8); overflow: hidden; }
+    .crt canvas {
+      display: block; width: 100%; height: 220px;
+      background-image: linear-gradient(rgba(124, 255, 178, 0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(124, 255, 178, 0.07) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .days { display: grid; grid-template-columns: repeat(14, minmax(0, 1fr)); font: 500 0.7rem var(--mono); color: var(--muted); text-align: center; margin-top: 8px; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .circuit .flow, .sky .bg { animation: none; }
+      .sky .link.new { animation: none; stroke-dashoffset: 0; }
+    }
   </style>
 </head>
 <body>
   <header class="intro">
-    <h1>Three ways to make it feel alive</h1>
-    <p>Each idea comes from the world of science, so it couldn't be mistaken for any other revision site. Play with each demo, then pick one, or mix bits you like.</p>
+    <h1>Eight ways to make it feel alive</h1>
+    <p>Each idea comes from the world of science, so it couldn't be mistaken for any other revision site. Play with each demo, then pick one, or mix bits you like. Ideas 4 to 8 each say where they'd go and how they fit with the periodic table.</p>
     <p><a href="index.html">← Back to the site</a></p>
   </header>
 
@@ -272,6 +358,7 @@
       <span class="num">02</span>
       <h2>Periodic table</h2>
       <p>The whole course is one periodic table. Every topic is an element tile that fills with colour as you master it. Your map, your progress and your menu in one picture.</p>
+      <p class="where"><b>Your favourite so far.</b> It would be the homepage map and each subject's menu.</p>
     </div>
     <div class="stage periodic">
       <h3>The periodic table of your revision</h3>
@@ -315,6 +402,112 @@
         </div>
       </div>
       <button class="replay" type="button" id="replay">Draw it again</button>
+    </div>
+  </section>
+
+
+  <!-- ================= 4. CIRCUIT ================= -->
+  <section class="concept">
+    <div class="concept-head">
+      <span class="num">04</span>
+      <h2>Circuit</h2>
+      <p>Each subject is a parallel circuit. Finishing a topic closes its switch: current flows through that branch and its bulb lights up. (Parallel, so every bulb works on its own, just like in P2.)</p>
+      <p class="where"><b>Where it goes:</b> a subject's overview. Works with the periodic table: the table shows the whole course, the circuit zooms into one subject.</p>
+    </div>
+    <div class="stage box">
+      <h3>Light up Biology</h3>
+      <p class="lede">Tap a topic to close or open its switch.</p>
+      <div class="scroll-x">
+        <svg class="circuit" id="circuit" viewBox="0 0 820 290" role="group" aria-label="Biology as a parallel circuit, one bulb per topic"></svg>
+      </div>
+      <p class="info" id="circuit-info" aria-live="polite">&nbsp;</p>
+    </div>
+  </section>
+
+  <!-- ================= 5. CONSTELLATION ================= -->
+  <section class="concept">
+    <div class="concept-head">
+      <span class="num">05</span>
+      <h2>Constellation</h2>
+      <p>Your course is a night sky. Every topic is a star. When you finish topics in a subject, their stars brighten and join up, so each subject draws its own constellation over the year.</p>
+      <p class="where"><b>Where it goes:</b> a "My progress" page. It's an alternative to the periodic table as the main map, so you'd pick one of the two.</p>
+    </div>
+    <div class="stage box">
+      <h3>Your sky so far</h3>
+      <p class="lede">Example progress. Tap a star to finish or un-finish that topic.</p>
+      <div class="scroll-x">
+        <svg class="sky" id="sky" viewBox="0 0 900 420" role="group" aria-label="The course as a sky of stars, one per topic"></svg>
+      </div>
+      <p class="info" id="sky-info" aria-live="polite">&nbsp;</p>
+    </div>
+  </section>
+
+  <!-- ================= 6. DNA ================= -->
+  <section class="concept">
+    <div class="concept-head">
+      <span class="num">06</span>
+      <h2>DNA strand</h2>
+      <p>Your blurting results as a slowly turning double helix. Each rung is one question, coloured green, amber or red. A strong blurt is a strand that's nearly all green.</p>
+      <p class="where"><b>Where it goes:</b> the blurting results screen, instead of the row of coloured squares. Works with the periodic table: the tile shows your score, the strand shows the detail.</p>
+    </div>
+    <div class="stage box">
+      <h3>Cell structure: 19 / 25</h3>
+      <p class="lede">Move over the strand to see each question.</p>
+      <canvas class="dna-canvas" id="dna" aria-label="A DNA helix with 25 rungs, one per blurting question"></canvas>
+      <div class="rag-key"><span><i style="background: #4ade80"></i>Correct</span><span><i style="background: #facc15"></i>Nearly</span><span><i style="background: #f87171"></i>Not yet</span></div>
+      <p class="info" id="dna-info" aria-live="polite">&nbsp;</p>
+    </div>
+  </section>
+
+  <!-- ================= 7. TITRATION ================= -->
+  <section class="concept">
+    <div class="concept-head">
+      <span class="num">07</span>
+      <h2>Titration</h2>
+      <p>The moment your answers are marked, your score drips from a burette into a conical flask. Like phenolphthalein, the flask stays colourless until the end point: 80% or more turns it pink.</p>
+      <p class="where"><b>Where it goes:</b> the moment a blurt is marked. Works with the periodic table: the score that fills the flask is the score that fills the tile.</p>
+    </div>
+    <div class="stage box titration">
+      <div>
+        <h3>Marking complete</h3>
+        <p class="ti-score"><span id="ti-num">23</span> <small>/ 25</small></p>
+        <p class="ti-verdict" id="ti-verdict">End point reached: Secure</p>
+        <div class="ti-buttons">
+          <button type="button" data-score="12">Try 12 / 25</button>
+          <button type="button" data-score="19">Try 19 / 25</button>
+          <button type="button" data-score="23">Try 23 / 25</button>
+        </div>
+      </div>
+      <svg class="ti-svg" viewBox="0 0 300 450" aria-label="A burette dripping into a conical flask">
+        <defs>
+          <clipPath id="flask-clip"><path d="M130 300 V330 L70 425 Q66 434 76 436 H224 Q234 434 230 425 L170 330 V300 Z"/></clipPath>
+        </defs>
+        <rect class="reagent" id="bur-liquid" x="140" y="14" width="20" height="246"/>
+        <rect class="glass" x="138" y="10" width="24" height="252" rx="3"/>
+        <g id="bur-ticks"></g>
+        <rect class="tap" x="126" y="262" width="48" height="8" rx="2"/>
+        <rect class="tap" x="147" y="270" width="6" height="18"/>
+        <g id="drops"></g>
+        <rect id="fl-liquid" x="60" y="436" width="180" height="0" clip-path="url(#flask-clip)"/>
+        <path class="glass" d="M130 300 V330 L70 425 Q66 434 76 436 H224 Q234 434 230 425 L170 330 V300 Z"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ================= 8. OSCILLOSCOPE ================= -->
+  <section class="concept">
+    <div class="concept-head">
+      <span class="num">08</span>
+      <h2>Oscilloscope</h2>
+      <p>Your revision habit as a heartbeat on a green oscilloscope screen. Each day you revise adds a beat, and longer sessions give bigger beats. A day off is a flat line.</p>
+      <p class="where"><b>Where it goes:</b> the top of the homepage, beside "pick up where you left off". Works with everything: it tracks the habit, not the topics.</p>
+    </div>
+    <div class="stage box">
+      <h3>Your revision pulse</h3>
+      <p class="lede">Example: the last 14 days.</p>
+      <div class="crt"><canvas id="pulse" aria-label="An oscilloscope trace with one heartbeat per day revised"></canvas></div>
+      <div class="days" id="days"></div>
+      <p class="info" id="pulse-info"></p>
     </div>
   </section>
 
@@ -491,6 +684,391 @@
         if (entries[0].isIntersecting) { play(); obs.disconnect(); }
       }, { threshold: 0.4 }).observe(board);
       document.getElementById("replay").addEventListener("click", play);
+    })();
+
+    /* ---------- 4. The circuit ---------- */
+    (function () {
+      const NS = "http://www.w3.org/2000/svg";
+      const svg = document.getElementById("circuit");
+      const info = document.getElementById("circuit-info");
+      const topics = [["B1", "Cell biology"], ["B2", "Organisation"], ["B3", "Infection and response"], ["B4", "Bioenergetics"],
+                      ["B5", "Homeostasis and response"], ["B6", "Inheritance, variation and evolution"], ["B7", "Ecology"]];
+      const on = new Set(["B1", "B3"]);
+      const TOP = 60, BOT = 240, BX = 46;
+      const xs = topics.map(function (_, i) { return 130 + i * 105; });
+      const last = xs[xs.length - 1];
+
+      function el(tag, attrs, parent) {
+        const e = document.createElementNS(NS, tag);
+        for (const k in attrs) e.setAttribute(k, attrs[k]);
+        (parent || svg).append(e);
+        return e;
+      }
+
+      // Battery (long plate = +) and the two rails
+      el("path", { class: "wire", d: "M" + BX + " 138 V" + TOP + " H" + last + " M" + BX + " 150 V" + BOT + " H" + last });
+      el("line", { class: "plate", x1: BX - 18, y1: 138, x2: BX + 18, y2: 138 });
+      el("line", { class: "plate", x1: BX - 9, y1: 150, x2: BX + 9, y2: 150 });
+      el("text", { class: "sign", x: BX + 24, y: 136 }).textContent = "+";
+
+      const branches = topics.map(function (t, i) {
+        const x = xs[i];
+        const g = el("g", { class: "branch", tabindex: "0", role: "button" });
+        el("rect", { class: "hit", x: x - 44, y: TOP + 4, width: 88, height: BOT - TOP - 8, rx: 6 }, g);
+        el("path", { class: "wire", d: "M" + x + " " + TOP + " V95 M" + x + " 125 V152 M" + x + " 192 V" + BOT }, g);
+        el("circle", { class: "contact", cx: x, cy: 95, r: 4 }, g);
+        el("circle", { class: "contact", cx: x, cy: 125, r: 4 }, g);
+        const lever = el("line", { class: "lever", x1: x, y1: 95, x2: x, y2: 125 }, g);
+        lever.style.transformOrigin = x + "px 95px";
+        const bulb = el("g", { class: "bulb" }, g);
+        el("circle", { cx: x, cy: 172, r: 20 }, bulb);
+        el("line", { x1: x - 14, y1: 158, x2: x + 14, y2: 186 }, bulb);
+        el("line", { x1: x + 14, y1: 158, x2: x - 14, y2: 186 }, bulb);
+        el("text", { class: "label", x: x, y: BOT + 34 }, g).textContent = t[0];
+
+        function describe() {
+          info.textContent = t[0] + " · " + t[1] + " · " + (on.has(t[0]) ? "finished: switch closed, bulb lit" : "not finished yet: switch open");
+        }
+        function toggle() {
+          if (on.has(t[0])) on.delete(t[0]); else on.add(t[0]);
+          update();
+          describe();
+        }
+        g.addEventListener("click", toggle);
+        g.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
+        });
+        g.addEventListener("mouseenter", describe);
+        g.addEventListener("focus", describe);
+        return { code: t[0], name: t[1], x: x, g: g, lever: lever };
+      });
+
+      const flow = el("g", {});   // the moving current, drawn on top
+
+      function update() {
+        while (flow.firstChild) flow.firstChild.remove();
+        let maxX = 0;
+        branches.forEach(function (b) {
+          const isOn = on.has(b.code);
+          b.g.classList.toggle("on", isOn);
+          b.g.setAttribute("aria-pressed", isOn ? "true" : "false");
+          b.g.setAttribute("aria-label", b.code + " " + b.name + (isOn ? ", finished" : ", not finished"));
+          b.lever.style.transform = isOn ? "none" : "rotate(-40deg)";
+          if (isOn) {
+            maxX = Math.max(maxX, b.x);
+            el("path", { class: "flow", d: "M" + b.x + " " + TOP + " V152 M" + b.x + " 192 V" + BOT }, flow);
+          }
+        });
+        if (maxX) {
+          // Conventional current: out of +, along the top, down the branches, back along the bottom
+          el("path", { class: "flow", d: "M" + BX + " 138 V" + TOP + " H" + maxX }, flow);
+          el("path", { class: "flow", d: "M" + maxX + " " + BOT + " H" + BX + " V150" }, flow);
+        }
+        info.textContent = on.size + " of 7 bulbs lit. Tap a topic to try.";
+      }
+      update();
+    })();
+
+    /* ---------- 5. The constellation ---------- */
+    (function () {
+      const NS = "http://www.w3.org/2000/svg";
+      const svg = document.getElementById("sky");
+      const info = document.getElementById("sky-info");
+      const stars = [
+        ["B1", "Cell biology", "bio", 90, 120], ["B2", "Organisation", "bio", 170, 80], ["B3", "Infection and response", "bio", 250, 130],
+        ["B4", "Bioenergetics", "bio", 210, 210], ["B5", "Homeostasis and response", "bio", 120, 250], ["B6", "Inheritance, variation and evolution", "bio", 190, 320],
+        ["B7", "Ecology", "bio", 280, 290],
+        ["C1", "Atomic structure and the periodic table", "chem", 360, 90], ["C2", "Bonding, structure and properties", "chem", 440, 60],
+        ["C3", "Quantitative chemistry", "chem", 520, 100], ["C4", "Chemical changes", "chem", 580, 170], ["C5", "Energy changes", "chem", 500, 220],
+        ["C6", "The rate and extent of chemical change", "chem", 420, 200], ["C7", "Organic chemistry", "chem", 370, 280], ["C8", "Chemical analysis", "chem", 450, 330],
+        ["C9", "Chemistry of the atmosphere", "chem", 540, 300], ["C10", "Using resources", "chem", 590, 360],
+        ["P1", "Energy", "phys", 660, 110], ["P2", "Electricity", "phys", 740, 70], ["P3", "Particle model of matter", "phys", 820, 120],
+        ["P4", "Atomic structure", "phys", 790, 210], ["P5", "Forces", "phys", 700, 230], ["P6", "Waves", "phys", 650, 310],
+        ["P7", "Magnetism and electromagnetism", "phys", 740, 340], ["P8", "Space physics", "phys", 840, 300],
+      ];
+      const done = new Set(["B1", "B2", "B3", "B4", "C1", "C2", "P1", "P2", "P5"]);
+
+      function el(tag, attrs, parent) {
+        const e = document.createElementNS(NS, tag);
+        for (const k in attrs) e.setAttribute(k, attrs[k]);
+        (parent || svg).append(e);
+        return e;
+      }
+
+      // Faint background stars, in the same places every time
+      let seed = 7;
+      function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+      for (let i = 0; i < 110; i++) {
+        const s = el("circle", { class: "bg", cx: (rnd() * 900).toFixed(1), cy: (rnd() * 420).toFixed(1), r: (rnd() * 1.2 + 0.3).toFixed(2) });
+        s.style.setProperty("--dur", (2 + rnd() * 4).toFixed(2) + "s");
+        s.style.setProperty("--delay", (-rnd() * 5).toFixed(2) + "s");
+      }
+
+      [["Biology", "bio", 185, 400], ["Chemistry", "chem", 470, 405], ["Physics", "phys", 750, 400]].forEach(function (c) {
+        const t = el("text", { class: "cluster", x: c[2], y: c[3] });
+        t.style.setProperty("--c", "var(--" + c[1] + ")");
+        t.textContent = c[0];
+      });
+
+      const lines = el("g", {});
+      let drawn = new Set();
+
+      const nodes = stars.map(function (s) {
+        const g = el("g", { class: "star", tabindex: "0", role: "button" });
+        g.style.setProperty("--c", "var(--" + s[2] + ")");
+        el("circle", { class: "halo", cx: s[3], cy: s[4], r: 14 }, g);
+        const core = el("circle", { class: "core", cx: s[3], cy: s[4], r: 3 }, g);
+        el("text", { x: s[3] + 10, y: s[4] - 10 }, g).textContent = s[0];
+        function describe() {
+          info.textContent = s[0] + " · " + s[1] + " · " + (done.has(s[0]) ? "finished" : "not finished yet");
+        }
+        function toggle() {
+          if (done.has(s[0])) done.delete(s[0]); else done.add(s[0]);
+          update(); describe();
+        }
+        g.addEventListener("click", toggle);
+        g.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
+        g.addEventListener("mouseenter", describe);
+        g.addEventListener("focus", describe);
+        return { s: s, g: g, core: core };
+      });
+
+      function update() {
+        while (lines.firstChild) lines.firstChild.remove();
+        const now = new Set();
+        nodes.forEach(function (n) {
+          const d = done.has(n.s[0]);
+          n.g.classList.toggle("done", d);
+          n.core.setAttribute("r", d ? 5 : 3);
+          n.g.setAttribute("aria-pressed", d ? "true" : "false");
+          n.g.setAttribute("aria-label", n.s[0] + " " + n.s[1] + (d ? ", finished" : ", not finished"));
+        });
+        // Join finished stars in each subject, in topic order
+        ["bio", "chem", "phys"].forEach(function (subject) {
+          const lit = stars.filter(function (s) { return s[2] === subject && done.has(s[0]); });
+          for (let i = 1; i < lit.length; i++) {
+            const a = lit[i - 1], b = lit[i], key = a[0] + "-" + b[0];
+            const len = Math.hypot(b[3] - a[3], b[4] - a[4]);
+            const line = el("line", { class: "link" + (drawn.has(key) ? "" : " new"), x1: a[3], y1: a[4], x2: b[3], y2: b[4] }, lines);
+            line.style.setProperty("--c", "var(--" + subject + ")");
+            line.style.setProperty("--len", len.toFixed(1));
+            now.add(key);
+          }
+        });
+        drawn = now;
+        info.textContent = done.size + " of 25 stars lit. Tap a star to try.";
+      }
+      update();
+    })();
+
+    /* ---------- 6. The DNA strand ---------- */
+    (function () {
+      const canvas = document.getElementById("dna");
+      const info = document.getElementById("dna-info");
+      const ctx = canvas.getContext("2d");
+      const N = 25;
+      // Example results: 19 correct, 4 nearly, 2 not yet
+      const results = [];
+      for (let i = 0; i < N; i++) results.push([4, 11, 17, 22].includes(i) ? "a" : [7, 19].includes(i) ? "r" : "g");
+      const colour = { g: "74, 222, 128", a: "250, 204, 21", r: "248, 113, 113" };
+      const word = { g: "Correct", a: "Nearly", r: "Not yet" };
+      let phase = 0, hover = -1;
+
+      function draw() {
+        const dpr = window.devicePixelRatio || 1;
+        const w = canvas.clientWidth, h = canvas.clientHeight;
+        if (canvas.width !== Math.round(w * dpr)) { canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr); }
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, w, h);
+        const pad = 24, mid = h / 2, A = Math.min(70, h * 0.32);
+        const step = (w - 2 * pad) / (N - 1);
+        const angle = function (x) { return phase + ((x - pad) / step) * 0.45; };
+
+        // The two backbones, drawn in short pieces; pieces at the back are fainter
+        function strands(front) {
+          for (let x = pad; x < w - pad; x += 3) {
+            [1, -1].forEach(function (side) {
+              const a1 = angle(x), a2 = angle(x + 3);
+              const depth = side * Math.cos(a1);
+              if ((depth >= 0) !== front) return;
+              ctx.strokeStyle = "rgba(200, 210, 230, " + (0.25 + 0.6 * (depth + 1) / 2) + ")";
+              ctx.lineWidth = 2 + 2 * (depth + 1) / 2;
+              ctx.beginPath();
+              ctx.moveTo(x, mid + side * Math.sin(a1) * A);
+              ctx.lineTo(x + 3, mid + side * Math.sin(a2) * A);
+              ctx.stroke();
+            });
+          }
+        }
+
+        strands(false);
+        for (let i = 0; i < N; i++) {
+          const x = pad + i * step, a = angle(x);
+          const y1 = mid + Math.sin(a) * A, y2 = mid - Math.sin(a) * A;
+          const alpha = 0.35 + 0.65 * Math.abs(Math.cos(a));
+          ctx.strokeStyle = "rgba(" + colour[results[i]] + ", " + (i === hover ? 1 : alpha) + ")";
+          ctx.lineWidth = i === hover ? 6 : 4;
+          ctx.beginPath(); ctx.moveTo(x, y1); ctx.lineTo(x, y2); ctx.stroke();
+        }
+        strands(true);
+      }
+
+      function frame() {
+        phase += 0.012;
+        draw();
+        requestAnimationFrame(frame);
+      }
+
+      canvas.addEventListener("mousemove", function (e) {
+        const r = canvas.getBoundingClientRect();
+        const step = (r.width - 48) / (N - 1);
+        const i = Math.round((e.clientX - r.left - 24) / step);
+        hover = i >= 0 && i < N ? i : -1;
+        if (hover >= 0) info.textContent = "Question " + (hover + 1) + " · " + word[results[hover]];
+        if (reduceMotion) draw();
+      });
+      canvas.addEventListener("mouseleave", function () { hover = -1; if (reduceMotion) draw(); });
+      window.addEventListener("resize", draw);
+      info.textContent = "19 correct · 4 nearly · 2 not yet";
+      if (reduceMotion) draw(); else frame();
+    })();
+
+    /* ---------- 7. The titration ---------- */
+    (function () {
+      const NS = "http://www.w3.org/2000/svg";
+      const liquid = document.getElementById("fl-liquid");
+      const reagent = document.getElementById("bur-liquid");
+      const drops = document.getElementById("drops");
+      const num = document.getElementById("ti-num");
+      const verdict = document.getElementById("ti-verdict");
+      const ticks = document.getElementById("bur-ticks");
+      for (let y = 30; y <= 250; y += 22) {
+        const t = document.createElementNS(NS, "line");
+        t.setAttribute("class", "tick");
+        t.setAttribute("x1", 138); t.setAttribute("x2", y % 44 === 30 % 44 ? 150 : 145);
+        t.setAttribute("y1", y); t.setAttribute("y2", y);
+        ticks.append(t);
+      }
+      const CLEAR = "rgba(200, 220, 255, 0.18)", PINK = "rgba(236, 72, 153, 0.78)";
+      const FULL = 91;   // how high the liquid can rise in the flask
+
+      function setLevel(fraction) {
+        const hgt = fraction * FULL;
+        liquid.setAttribute("y", 436 - hgt);
+        liquid.setAttribute("height", hgt);
+        const used = fraction * 150;          // the burette empties as the flask fills
+        reagent.setAttribute("y", 14 + used);
+        reagent.setAttribute("height", 246 - used);
+      }
+
+      function finish(score) {
+        const pct = score / 25;
+        if (pct >= 0.8) { liquid.style.fill = PINK; verdict.textContent = "End point reached: Secure"; }
+        else if (pct >= 0.5) { verdict.textContent = "Nearly there: not at the end point yet"; }
+        else { verdict.textContent = "Keep going: a way to go yet"; }
+      }
+
+      let running = null;
+      function run(score) {
+        if (running) cancelAnimationFrame(running);
+        liquid.style.fill = CLEAR;
+        verdict.textContent = "Marking…";
+        const target = score / 25, start = performance.now(), dur = 1800;
+        let lastDrop = 0;
+        function frame(now) {
+          const p = Math.min(1, (now - start) / dur);
+          const eased = 1 - Math.pow(1 - p, 2);
+          setLevel(target * eased);
+          num.textContent = Math.round(score * eased);
+          if (now - lastDrop > 110 && p < 1) {
+            lastDrop = now;
+            const d = document.createElementNS(NS, "circle");
+            d.setAttribute("class", "drop");
+            d.setAttribute("cx", 150); d.setAttribute("cy", 292); d.setAttribute("r", 3.5);
+            d.style.setProperty("--fall", (436 - target * eased * FULL - 292) + "px");
+            drops.append(d);
+            setTimeout(function () { d.remove(); }, 500);
+          }
+          if (p < 1) running = requestAnimationFrame(frame);
+          else { running = null; finish(score); }
+        }
+        if (reduceMotion) { setLevel(target); num.textContent = score; finish(score); return; }
+        running = requestAnimationFrame(frame);
+      }
+
+      document.querySelectorAll(".ti-buttons button").forEach(function (b) {
+        b.addEventListener("click", function () { run(Number(b.dataset.score)); });
+      });
+      // Start finished, so the page makes sense before anyone clicks
+      liquid.style.transition = "none";
+      setLevel(23 / 25); finish(23);
+      requestAnimationFrame(function () { liquid.style.transition = ""; });
+    })();
+
+    /* ---------- 8. The oscilloscope ---------- */
+    (function () {
+      const canvas = document.getElementById("pulse");
+      const ctx = canvas.getContext("2d");
+      const minutes = [30, 45, 0, 20, 60, 40, 0, 0, 25, 35, 50, 45, 30, 55];   // example: last 14 days
+      const days = document.getElementById("days");
+      const today = new Date();
+      for (let i = 13; i >= 0; i--) {
+        const d = new Date(today); d.setDate(today.getDate() - i);
+        const span = document.createElement("span");
+        span.textContent = i === 0 ? "Today" : d.toLocaleDateString("en-GB", { weekday: "short" }).slice(0, 2);
+        days.append(span);
+      }
+      let streak = 0;
+      for (let i = minutes.length - 1; i >= 0 && minutes[i] > 0; i--) streak++;
+      document.getElementById("pulse-info").textContent =
+        "Revised on " + minutes.filter(function (m) { return m > 0; }).length + " of the last 14 days · " +
+        "current streak: " + streak + " days · longest session: " + Math.max.apply(null, minutes) + " min";
+
+      // The shape of one heartbeat (an ECG): small bump, sharp spike, small bump
+      function g(u, c, wdt) { return Math.exp(-Math.pow((u - c) / wdt, 2)); }
+      function ecg(u) { return 0.12 * g(u, 0.15, 0.03) - 0.12 * g(u, 0.31, 0.012) + g(u, 0.35, 0.014) - 0.25 * g(u, 0.39, 0.012) + 0.22 * g(u, 0.62, 0.05); }
+
+      let w = 0, h = 0, dpr = 1, x = 0, prevY = 0;
+      function size() {
+        dpr = window.devicePixelRatio || 1;
+        w = canvas.clientWidth; h = canvas.clientHeight;
+        canvas.width = Math.round(w * dpr); canvas.height = Math.round(h * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        x = 0; prevY = yAt(0);
+      }
+      function yAt(px) {
+        const dayW = w / 14;
+        const d = Math.min(13, Math.floor(px / dayW));
+        const u = (px - d * dayW) / dayW;
+        return h * 0.62 - (minutes[d] / 60) * h * 0.5 * ecg(u);
+      }
+      function segment(x1, y1, x2, y2) {
+        ctx.strokeStyle = "#7cffb2";
+        ctx.lineWidth = 2;
+        ctx.shadowColor = "#7cffb2";
+        ctx.shadowBlur = 5;
+        ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+      }
+      function drawAll() {
+        ctx.clearRect(0, 0, w, h);
+        for (let px = 0; px < w; px += 1) segment(px, yAt(px), px + 1, yAt(px + 1));
+      }
+      // Like a hospital heart monitor: the whole trace stays on screen, and
+      // the beam sweeps along, rubbing out a small gap just ahead of itself.
+      function frame() {
+        ctx.clearRect(x + 1, 0, 18, h);
+        for (let k = 0; k < 3; k++) {          // three small steps per frame = smooth sharp spikes
+          const nx = x + 1.2, ny = yAt(nx);
+          segment(x, prevY, nx, ny);
+          x = nx; prevY = ny;
+          if (x >= w) { x = 0; prevY = yAt(0); }
+        }
+        requestAnimationFrame(frame);
+      }
+      size();
+      drawAll();
+      window.addEventListener("resize", function () { size(); drawAll(); });
+      if (!reduceMotion) frame();
     })();
   </script>
 </body>
