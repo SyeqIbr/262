@@ -5024,3 +5024,120 @@ html[data-mode="light"] .page-overlay { background: rgba(21, 23, 27, 0.25); }
 .page-overlay { grid-template-columns: minmax(0, 1fr); justify-items: center; }
 /* Count the padding inside the width (otherwise 358px + padding = too wide) */
 .load-card { box-sizing: border-box; }
+
+/* ======================================================
+   LESSON 20: The welcome tour (tour.js)
+   ====================================================== */
+.tour { position: fixed; inset: 0; z-index: 900; }
+
+/* Stops clicks reaching the page underneath while the tour is open */
+.tour-block { position: fixed; inset: 0; }
+
+/* The spotlight: a box with a giant shadow that darkens everything else */
+.tour-hole {
+  position: fixed;
+  border-radius: 14px;
+  box-shadow: 0 0 0 9999px rgba(5, 6, 10, 0.72), 0 0 0 2px var(--star), 0 0 24px 4px color-mix(in srgb, var(--star) 45%, transparent);
+  pointer-events: none;
+  transition: top 0.45s cubic-bezier(.3,.8,.3,1), left 0.45s cubic-bezier(.3,.8,.3,1),
+              width 0.45s cubic-bezier(.3,.8,.3,1), height 0.45s cubic-bezier(.3,.8,.3,1), border-radius 0.3s;
+}
+.tour-hole.round { border-radius: 999px; }
+/* Welcome and goodbye: no feature, so no glowing edge */
+.tour.centred .tour-hole { box-shadow: 0 0 0 9999px rgba(5, 6, 10, 0.72); }
+html[data-mode="light"] .tour-hole { box-shadow: 0 0 0 9999px rgba(21, 23, 27, 0.55), 0 0 0 2px var(--star-deep), 0 0 24px 4px color-mix(in srgb, var(--star) 60%, transparent); }
+html[data-mode="light"] .tour.centred .tour-hole { box-shadow: 0 0 0 9999px rgba(21, 23, 27, 0.55); }
+
+/* The card: the same little night sky as the loading card */
+.tour-card {
+  position: fixed;
+  box-sizing: border-box;
+  width: min(360px, calc(100vw - 32px));
+  padding: 20px 22px 18px;
+  overflow: hidden;
+  color: #eef0f6;
+  border: 1px solid #2a3044;
+  border-radius: 18px;
+  background: radial-gradient(ellipse at 30% 0%, #232c4d 0%, #10131f 60%, #07080c 100%);
+  box-shadow: 0 24px 60px -18px rgba(0, 0, 0, 0.75);
+  transition: top 0.45s cubic-bezier(.3,.8,.3,1), left 0.45s cubic-bezier(.3,.8,.3,1);
+}
+.tour-card.pop { animation: tour-pop 0.3s cubic-bezier(.2,.8,.3,1.2); }
+@keyframes tour-pop { from { opacity: 0.4; transform: scale(0.95); } }
+.tour-card > *:not(.load-dots) { position: relative; }
+
+.tour-count {
+  margin: 0 0 4px;
+  font: 500 0.7rem var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--star);
+}
+.tour-card h2 { margin: 0 0 6px; font-size: 1.25rem; color: #ffffff; }
+.tour-text { margin: 0 0 14px; font-size: 0.95rem; line-height: 1.5; color: #c7ccd9; }
+
+.tour-x {
+  position: absolute !important;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  font-size: 1.3rem;
+  line-height: 1;
+  color: #8f96a8;
+  background: none;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.tour-x:hover { color: #ffffff; background: rgba(255, 255, 255, 0.08); }
+
+/* Progress dots */
+.tour-dots { display: flex; gap: 6px; margin-bottom: 14px; }
+.tour-dots i { width: 6px; height: 6px; border-radius: 50%; background: #343a4d; transition: background 0.2s, transform 0.2s; }
+.tour-dots i.on { background: var(--star); transform: scale(1.4); box-shadow: 0 0 6px var(--star); }
+
+.tour-buttons { display: flex; justify-content: flex-end; gap: 8px; }
+.tour-back {
+  font: inherit;
+  font-weight: 600;
+  padding: 8px 14px;
+  color: #c7ccd9;
+  background: none;
+  border: 1px solid #343a4d;
+  border-radius: var(--radius-small);
+  cursor: pointer;
+}
+.tour-back:hover { color: #ffffff; border-color: #8f96a8; }
+.tour-next.button {
+  padding: 8px 16px;
+  color: #0b0c10;
+  background: var(--star);
+  border: 1px solid var(--star);
+}
+.tour-next.button:hover { background: var(--star-pale); }
+
+.tour.closing { animation: tour-out 0.25s ease-in forwards; }
+@keyframes tour-out { to { opacity: 0; } }
+
+/* "Take the tour again" on How it works */
+.tour-again {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px 32px;
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--star) 7%, var(--surface));
+}
+.tour-again .section-title { margin-top: 0; }
+.tour-again .section-intro { margin-bottom: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tour-hole, .tour-card { transition: none; }
+  .tour-card.pop, .tour.closing { animation: none; }
+}
+/* Keep the tour's button labels on one line */
+.tour-back, .tour-next.button { white-space: nowrap; }
