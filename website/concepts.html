@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<!--
+  DESIGN CONCEPTS
+  ---------------
+  Three possible "big ideas" for the site's look, each as a small live demo.
+  This page has its own styles (below) so it doesn't change the real site.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Design Concepts · GCSE Science</title>
+  <meta name="color-scheme" content="dark">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Schibsted+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f1012;
+      --text: #ecedef;
+      --muted: #8d9199;
+      --line: #2a2c31;
+      --bio: #4ade80;
+      --chem: #fb923c;
+      --phys: #60a5fa;
+      --display: "Schibsted Grotesk", system-ui, sans-serif;
+      --body: "Hanken Grotesk", system-ui, sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, monospace;
+      --chalk-font: "Caveat", "Comic Sans MS", cursive;
+      color-scheme: dark;
+    }
+
+    html, body { background: var(--bg); color: var(--text); margin: 0; }
+    body { font-family: var(--body); line-height: 1.6; }
+    a { color: inherit; }
+
+    .intro {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 56px 20px 24px;
+    }
+    .intro h1 { font-family: var(--display); font-size: clamp(2rem, 5vw, 3rem); line-height: 1.1; margin: 0 0 12px; letter-spacing: -0.02em; }
+    .intro p { color: var(--muted); margin: 0 0 10px; }
+    .intro a { color: var(--bio); }
+
+    .concept {
+      border-top: 1px solid var(--line);
+      padding: 48px 20px 64px;
+    }
+    .concept-head {
+      max-width: 1100px;
+      margin: 0 auto 28px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 24px;
+      align-items: baseline;
+    }
+    .concept-head .num { font-family: var(--mono); color: var(--muted); }
+    .concept-head h2 { font-family: var(--display); font-size: 1.6rem; margin: 0; }
+    .concept-head p { flex-basis: 100%; margin: 0; color: var(--muted); max-width: 70ch; }
+    .stage {
+      max-width: 1100px;
+      margin: 0 auto;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    /* ---------- 1. SPECIMEN ---------- */
+    .specimen {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 40px;
+      align-items: center;
+      padding: 40px;
+      background: #0c0d0f;
+      border: 1px solid var(--line);
+    }
+    @media (max-width: 820px) { .specimen { grid-template-columns: minmax(0, 1fr); padding: 24px; } }
+    .specimen h3 { font-family: var(--display); font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.02; margin: 0 0 16px; letter-spacing: -0.03em; }
+    .specimen .lede { color: var(--muted); margin: 0 0 24px; }
+    .slides { display: grid; gap: 10px; }
+    .slide {
+      display: grid;
+      grid-template-columns: 70px 1fr auto;
+      align-items: center;
+      background: linear-gradient(90deg, rgba(255,255,255,0.06) 0 70px, rgba(255,255,255,0.02) 70px);
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      height: 44px;
+      font-size: 0.95rem;
+    }
+    .slide .lab {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      text-align: center;
+      color: var(--c);
+      border-right: 1px dashed var(--line);
+      height: 100%;
+      display: grid;
+      place-items: center;
+    }
+    .slide span:nth-child(2) { padding: 0 14px; }
+    .slide .mag { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); padding-right: 14px; }
+
+    .scope {
+      position: relative;
+      aspect-ratio: 1;
+      max-width: 440px;
+      width: 100%;
+      justify-self: center;
+    }
+    .scope canvas {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      display: block;
+      box-shadow: 0 0 0 10px #17191c, 0 0 0 11px #2d3036, inset 0 0 60px rgba(0,0,0,0.9);
+      background: radial-gradient(circle at 45% 40%, #1b2a20, #0b0f0c 70%);
+    }
+    .scope-label {
+      position: absolute;
+      left: 0; right: 0; bottom: -44px;
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+    .scope-tabs { display: flex; gap: 8px; margin-top: 60px; justify-content: center; }
+    .scope-tabs button {
+      font: 500 0.8rem var(--mono);
+      color: var(--muted);
+      background: none;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 6px 12px;
+      cursor: pointer;
+    }
+    .scope-tabs button[aria-pressed="true"] { color: var(--bg); background: var(--c); border-color: var(--c); }
+
+    /* ---------- 2. PERIODIC ---------- */
+    .periodic {
+      padding: 40px;
+      background: #0c0d0f;
+      border: 1px solid var(--line);
+    }
+    @media (max-width: 820px) { .periodic { padding: 20px; } }
+    .periodic h3 { font-family: var(--display); font-size: clamp(1.8rem, 4.5vw, 2.8rem); margin: 0 0 6px; letter-spacing: -0.03em; }
+    .periodic .lede { color: var(--muted); margin: 0 0 28px; }
+    .table {
+      display: grid;
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+      gap: 6px;
+    }
+    .el {
+      position: relative;
+      aspect-ratio: 1;
+      border: 1px solid color-mix(in srgb, var(--c) 35%, transparent);
+      border-radius: 4px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: linear-gradient(to top, color-mix(in srgb, var(--c) 35%, transparent) var(--fill, 0%), transparent var(--fill, 0%));
+      transition: transform 0.2s, border-color 0.2s;
+      cursor: pointer;
+      min-width: 0;
+      overflow: hidden;
+    }
+    /* Lets the browser animate the tile's fill smoothly */
+    @property --fill { syntax: "<percentage>"; inherits: false; initial-value: 0%; }
+    .el { transition: transform 0.2s, border-color 0.2s, --fill 1.2s ease; }
+    .el:hover { transform: translateY(-3px); border-color: var(--c); }
+    .el .z { font-family: var(--mono); font-size: 0.6rem; color: var(--muted); }
+    .el .sym { font-family: var(--display); font-weight: 800; font-size: clamp(0.9rem, 2.6vw, 1.7rem); color: var(--c); line-height: 1; }
+    .el .nm { font-size: 0.6rem; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .el.ready { border-color: var(--c); box-shadow: 0 0 24px -6px var(--c); }
+    .el.gap { visibility: hidden; }
+    @media (max-width: 560px) { .el .nm, .el .z { display: none; } .el { justify-content: center; align-items: center; } }
+    .legend { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 18px; font-size: 0.85rem; color: var(--muted); }
+    .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+    .tile-info { margin-top: 18px; min-height: 1.6em; font-family: var(--mono); font-size: 0.85rem; }
+
+    /* ---------- 3. CHALKBOARD ---------- */
+    .board {
+      padding: 48px 40px;
+      background:
+        radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.05), transparent 60%),
+        #1d2723;
+      border: 12px solid #3b2f25;
+      border-radius: 6px;
+      font-family: var(--body);
+      color: #e9ece6;
+    }
+    @media (max-width: 820px) { .board { padding: 28px 20px; border-width: 8px; } }
+    .board h3 { font-family: var(--display); font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.05; margin: 0 0 20px; letter-spacing: -0.02em; }
+    .ink { position: relative; display: inline-block; }
+    .ink svg { position: absolute; overflow: visible; pointer-events: none; }
+    .ink .circle { left: -12%; top: -18%; width: 124%; height: 140%; }
+    .ink .under { left: -2%; bottom: -14px; width: 104%; height: 16px; }
+    .chalk { fill: none; stroke: #f3f0c8; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; opacity: 0.9; }
+    .draw { stroke-dasharray: var(--len); stroke-dashoffset: var(--len); }
+    .play .draw { animation: draw 0.9s ease forwards; animation-delay: var(--d, 0s); }
+    @keyframes draw { to { stroke-dashoffset: 0; } }
+    .note-hand { font-family: var(--chalk-font); font-size: 1.5rem; color: #f3f0c8; }
+    .answers { display: grid; gap: 22px; margin-top: 32px; max-width: 640px; }
+    .answer { position: relative; padding-right: 60px; }
+    .answer .q { margin: 0 0 4px; }
+    .answer .a { margin: 0; font-family: var(--chalk-font); font-size: 1.45rem; color: #dfe7ff; }
+    .answer .mark { position: absolute; right: 0; top: 0; width: 44px; height: 44px; }
+    .answer .fix { margin: 4px 0 0; font-family: var(--chalk-font); font-size: 1.3rem; color: #ffb4a8; }
+    .replay {
+      margin-top: 28px;
+      font: 600 0.9rem var(--body);
+      color: #1d2723;
+      background: #f3f0c8;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 18px;
+      cursor: pointer;
+    }
+
+    footer { text-align: center; color: var(--muted); padding: 40px 20px; font-size: 0.9rem; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .play .draw { animation: none; stroke-dashoffset: 0; }
+      .el { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="intro">
+    <h1>Three ways to make it feel alive</h1>
+    <p>Each idea comes from the world of science, so it couldn't be mistaken for any other revision site. Play with each demo, then pick one, or mix bits you like.</p>
+    <p><a href="index.html">← Back to the site</a></p>
+  </header>
+
+  <!-- ================= 1. SPECIMEN ================= -->
+  <section class="concept">
+    <div class="concept-head">
+      <span class="num">01</span>
+      <h2>Specimen</h2>
+      <p>The site is a microscope. A live specimen sits at the heart of every page: cells for Biology, molecules for Chemistry, waves for Physics. Topics are labelled like slides.</p>
+    </div>
+    <div class="stage specimen" style="--c: var(--bio)" id="specimen">
+      <div>
+        <h3>Revise smarter,<br>not longer.</h3>
+        <p class="lede">Read the notes, blurt what you remember, get it marked.</p>
+        <div class="slides">
+          <div class="slide" style="--c: var(--bio)"><span class="lab">B1</span><span>Cell biology</span><span class="mag">×400</span></div>
+          <div class="slide" style="--c: var(--chem)"><span class="lab">C1</span><span>Atomic structure</span><span class="mag">soon</span></div>
+          <div class="slide" style="--c: var(--phys)"><span class="lab">P1</span><span>Energy</span><span class="mag">soon</span></div>
+        </div>
+      </div>
+      <div>
+        <div class="scope">
+          <canvas id="scope" width="880" height="880" aria-label="A live view down a microscope"></canvas>
+          <div class="scope-label"><span id="scope-name">Specimen · Cheek cells</span><span id="scope-mag">×400</span></div>
+        </div>
+        <div class="scope-tabs" role="group" aria-label="Choose a specimen">
+          <button type="button" data-kind="bio" aria-pressed="true">Biology</button>
+          <button type="button" data-kind="chem" aria-pressed="false">Chemistry</button>
+          <button type="button" data-kind="phys" aria-pressed="false">Physics</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 2. PERIODIC ================= -->
+  <section class="concept">
+    <div class="concept-head">
+      <span class="num">02</span>
+      <h2>Periodic table</h2>
+      <p>The whole course is one periodic table. Every topic is an element tile that fills with colour as you master it. Your map, your progress and your menu in one picture.</p>
+    </div>
+    <div class="stage periodic">
+      <h3>The periodic table of your revision</h3>
+      <p class="lede">Hover or tap a tile. The coloured fill is your best blurting score.</p>
+      <div class="table" id="table"></div>
+      <div class="tile-info" id="tile-info" aria-live="polite">&nbsp;</div>
+      <div class="legend">
+        <span><i style="background: var(--bio)"></i>Biology</span>
+        <span><i style="background: var(--chem)"></i>Chemistry</span>
+        <span><i style="background: var(--phys)"></i>Physics</span>
+        <span>Glowing = notes ready</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 3. CHALKBOARD ================= -->
+  <section class="concept">
+    <div class="concept-head">
+      <span class="num">03</span>
+      <h2>Chalkboard</h2>
+      <p>A teacher's board. Key words get circled and underlined in chalk as you read, and blurting comes back marked with hand-drawn ticks, crosses and corrections.</p>
+    </div>
+    <div class="stage board" id="board">
+      <h3>Revise
+        <span class="ink">smarter<svg class="circle" viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path class="chalk draw" style="--len: 520; --d: 0.2s" d="M20 45 C 20 10, 180 5, 188 38 S 60 78, 16 50 C 8 40, 40 18, 70 14"/></svg></span>,<br>not
+        <span class="ink">longer<svg class="under" viewBox="0 0 200 16" preserveAspectRatio="none" aria-hidden="true"><path class="chalk draw" style="--len: 220; --d: 0.9s" d="M4 10 C 60 4, 120 14, 196 6"/></svg></span>.
+      </h3>
+      <p class="note-hand">← blurt it, then get it marked</p>
+
+      <div class="answers">
+        <div class="answer">
+          <p class="q">9. A cell is 20 µm long. Its image is 8 mm long. Calculate the magnification.</p>
+          <p class="a">8 mm = 8000 µm → 8000 ÷ 20 = ×400</p>
+          <svg class="mark" viewBox="0 0 44 44" aria-label="Correct"><path class="chalk draw" style="--len: 60; --d: 1.5s; stroke: #9ef0b0; stroke-width: 4" d="M8 24 L18 34 L38 8"/></svg>
+        </div>
+        <div class="answer">
+          <p class="q">1. What is magnification?</p>
+          <p class="a">how zoomed in it is</p>
+          <svg class="mark" viewBox="0 0 44 44" aria-label="Nearly"><path class="chalk draw" style="--len: 50; --d: 2.1s; stroke: #ffd98a; stroke-width: 4" d="M6 24 C 14 14, 22 34, 38 20"/></svg>
+          <p class="fix">say: how many times bigger the image is than the real object</p>
+        </div>
+      </div>
+      <button class="replay" type="button" id="replay">Draw it again</button>
+    </div>
+  </section>
+
+  <footer>Tell Claude which one you like, or which bits to mix.</footer>
+
+  <script>
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    /* ---------- 1. The live microscope ---------- */
+    (function () {
+      const canvas = document.getElementById("scope");
+      const ctx = canvas.getContext("2d");
+      const W = canvas.width, R = W / 2;
+      const name = document.getElementById("scope-name");
+      const mag = document.getElementById("scope-mag");
+      const stage = document.getElementById("specimen");
+      let kind = "bio";
+      let things = [];
+      let t = 0;
+
+      function rand(a, b) { return a + Math.random() * (b - a); }
+
+      function setup() {
+        things = [];
+        if (kind === "bio") {
+          for (let i = 0; i < 9; i++) things.push({ x: rand(240, 640), y: rand(240, 640), r: rand(55, 85), vx: rand(-0.3, 0.3), vy: rand(-0.3, 0.3), wob: rand(0, 6), grow: rand(0.02, 0.05) });
+        } else if (kind === "chem") {
+          for (let i = 0; i < 14; i++) things.push({ x: rand(200, 680), y: rand(200, 680), vx: rand(-1, 1), vy: rand(-1, 1), a: rand(0, 6), spin: rand(-0.02, 0.02) });
+        }
+      }
+
+      function inside(p, margin) {
+        const dx = p.x - R, dy = p.y - R, d = Math.hypot(dx, dy);
+        if (d > R - margin) { p.vx -= dx / d * 0.2; p.vy -= dy / d * 0.2; }
+      }
+
+      function drawBio() {
+        things.forEach(function (c, i) {
+          c.x += c.vx; c.y += c.vy; inside(c, c.r + 20);
+          c.r += c.grow;
+          // A cell that gets big enough divides in two (mitosis!)
+          if (c.r > 100 && things.length < 16) {
+            c.r = 60; c.grow = rand(0.02, 0.05);
+            things.push({ x: c.x + 40, y: c.y, r: 60, vx: -c.vx + 0.2, vy: c.vy, wob: c.wob + 1, grow: rand(0.02, 0.05) });
+            c.x -= 40;
+          }
+          if (c.r > 100) c.r = 60;
+          ctx.save();
+          ctx.translate(c.x, c.y);
+          ctx.beginPath();
+          for (let a = 0; a <= Math.PI * 2 + 0.01; a += 0.2) {
+            const rr = c.r + Math.sin(a * 3 + t * 0.02 + c.wob) * 5;
+            const px = Math.cos(a) * rr, py = Math.sin(a) * rr;
+            a === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+          }
+          ctx.fillStyle = "rgba(160, 230, 180, 0.10)";
+          ctx.strokeStyle = "rgba(160, 230, 180, 0.55)";
+          ctx.lineWidth = 3;
+          ctx.fill(); ctx.stroke();
+          ctx.beginPath();
+          ctx.arc(c.r * 0.15, -c.r * 0.1, c.r * 0.3, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(196, 181, 253, 0.45)";
+          ctx.fill();
+          ctx.restore();
+        });
+      }
+
+      function drawChem() {
+        things.forEach(function (m) {
+          m.x += m.vx; m.y += m.vy; m.a += m.spin; inside(m, 70);
+          // A water molecule: one oxygen, two hydrogens at 104.5°
+          ctx.save();
+          ctx.translate(m.x, m.y); ctx.rotate(m.a);
+          const arm = 46, ang = 104.5 / 2 * Math.PI / 180;
+          [[Math.sin(ang), Math.cos(ang)], [-Math.sin(ang), Math.cos(ang)]].forEach(function (d) {
+            ctx.strokeStyle = "rgba(255,255,255,0.35)"; ctx.lineWidth = 6;
+            ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(d[0] * arm, d[1] * arm); ctx.stroke();
+            ctx.fillStyle = "#e8eef6"; ctx.beginPath(); ctx.arc(d[0] * arm, d[1] * arm, 14, 0, Math.PI * 2); ctx.fill();
+          });
+          ctx.fillStyle = "#fb7c5c"; ctx.beginPath(); ctx.arc(0, 0, 24, 0, Math.PI * 2); ctx.fill();
+          ctx.restore();
+        });
+      }
+
+      function drawPhys() {
+        const colours = ["rgba(96,165,250,0.9)", "rgba(96,165,250,0.5)", "rgba(96,165,250,0.25)"];
+        colours.forEach(function (col, k) {
+          ctx.strokeStyle = col; ctx.lineWidth = 4;
+          ctx.beginPath();
+          for (let x = 0; x <= W; x += 6) {
+            const y = R + Math.sin(x * (0.012 + k * 0.004) - t * (0.04 + k * 0.01)) * (120 - k * 30) + (k - 1) * 90;
+            x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+          }
+          ctx.stroke();
+        });
+      }
+
+      function frame() {
+        t++;
+        ctx.clearRect(0, 0, W, W);
+        ctx.save();
+        ctx.beginPath(); ctx.arc(R, R, R, 0, Math.PI * 2); ctx.clip();
+        if (kind === "bio") drawBio(); else if (kind === "chem") drawChem(); else drawPhys();
+        ctx.restore();
+        if (!reduceMotion) requestAnimationFrame(frame);
+      }
+
+      document.querySelectorAll(".scope-tabs button").forEach(function (b) {
+        b.addEventListener("click", function () {
+          kind = b.dataset.kind;
+          document.querySelectorAll(".scope-tabs button").forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+          const info = { bio: ["Specimen · Cheek cells", "×400", "var(--bio)"], chem: ["Specimen · Water molecules", "model", "var(--chem)"], phys: ["Specimen · Transverse waves", "live", "var(--phys)"] }[kind];
+          name.textContent = info[0]; mag.textContent = info[1];
+          stage.style.setProperty("--c", info[2]);
+          setup();
+          if (reduceMotion) frame();
+        });
+      });
+
+      setup();
+      frame();
+    })();
+
+    /* ---------- 2. The periodic table of topics ---------- */
+    (function () {
+      const topics = [
+        ["B1", "Cell biology", "bio", 1, 72], ["B2", "Organisation", "bio"], ["B3", "Infection and response", "bio"],
+        ["B4", "Bioenergetics", "bio"], ["B5", "Homeostasis and response", "bio"], ["B6", "Inheritance, variation and evolution", "bio"],
+        ["B7", "Ecology", "bio"], null, null, null,
+        ["C1", "Atomic structure and the periodic table", "chem"], ["C2", "Bonding, structure and properties", "chem"],
+        ["C3", "Quantitative chemistry", "chem"], ["C4", "Chemical changes", "chem"], ["C5", "Energy changes", "chem"],
+        ["C6", "The rate and extent of chemical change", "chem"], ["C7", "Organic chemistry", "chem"], ["C8", "Chemical analysis", "chem"],
+        ["C9", "Chemistry of the atmosphere", "chem"], ["C10", "Using resources", "chem"],
+        ["P1", "Energy", "phys"], ["P2", "Electricity", "phys"], ["P3", "Particle model of matter", "phys"], ["P4", "Atomic structure", "phys"],
+        ["P5", "Forces", "phys"], ["P6", "Waves", "phys"], ["P7", "Magnetism and electromagnetism", "phys"], ["P8", "Space physics", "phys"], null, null,
+      ];
+      const table = document.getElementById("table");
+      const info = document.getElementById("tile-info");
+      let z = 0;
+      topics.forEach(function (tp) {
+        const el = document.createElement(tp ? "button" : "span");
+        el.className = "el";
+        if (!tp) { el.classList.add("gap"); table.append(el); return; }
+        z++;
+        el.type = "button";
+        el.style.setProperty("--c", "var(--" + tp[2] + ")");
+        if (tp[3]) el.classList.add("ready");
+        el.innerHTML = '<span class="z"></span><span class="sym"></span><span class="nm"></span>';
+        el.querySelector(".z").textContent = z;
+        el.querySelector(".sym").textContent = tp[0];
+        el.querySelector(".nm").textContent = tp[1];
+        const show = function () {
+          info.textContent = tp[0] + " · " + tp[1] + (tp[3] ? " · notes ready · best blurt " + tp[4] + "%" : " · coming soon");
+          if (tp[3]) el.style.setProperty("--fill", tp[4] + "%");
+        };
+        el.addEventListener("mouseenter", show);
+        el.addEventListener("focus", show);
+        el.addEventListener("click", show);
+        table.append(el);
+      });
+      // The ready tile fills up once, to show the idea
+      setTimeout(function () { table.querySelector(".ready").style.setProperty("--fill", "72%"); }, 600);
+    })();
+
+    /* ---------- 3. The chalkboard draws itself when it scrolls into view ---------- */
+    (function () {
+      const board = document.getElementById("board");
+      function play() {
+        board.classList.remove("play");
+        void board.offsetWidth;          // restart the animations
+        board.classList.add("play");
+      }
+      new IntersectionObserver(function (entries, obs) {
+        if (entries[0].isIntersecting) { play(); obs.disconnect(); }
+      }, { threshold: 0.4 }).observe(board);
+      document.getElementById("replay").addEventListener("click", play);
+    })();
+  </script>
+</body>
+</html>
