@@ -265,3 +265,40 @@ document.querySelectorAll("[data-count-quizzes]").forEach(function (el) {
   const tried = ids.filter(function (id) { return loadValue("best:" + id) !== null; }).length;
   el.textContent = tried + " / " + ids.length;
 });
+
+// LESSON 16: a trail of tiny stars behind the mouse.
+// Every time the mouse travels about 16px, a small four-point star appears
+// where it is, drifts down a little, spins and fades away. Only with a real
+// mouse (not touch), and never if the device asks for less motion.
+(function () {
+  const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!fine || calm) return;
+
+  let lastX = -100, lastY = -100, alive = 0;
+  window.addEventListener("pointermove", function (e) {
+    if (e.pointerType !== "mouse") return;
+    const moved = Math.hypot(e.clientX - lastX, e.clientY - lastY);
+    if (moved < 16 || alive > 24) return;       // not too many at once
+    lastX = e.clientX; lastY = e.clientY;
+
+    const star = document.createElement("span");
+    star.className = "trail-star" + (Math.random() < 0.3 ? " tint" : "");
+    star.setAttribute("aria-hidden", "true");
+    const size = 5 + Math.random() * 6;
+    star.style.width = star.style.height = size + "px";
+    document.body.append(star);
+    alive++;
+
+    const x = e.clientX - size / 2 + (Math.random() - 0.5) * 8;
+    const y = e.clientY - size / 2 + (Math.random() - 0.5) * 8;
+    const spin = (Math.random() < 0.5 ? -1 : 1) * (90 + Math.random() * 90);
+    star.animate([
+      { transform: "translate(" + x + "px," + y + "px) scale(1) rotate(0deg)", opacity: 0.95 },
+      { transform: "translate(" + (x + (Math.random() - 0.5) * 20) + "px," + (y + 14 + Math.random() * 12) + "px) scale(0.2) rotate(" + spin + "deg)", opacity: 0 },
+    ], { duration: 700 + Math.random() * 300, easing: "ease-out" }).onfinish = function () {
+      star.remove();
+      alive--;
+    };
+  }, { passive: true });
+})();

@@ -4350,3 +4350,178 @@ html[data-mode="light"] .site-footer .brand .logo .logo-big { fill: #ffffff; }
   .footer-sky .f-lines,
   .footer-sky .f-bright { display: none; }
 }
+
+/* ======================================================
+   LESSON 16: Red "undo", more space, light mode, star trail,
+   and a Mixed blurting card you can't miss
+   ====================================================== */
+
+/* ----- The red "undo" button: it takes brightness away ----- */
+.undo-star {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 1rem;
+  padding: 12px 16px;
+  color: #fca5a5;
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.45);
+}
+.undo-star svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.undo-star:hover,
+.undo-star:focus-visible { background: rgba(248, 113, 113, 0.18); border-color: #f87171; color: #fecaca; }
+
+/* The red "Are you sure?" box */
+.confirm-box.danger {
+  border-color: rgba(248, 113, 113, 0.6);
+  background: rgba(248, 113, 113, 0.08);
+}
+.confirm-title { display: block; margin-bottom: 6px; color: #fca5a5; font-size: 1.05rem; }
+.button.danger { background: #f87171; border-color: #f87171; color: #1a0b0b; }
+.button.danger:hover { background: #fca5a5; }
+
+html[data-mode="light"] .undo-star { color: #b91c1c; background: #fef2f2; border-color: #fca5a5; }
+html[data-mode="light"] .undo-star:hover { background: #fee2e2; color: #991b1b; border-color: #f87171; }
+html[data-mode="light"] .confirm-box.danger { background: #fef2f2; border-color: #fca5a5; }
+html[data-mode="light"] .confirm-title { color: #b91c1c; }
+html[data-mode="light"] .button.danger { background: #dc2626; border-color: #dc2626; color: #ffffff; }
+
+/* ----- More breathing room around "How a star gets brighter" ----- */
+.home-below { padding-top: 80px; }
+.home-below .home-section { margin-bottom: 88px; }
+.star-steps { margin-top: 28px; }
+
+/* ----- Light mode that actually works -----
+   In light mode the top of the homepage becomes a pale "daytime" page.
+   The sky itself stays a dark night window, like a picture on the page. */
+html[data-mode="light"] .sky-hero {
+  --background: #f6f7f8;
+  --surface: #ffffff;
+  --border: #e1e3e7;
+  --border-strong: #c9ccd2;
+  --text: #15171b;
+  --text-2: #3a3f47;
+  --muted: #676d77;
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, #ece8fb 0%, #f3f1fb 40%, #f6f7f8 100%);
+}
+html[data-mode="light"] .sky-hero .home-head h1 { color: #15171b; }
+html[data-mode="light"] .sky-hero .sky-stats { color: #6d28d9; }
+html[data-mode="light"] .sky-hero .sky-frame {
+  background: radial-gradient(ellipse at 50% 0%, #141a2b, #07080c 75%);
+  border-color: #1d2230;
+  box-shadow: 0 18px 50px -20px rgba(49, 36, 99, 0.45);
+}
+html[data-mode="light"] .sky-hero .star-panel { background: #ffffff; }
+html[data-mode="light"] .sky-hero .next-step { background: #ffffff; }
+html[data-mode="light"] .sky-hero .next-step .next-label { color: #6d28d9; }
+html[data-mode="light"] .sky-hero { --on-accent: #ffffff; --accent: #7c3aed; }
+html[data-mode="light"] .sky-hero .button:not(.ghost):not(.undo-star):not(.danger) { background: #7c3aed; border-color: #7c3aed; color: #ffffff; }
+
+/* Step stars: a coloured centre, so they show up on a light page */
+html[data-mode="light"] .glyph { --c: #7c3aed; background: #c9ccd2; }
+html[data-mode="light"] .glyph.stage-1,
+html[data-mode="light"] .glyph.stage-2,
+html[data-mode="light"] .glyph.joined,
+html[data-mode="light"] .glyph.joined::before { background: #7c3aed; }
+html[data-mode="light"] .mini-star.stage-2 { background: var(--c); }
+
+/* ----- The star trail behind the mouse (progress.js) ----- */
+.trail-star {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 300;
+  pointer-events: none;
+  background: #ffffff;
+  clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
+  filter: drop-shadow(0 0 3px #c4b5fd);
+}
+.trail-star.tint { background: #c4b5fd; }
+html[data-mode="light"] .trail-star { background: #7c3aed; filter: none; }
+html[data-mode="light"] .trail-star.tint { background: #a78bfa; }
+
+/* ----- Mixed blurting: a feature card ----- */
+.mix-card.feature {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 14px 16px;
+  align-items: center;
+  padding: 18px 20px;
+  border: 1px solid transparent;
+  /* a gradient border: the card's colour on top, a green-orange-blue edge underneath */
+  background:
+    linear-gradient(var(--surface), var(--surface)) padding-box,
+    linear-gradient(120deg, #4ade80, #fb923c 50%, #60a5fa) border-box;
+  text-decoration: none;
+  color: var(--text);
+  transition: transform 0.2s ease;
+}
+.mix-card.feature:hover,
+.mix-card.feature:focus-visible { transform: translateY(-2px); }
+.mix-card.feature .mix-text { display: flex; flex-direction: column; gap: 4px; }
+.mix-card.feature .mix-text b { display: flex; align-items: center; gap: 8px; font-size: 1.1rem; }
+.mix-card.feature .mix-text span { color: var(--muted); font-size: 0.92rem; }
+.mix-card.feature .mix-go {
+  grid-column: 1 / -1;
+  justify-self: start;
+  font-weight: 600;
+  color: var(--text);
+  padding: 8px 14px;
+  border-radius: var(--radius-small);
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+}
+.mix-card.feature:hover .mix-go { background: color-mix(in srgb, var(--text) 14%, transparent); }
+
+.new-pill {
+  font: 500 0.66rem var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 2px 7px;
+  border-radius: 999px;
+  color: #0b0c10 !important;
+  background: #c4b5fd;
+}
+html[data-mode="light"] .new-pill { background: #7c3aed; color: #ffffff !important; }
+
+/* Three overlapping orbs: Biology + Chemistry + Physics */
+.mix-orbs { position: relative; width: 52px; height: 40px; }
+.mix-orbs .orb {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  mix-blend-mode: screen;
+  opacity: 0.9;
+}
+.mix-orbs .orb.biology   { left: 0;    top: 12px; background: #4ade80; }
+.mix-orbs .orb.chemistry { left: 14px; top: 0;    background: #fb923c; }
+.mix-orbs .orb.physics   { left: 28px; top: 12px; background: #60a5fa; }
+html[data-mode="light"] .mix-orbs .orb { mix-blend-mode: multiply; opacity: 0.75; }
+
+/* On the subject Blurting pages it sits in a row */
+.mix-card.banner { grid-template-columns: auto 1fr auto; margin: 8px 0 28px; }
+.mix-card.banner .mix-go { grid-column: auto; }
+@media (max-width: 600px) {
+  .mix-card.banner { grid-template-columns: auto 1fr; }
+  .mix-card.banner .mix-go { grid-column: 1 / -1; }
+}
+
+/* The menu only has room for "Mixed blurting" on wide screens */
+@media (max-width: 1100px) {
+  .nav .mix-link { display: none; }
+}
+
+/* The card title stays full strength (".mix-card span" was greying it) */
+.mix-card.feature .mix-text { color: var(--text); }
+
+/* Deeper subject colours for the star panel on a white background */
+html[data-mode="light"] .star-panel {
+  --sky-biology: #15803d;
+  --sky-chemistry: #c2410c;
+  --sky-physics: #1d4ed8;
+}

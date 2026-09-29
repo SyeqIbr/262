@@ -404,14 +404,16 @@
   }
 
   // An "Are you sure?" box inside the panel (confirm() doesn't work in the preview)
-  function askFirst(where, question, yesText, onYes) {
+  // danger = true makes it red, for things that take progress away.
+  function askFirst(where, question, yesText, onYes, danger, onCancel) {
     where.innerHTML = "";
-    const box = make("div", "confirm-box");
+    const box = make("div", "confirm-box" + (danger ? " danger" : ""));
     box.setAttribute("role", "alertdialog");
+    if (danger) box.append(make("b", "confirm-title", "Are you sure?"));
     box.append(make("p", "", question));
     const row = make("div", "confirm-row");
-    const cancel = btn("Cancel", "button ghost", function () { where.innerHTML = ""; });
-    row.append(btn(yesText, "button", onYes), cancel);
+    const cancel = btn("Cancel", "button ghost", function () { where.innerHTML = ""; if (onCancel) onCancel(); });
+    row.append(btn(yesText, "button" + (danger ? " danger" : ""), onYes), cancel);
     box.append(row);
     where.append(box);
     cancel.focus();
@@ -489,18 +491,25 @@
     const confirmArea = make("div");
 
     if (p.manual) {
-      wrap.append(btn("Go back to my tracked progress", "button ghost set-star", function () {
+      // A red button with an "undo" arrow: it takes brightness away, so it looks different
+      const undo = btn("", "button undo-star", function () {
+        undo.hidden = true;
         askFirst(confirmArea,
-          "Go back to your tracked progress for " + topic.code + "? The star will show " + STAGES[p.tracked] + " again.",
-          "Yes, go back",
+          "This removes the brightness you set for " + topic.code + " " + topic.name + ". The star goes back to " +
+          STAGES[p.tracked] + ", which is your tracked progress. Your notes and blurt scores won't change.",
+          "Yes, remove it",
           function () {
             delete manual[topic.code];
             saveManual();
             showToast(topic.code + " is back to your tracked progress.");
             showPanel(topic); draw(); focusStar(topic.code);
-          });
-      }));
-      wrap.append(confirmArea);
+          },
+          true,
+          function () { undo.hidden = false; undo.focus(); });
+      });
+      undo.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></svg>';
+      undo.append("Remove the brightness I set");
+      wrap.append(undo, confirmArea);
       return wrap;
     }
 
