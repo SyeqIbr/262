@@ -1,6 +1,6 @@
 /*
-  LESSON 11: Your sky
-  -------------------
+  LESSON 11–12: Your sky
+  ----------------------
   Every topic is a star. Its brightness comes from what the student has
   actually done (read notes and blurt scores, saved by progress.js and
   blurt.js in localStorage), in five stages:
@@ -15,7 +15,12 @@
   Lit stars in the same subject join up into a constellation.
   Each subtopic is a small moon orbiting its star, coloured by best blurt.
 
-  The page gives us the course in window.SKY (see sky.html).
+  NEW: students can set a star brighter themselves (e.g. a topic they
+  already know from class). They must confirm first, self-set stars get
+  a dashed ring, and once their tracked progress catches up, the self-set
+  value is dropped automatically.
+
+  The page gives us the course in window.SKY.
 */
 
 (function () {
@@ -53,7 +58,7 @@
   let example = false;       // showing the example sky?
   let selected = null;       // the topic code whose panel is open
 
-  // ---------- Reading progress (always inside try/catch) ----------
+  // ---------- Saving and loading (always inside try/catch) ----------
   function load(key) {
     try { return localStorage.getItem(key); } catch (e) { return null; }
   }
@@ -61,9 +66,14 @@
     try { localStorage.setItem(key, value); } catch (e) {}
   }
 
-  // Everything we know about one topic's progress
-  function progressOf(topic) {
-    if (example) return exampleProgress(topic);
+  // Stars the student has set themselves: { "B3": 3, ... }
+  let manual = {};
+  try { manual = JSON.parse(load("sky:manual")) || {}; } catch (e) { manual = {}; }
+  function saveManual() { save("sky:manual", JSON.stringify(manual)); }
+
+  // ---------- Progress ----------
+  // What the site has actually tracked for one topic
+  function trackedOf(topic) {
     if (topic.subtopics.length === 0) return { forming: true, stage: 0, subs: [] };
     let read = 0, total = 0, blurted = 0, secure = 0;
     const subs = topic.subtopics.map(function (s) {
@@ -81,6 +91,25 @@
     return { forming: false, stage: stage, subs: subs };
   }
 
+  // What the sky shows: tracked progress, unless the student set it higher
+  function progressOf(topic) {
+    if (example) return exampleProgress(topic);
+    const p = trackedOf(topic);
+    p.tracked = p.stage;
+    const m = manual[topic.code];
+    if (m !== undefined) {
+      if (p.stage >= m) {
+        // Real progress has caught up, so the self-set value isn't needed any more
+        delete manual[topic.code];
+        saveManual();
+      } else {
+        p.stage = m;
+        p.manual = true;
+      }
+    }
+    return p;
+  }
+
   // A made-up sky, to show what a term of revision could look like
   const EXAMPLE = { B1: 4, B2: 3, B3: 2, B4: 1, B5: 1, C1: 3, C2: 2, C3: 1, C4: 1, P1: 4, P2: 3, P3: 1, P5: 2 };
   function exampleProgress(topic) {
@@ -92,11 +121,13 @@
     return { forming: false, stage: stage, subs: stage === 0 ? [] : subs, example: true };
   }
 
-  // What should the student do next? Go subtopic by subtopic.
+  // What should the student do next? Go subtopic by subtopic,
+  // skipping stars they've told us they already know.
   function nextStep() {
     for (const topic of DATA.topics) {
       if (topic.subtopics.length === 0) continue;
       const p = progressOf(topic);
+      if (p.manual) continue;
       for (const sp of p.subs) {
         if (sp.nextNote) return { topic: topic, text: "Read " + sp.nextNote.title, url: sp.nextNote.url, button: "Read it" };
         if (sp.best === null) return { topic: topic, text: "Blurt " + sp.s.label, url: sp.s.blurt.url, button: "Blurt it" };
@@ -170,16 +201,21 @@
     // The stars themselves
     DATA.topics.forEach(function (topic) {
       const p = progress[topic.code];
+      const formingLook = p.forming && !p.manual;      // a dotted "still forming" star
       const xy = pos(topic.code), x = xy[0], y = xy[1];
-      const g = el("g", { class: "star stage-" + p.stage + (p.forming ? " forming" : ""), tabindex: "0", role: "button" });
+      const g = el("g", { class: "star stage-" + p.stage + (formingLook ? " forming" : "") + (p.manual ? " self-set" : ""), tabindex: "0", role: "button" });
       g.style.setProperty("--c", "var(--sky-" + topic.subject + ")");
-      g.setAttribute("aria-label", topic.code + " " + topic.name + ": " + (p.forming ? "notes coming soon" : STAGES[p.stage]));
+      g.setAttribute("aria-label", topic.code + " " + topic.name + ": " +
+        (formingLook ? "notes coming soon" : STAGES[p.stage] + (p.manual ? ", set by you" : "")));
       if (selected === topic.code) g.classList.add("selected");
 
+      // An invisible, fingertip-sized circle, so even tiny stars are easy to tap
+      el("circle", { class: "hit", cx: x, cy: y, r: 22 }, g);
       if (next && next.topic.code === topic.code) el("circle", { class: "pulse", cx: x, cy: y, r: 16 }, g);
       el("circle", { class: "halo", cx: x, cy: y, r: [0, 10, 14, 18, 24][p.stage] }, g);
-      if (p.forming) el("circle", { class: "ring", cx: x, cy: y, r: 7 }, g);
-      el("circle", { class: "core", cx: x, cy: y, r: p.forming ? 2 : [2.5, 3.5, 4.5, 5.5, 7][p.stage] }, g);
+      if (formingLook) el("circle", { class: "ring", cx: x, cy: y, r: 7 }, g);
+      if (p.manual) el("circle", { class: "self-ring", cx: x, cy: y, r: [9, 14, 18, 22, 28][p.stage] }, g);
+      el("circle", { class: "core", cx: x, cy: y, r: formingLook ? 2 : [2.5, 3.5, 4.5, 5.5, 7][p.stage] }, g);
       if (p.stage === 4) {
         el("path", { class: "sparkle", d: "M" + x + " " + (y - 16) + " V" + (y + 16) + " M" + (x - 16) + " " + y + " H" + (x + 16) }, g);
       }
@@ -198,7 +234,7 @@
 
       el("text", { class: "code", x: x + (p.subs.length ? 32 : 11), y: y - 8 }, g).textContent = topic.code;
 
-      function open() { selected = topic.code; showPanel(topic, p); draw(); focusStar(topic.code); }
+      function open() { selected = topic.code; showPanel(topic); draw(); focusStar(topic.code); }
       g.addEventListener("click", open);
       g.addEventListener("keydown", function (e) {
         if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); }
@@ -209,7 +245,9 @@
     // Numbers at the top
     const lit = DATA.topics.filter(function (t) { return progress[t.code].stage >= 1; }).length;
     const blazing = DATA.topics.filter(function (t) { return progress[t.code].stage === 4; }).length;
-    stats.textContent = lit + " of " + DATA.topics.length + " stars lit · " + blazing + " blazing";
+    const mine = DATA.topics.filter(function (t) { return progress[t.code].manual; }).length;
+    stats.textContent = lit + " of " + DATA.topics.length + " stars lit · " + blazing + " blazing" +
+      (mine ? " · " + mine + " set by you" : "");
 
     // "Your next star"
     nextBox.innerHTML = "";
@@ -237,90 +275,168 @@
     if (g) g.focus({ preventScroll: true });
   }
 
+  // ---------- Small helpers for building the panel ----------
+  function make(tag, className, text) {
+    const e = document.createElement(tag);
+    if (className) e.className = className;
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+  function btn(text, className, onClick) {
+    const b = make("button", className, text);
+    b.type = "button";
+    b.addEventListener("click", onClick);
+    return b;
+  }
+  function showToast(message) {
+    toast.textContent = message;
+    toast.hidden = false;
+    clearTimeout(showToast.timer);
+    showToast.timer = setTimeout(function () { toast.hidden = true; }, 5000);
+  }
+
+  // An "Are you sure?" box inside the panel (confirm() doesn't work in the preview)
+  function askFirst(where, question, yesText, onYes) {
+    where.innerHTML = "";
+    const box = make("div", "confirm-box");
+    box.setAttribute("role", "alertdialog");
+    box.append(make("p", "", question));
+    const row = make("div", "confirm-row");
+    const cancel = btn("Cancel", "button ghost", function () { where.innerHTML = ""; });
+    row.append(btn(yesText, "button", onYes), cancel);
+    box.append(row);
+    where.append(box);
+    cancel.focus();
+  }
+
   // ---------- The panel for one star ----------
-  function showPanel(topic, p) {
+  function showPanel(topic) {
+    const p = progressOf(topic);
+    const formingLook = p.forming && !p.manual;
     panel.innerHTML = "";
-    const head = document.createElement("div");
-    head.className = "panel-head";
-    const code = document.createElement("span");
-    code.className = "code";
-    code.textContent = topic.code;
-    const h = document.createElement("h2");
-    h.textContent = topic.name;
-    const sub = document.createElement("p");
-    sub.className = "panel-sub";
-    sub.textContent = SUBJECT_NAMES[topic.subject] + (topic.triple ? " · Triple only" : "");
-    head.append(code, h, sub);
-    panel.append(head);
     panel.style.setProperty("--accent", "var(--sky-" + topic.subject + ")");
 
-    if (p.forming) {
-      const f = document.createElement("p");
-      f.className = "panel-note";
-      f.textContent = "This star is still forming. Notes for " + topic.name + " are on the way.";
-      panel.append(f);
-      return;
+    const head = make("div", "panel-head");
+    head.append(make("span", "code", topic.code), make("h2", "", topic.name),
+      make("p", "panel-sub", SUBJECT_NAMES[topic.subject] + (topic.triple ? " · Triple only" : "")));
+    panel.append(head);
+
+    if (!formingLook) {
+      // Brightness meter: five dots
+      const meter = make("div", "meter");
+      for (let i = 0; i < 5; i++) meter.append(make("span", i <= p.stage ? "on" : ""));
+      meter.append(make("b", "", STAGES[p.stage] + (p.manual ? " (set by you)" : "")));
+      panel.append(meter);
     }
 
-    // Brightness meter: five dots
-    const meter = document.createElement("div");
-    meter.className = "meter";
-    for (let i = 0; i < 5; i++) {
-      const dot = document.createElement("span");
-      if (i <= p.stage) dot.className = "on";
-      meter.append(dot);
+    if (p.example) {
+      panel.append(make("p", "panel-note", "This is the example sky, not your real progress."));
+    } else if (p.manual) {
+      panel.append(make("p", "panel-note", "You set this star to " + STAGES[p.stage] + ". Your tracked progress is " +
+        STAGES[p.tracked] + ". When your tracked progress catches up, it takes over."));
+    } else if (formingLook) {
+      panel.append(make("p", "panel-note", "This star is still forming: notes for " + topic.name +
+        " are on the way. If you already know it from class, you can light it up yourself."));
+    } else {
+      panel.append(make("p", "panel-note", HINTS[p.stage]));
     }
-    const stageName = document.createElement("b");
-    stageName.textContent = STAGES[p.stage];
-    meter.append(stageName);
-    panel.append(meter);
 
-    const hint = document.createElement("p");
-    hint.className = "panel-note";
-    hint.textContent = p.example ? "This is the example sky, not your real progress." : HINTS[p.stage];
-    panel.append(hint);
+    if (p.forming && p.manual) {
+      panel.append(make("p", "panel-note", "Notes for this topic are on the way."));
+    }
 
     // One row per subtopic
-    const list = document.createElement("ul");
-    list.className = "sub-rows";
-    p.subs.forEach(function (sp) {
-      const li = document.createElement("li");
-      const top = document.createElement("div");
-      top.className = "sub-top";
-      const dot = document.createElement("span");
-      dot.className = "moon-dot";
-      dot.style.background = moonColour(sp.best);
-      const name = document.createElement("b");
-      name.textContent = sp.s.label;
-      top.append(dot, name);
-      const facts = document.createElement("p");
-      facts.className = "sub-facts";
-      facts.textContent = "Notes " + sp.read + " / " + sp.total + " · " +
-        (sp.best === null ? "not blurted yet" : "best blurt " + sp.best + "%");
-      li.append(top, facts);
-      if (!p.example) {
-        const links = document.createElement("div");
-        links.className = "sub-links";
-        [["Notes", (sp.nextNote || sp.s.notes[0]).url], ["Blurt", sp.s.blurt.url], ["Quick check", sp.s.quick.url]].forEach(function (l) {
-          const a = document.createElement("a");
-          a.href = l[1];
-          a.textContent = l[0];
-          links.append(a);
-        });
-        li.append(links);
-      }
-      list.append(li);
+    if (p.subs.length) {
+      const list = make("ul", "sub-rows");
+      p.subs.forEach(function (sp) {
+        const li = make("li");
+        const top = make("div", "sub-top");
+        const dot = make("span", "moon-dot");
+        dot.style.background = moonColour(sp.best);
+        top.append(dot, make("b", "", sp.s.label));
+        li.append(top, make("p", "sub-facts", "Notes " + sp.read + " / " + sp.total + " · " +
+          (sp.best === null ? "not blurted yet" : "best blurt " + sp.best + "%")));
+        if (!p.example) {
+          const links = make("div", "sub-links");
+          [["Notes", (sp.nextNote || sp.s.notes[0]).url], ["Blurt", sp.s.blurt.url], ["Quick check", sp.s.quick.url]].forEach(function (l) {
+            const a = make("a", "", l[0]);
+            a.href = l[1];
+            links.append(a);
+          });
+          li.append(links);
+        }
+        list.append(li);
+      });
+      panel.append(list);
+    }
+
+    if (!p.example) panel.append(selfSetControls(topic, p));
+  }
+
+  // "Set this star myself" and "Go back to my tracked progress"
+  function selfSetControls(topic, p) {
+    const wrap = make("div", "self-set");
+    const confirmArea = make("div");
+
+    if (p.manual) {
+      wrap.append(btn("Go back to my tracked progress", "button ghost", function () {
+        askFirst(confirmArea,
+          "Go back to your tracked progress for " + topic.code + "? The star will show " + STAGES[p.tracked] + " again.",
+          "Yes, go back",
+          function () {
+            delete manual[topic.code];
+            saveManual();
+            showToast(topic.code + " is back to your tracked progress.");
+            showPanel(topic); draw(); focusStar(topic.code);
+          });
+      }));
+      wrap.append(confirmArea);
+      return wrap;
+    }
+
+    const tracked = p.tracked || 0;
+    if (tracked >= 4) return wrap;          // already blazing: nothing brighter to set
+
+    const open = btn("Set this star myself", "link-button", function () {
+      open.hidden = true;
+      chooser.hidden = false;
+      chooser.querySelector("button").focus();
     });
-    panel.append(list);
+    const chooser = make("div", "chooser");
+    chooser.hidden = true;
+    chooser.append(make("p", "blurt-small", "Already know this topic? Pick how bright it should be:"));
+    const options = make("div", "chooser-options");
+    for (let s = tracked + 1; s <= 4; s++) {
+      (function (stage) {
+        options.append(btn(STAGES[stage], "chooser-option", function () {
+          askFirst(confirmArea,
+            "Set " + topic.code + " " + topic.name + " to " + STAGES[stage] + "? This only changes how the star looks. " +
+            "It won't mark any notes as read or change your blurt scores, and you can change it back at any time.",
+            "Yes, set it",
+            function () {
+              manual[topic.code] = stage;
+              saveManual();
+              showToast(topic.code + " set to " + STAGES[stage] + " by you.");
+              showPanel(topic); draw(); focusStar(topic.code);
+            });
+        }));
+      })(s);
+    }
+    chooser.append(options, btn("Cancel", "link-button", function () {
+      chooser.hidden = true; open.hidden = false; confirmArea.innerHTML = "";
+    }));
+    wrap.append(open, chooser, confirmArea);
+    return wrap;
   }
 
   // ---------- A shooting star when a star got brighter since last time ----------
+  // Only real (tracked) progress counts here, not stars set by hand.
   function celebrate() {
     let seen = {};
     try { seen = JSON.parse(load("sky:seen")) || {}; } catch (e) {}
     const now = {}, brighter = [];
     DATA.topics.forEach(function (t) {
-      const stage = progressOf(t).stage;
+      const stage = trackedOf(t).stage;
       now[t.code] = stage;
       if (seen[t.code] !== undefined && stage > seen[t.code]) brighter.push([t, stage]);
     });
@@ -328,9 +444,7 @@
     if (!brighter.length) return;
 
     const t = brighter[0][0];
-    toast.textContent = t.code + " " + t.name + " got brighter: it's now " + STAGES[brighter[0][1]] + ".";
-    toast.hidden = false;
-    setTimeout(function () { toast.hidden = true; }, 6000);
+    showToast(t.code + " " + t.name + " got brighter: it's now " + STAGES[brighter[0][1]] + ".");
     const g = svg.querySelector('[data-code="' + t.code + '"]');
     if (g) g.classList.add("upgraded");
     if (reduceMotion) return;
@@ -357,7 +471,7 @@
   const first = nextStep();
   if (first) {
     selected = first.topic.code;
-    showPanel(first.topic, progressOf(first.topic));
+    showPanel(first.topic);
   }
   draw();
   lastTall = tall;

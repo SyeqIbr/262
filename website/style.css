@@ -3181,7 +3181,7 @@ html[data-mode="light"] details.topic {
 html[data-mode="light"] .demo { box-shadow: none; }
 
 /* ======================================================
-   LESSON 11: Your sky (sky.html)
+   LESSON 11: Your sky (now the homepage, index.html)
    The sky is always a night sky, even in light mode.
    ====================================================== */
 .sky-page,
@@ -3497,4 +3497,182 @@ html[data-mode="light"] .demo { box-shadow: none; }
     font-size: 0.9rem;
     text-align: center;
   }
+}
+
+/* ======================================================
+   LESSON 12: Constellate
+   ====================================================== */
+
+/* The logo: four stars joined into a small constellation */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand .logo {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.brand .logo path {
+  fill: none;
+  stroke: #c4b5fd;
+  stroke-width: 1.4;
+  opacity: 0.7;
+}
+
+.brand .logo circle {
+  fill: #c4b5fd;
+}
+
+/* Stars set by the student: a dashed ring around them */
+.sky .star .self-ring {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 1.2;
+  stroke-dasharray: 3 3;
+  opacity: 0.7;
+}
+
+/* "Set this star myself" */
+.self-set {
+  margin-top: 16px;
+}
+
+.link-button {
+  font: inherit;
+  font-weight: 600;
+  color: var(--accent);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.link-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.chooser .blurt-small {
+  margin: 0 0 8px;
+}
+
+.chooser-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.chooser-option {
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--text);
+  background: none;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-small);
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.chooser-option:hover,
+.chooser-option:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
+  outline: none;
+}
+
+/* The "Are you sure?" box */
+.confirm-box {
+  margin-top: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+}
+
+.confirm-box p {
+  margin: 0 0 12px;
+}
+
+.confirm-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.confirm-row .button {
+  padding: 8px 16px;
+}
+
+/* Homepage: the headline sits above the sky */
+.home-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px 32px;
+  margin-bottom: 20px;
+}
+
+.home-head h1 {
+  font-size: clamp(2.2rem, 6vw, 3.6rem);
+  line-height: 1.02;
+  margin: 0 0 10px;
+}
+
+.home-head .intro {
+  max-width: 52ch;
+  margin: 0;
+}
+
+.sky-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 16px;
+  margin: 8px 0 14px;
+}
+
+.sky-title h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.4rem;
+  margin: 0;
+}
+
+.sky-title .sky-stats {
+  margin: 0;
+}
+
+.home-below {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px 64px;
+}
+
+.home-below .hero-split {
+  padding: 32px 0 48px;
+}
+
+/* The invisible tap area around each star */
+.sky .star .hit { fill: transparent; }
+
+/* The homepage headline isn't a normal page header, so it doesn't get
+   the extra padding from the old "header" rule in Lesson 1. */
+header.home-head {
+  max-width: none;
+  margin: 0 0 20px;
+  padding: 16px 0 0;
+}
+
+/* Messages appear under the menu, where they don't cover any buttons */
+.sky-toast {
+  top: 84px;
+  bottom: auto;
 }
