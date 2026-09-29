@@ -195,6 +195,7 @@ function markPrompt(answered) {
 // ---------- Asking Claude ----------
 async function generate(count) {
   if (!sample) return showError(errorMessage({ code: "not_granted" }));
+  if (!CONFIG.notes) return showError("Tick at least one topic above first.");
   const previous = state;
   controller = new AbortController();
   state = { stage: "generating", count: count };
@@ -335,7 +336,7 @@ function renderSetup() {
   const card = el("div", "blurt-card");
   card.append(el("h2", "blurt-h", "Ready to blurt?"));
   card.append(el("p", "blurt-p",
-    "Close your notes. Claude will write fresh questions on " + CONFIG.subtopic +
+    "Close your notes. Claude will write fresh questions on " + (CONFIG.subtopic || "the topics you tick") +
     ", you answer from memory, then Claude marks every answer and shows you what you missed."));
 
   // Choose how many questions: 20 / 25 / 30
@@ -376,6 +377,7 @@ function renderSetup() {
 }
 
 function quickCheckLink() {
+  if (!CONFIG.quickCheck) return document.createTextNode("");   // e.g. mixed blurting has none
   const p = el("p", "blurt-small");
   p.append("No time? Try the ");
   const a = el("a", "accent-link", "multiple-choice quick check");
@@ -652,6 +654,11 @@ function celebrate() {
 
 // ---------- Start ----------
 render();
+
+// On the mixed blurting page, redraw the start screen when the ticked topics change
+window.addEventListener("blurt-config", function () {
+  if (state.stage === "setup") render();
+});
 
 // Ask the Claude preview for the "sample" ability. This can take a moment,
 // and it's null outside the preview, so we draw the page first and then

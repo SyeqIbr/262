@@ -3859,3 +3859,301 @@ html[data-mode="light"] .mini-star.stage-4 { background: var(--c); }
 
 /* Messages never block taps on whatever is underneath */
 .sky-toast { pointer-events: none; }
+
+/* ======================================================
+   LESSON 14: Bigger sky, new logo, How it works, Mixed blurting
+   ====================================================== */
+
+/* ----- The logo: a "C" constellation with one sparkling star ----- */
+.brand {
+  font-size: 1.35rem;
+  gap: 10px;
+  letter-spacing: -0.01em;
+}
+
+.brand .logo {
+  width: 38px;
+  height: 38px;
+}
+
+.brand .logo .logo-lines {
+  fill: none;
+  stroke: #c4b5fd;
+  stroke-width: 1.3;
+  stroke-linejoin: round;
+  opacity: 0.6;
+}
+
+.brand .logo .logo-spark {
+  stroke: #ffffff;
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  opacity: 0.85;
+}
+
+.brand .logo circle { fill: #c4b5fd; }
+.brand .logo .logo-big { fill: #ffffff; filter: drop-shadow(0 0 3px #c4b5fd); }
+
+.brand:hover .logo .logo-lines { opacity: 1; }
+
+html[data-mode="light"] .brand .logo circle,
+html[data-mode="light"] .brand .logo .logo-lines { fill: #7c3aed; stroke: #7c3aed; }
+html[data-mode="light"] .brand .logo .logo-lines { fill: none; }
+html[data-mode="light"] .brand .logo .logo-spark { stroke: #7c3aed; }
+html[data-mode="light"] .brand .logo .logo-big { fill: #7c3aed; filter: none; }
+
+@media (max-width: 520px) {
+  .brand { font-size: 1.2rem; }
+  .brand .logo { width: 32px; height: 32px; }
+}
+
+/* ----- The menu: My sky first, with a star icon ----- */
+.nav .nav-link.sky-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.nav-icon {
+  width: 15px;
+  height: 15px;
+  fill: #c4b5fd;
+  flex-shrink: 0;
+}
+
+html[data-mode="light"] .nav-icon { fill: #7c3aed; }
+
+/* "How it works" is in the menu on bigger screens only */
+@media (max-width: 720px) {
+  .nav .wide-only { display: none; }
+}
+
+.nav .how-link { --accent: #c4b5fd; }
+
+/* ----- The sky, centre stage ----- */
+.sky-hero .home-head {
+  align-items: flex-end;
+}
+
+.sky-hero .home-head h1 {
+  font-size: clamp(2.4rem, 6vw, 4rem);
+}
+
+.sky-hero .home-head .sky-title {
+  margin: 0;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0;
+}
+
+@media (max-width: 760px) {
+  .sky-hero .home-head .sky-title { align-items: flex-start; }
+}
+
+.sky-frame.big {
+  margin-bottom: 20px;
+}
+
+/* Under the sky: next step and extras on the left, the star's panel on the right */
+.sky-below {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .sky-below { grid-template-columns: minmax(0, 1fr); }
+}
+
+.sky-side {
+  display: grid;
+  gap: 14px;
+}
+
+.next-step.stacked {
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 0;
+}
+
+.mix-card {
+  display: block;
+  padding: 16px 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.mix-card b { display: block; }
+.mix-card span { color: var(--muted); font-size: 0.92rem; }
+.mix-card:hover, .mix-card:focus-visible { border-color: #c4b5fd; outline: none; }
+
+.sky-side .sky-options { margin: 0; }
+
+.section-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px 20px;
+  margin-bottom: 18px;
+}
+
+.section-row .section-title { margin: 0; }
+
+/* ----- How it works page ----- */
+.how-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px 20px 72px;
+}
+
+header.how-head {
+  max-width: none;
+  margin: 0 0 16px;
+  padding: 0;
+}
+
+.how-head h1 {
+  font-size: clamp(2.2rem, 6vw, 3.6rem);
+  margin: 0 0 12px;
+}
+
+.how-head .intro { max-width: 60ch; }
+
+.how-section {
+  padding: 40px 0;
+  border-top: 1px solid var(--border);
+}
+
+.how-section:first-of-type { border-top: none; }
+
+.how-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 40px;
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .how-split { grid-template-columns: minmax(0, 1fr); }
+}
+
+.how-text p { color: var(--text-2); margin: 0 0 14px; }
+.how-text.wide { max-width: 70ch; margin-bottom: 20px; }
+
+.rag-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 14px;
+  display: grid;
+  gap: 8px;
+}
+
+.rag-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-2);
+}
+
+.rag-list .verdict { min-width: 88px; justify-content: center; }
+
+.demo-item.incorrect { border-left-color: var(--bad); }
+
+.review-example {
+  max-width: 760px;
+  padding: 8px 24px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.review-example .rag-row:first-child { border-top: none; }
+
+/* ----- Mixed blurting: picking topics ----- */
+.pick-groups {
+  display: grid;
+  gap: 16px;
+  margin: 24px 0 8px;
+}
+
+.pick-group {
+  margin: 0;
+  padding: 16px 20px 18px;
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--accent);
+  border-radius: var(--radius);
+}
+
+.pick-group legend {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  padding: 0 6px;
+  color: var(--accent);
+}
+
+.pick-group .select-all {
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
+.pick-topic {
+  padding: 8px 0;
+  border-top: 1px solid var(--border);
+}
+
+.pick-topic.soon { color: var(--muted); }
+
+.pick-name {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pick-subs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 10px 0 4px;
+}
+
+.pick {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-small);
+  cursor: pointer;
+}
+
+.pick input { accent-color: var(--accent); width: 16px; height: 16px; margin: 0; }
+.pick:has(input:checked) { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); }
+.pick:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.pick-summary {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0 0 24px;
+}
+
+.mix-page { --accent: #c4b5fd; }
+
+.pick-soon {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.pick-soon .code { opacity: 0.6; }

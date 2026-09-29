@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<!--
+  HOW IT WORKS: the star steps, blurting explained with examples, and the sky.
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>How It Works · Constellate</title>
+  <!-- Paint the page straight away (dark, or light if chosen), so there's no flash between pages -->
+  <meta name="color-scheme" content="dark light">
+  <style>html { background: #0f1012; } html[data-mode="light"] { background: #f6f7f8; }</style>
+  <script>
+    // Switch on light mode before the page draws, if the student chose it
+    try { if (localStorage.getItem("mode") === "light") document.documentElement.dataset.mode = "light"; } catch (e) {}
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&family=Schibsted+Grotesk:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="sky-page">
+  <nav class="nav">
+    <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><path class="logo-lines" d="M24 7 L14 5 L7 11 L6 20 L12 27 L22 26"/><path class="logo-spark" d="M24 1.5 V12.5 M18.5 7 H29.5"/><circle class="logo-big" cx="24" cy="7" r="2.6"/><circle cx="14" cy="5" r="1.6"/><circle cx="7" cy="11" r="1.6"/><circle cx="6" cy="20" r="1.6"/><circle cx="12" cy="27" r="1.6"/><circle cx="22" cy="26" r="1.9"/></svg><span class="brand-name">Constellate</span></a>
+    <a class="nav-link sky-link" href="index.html"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 L13.8 9.2 L20 11 L13.8 12.8 L12 19 L10.2 12.8 L4 11 L10.2 9.2 Z"/></svg>My sky</a>
+    <a class="nav-link biology" href="biology.html">Biology</a>
+    <a class="nav-link chemistry" href="chemistry.html">Chemistry</a>
+    <a class="nav-link physics" href="physics.html">Physics</a>
+    <a class="nav-link how-link wide-only" href="how.html" aria-current="page">How it works</a>
+    <button class="mode-toggle" type="button" aria-label="Switch between light and dark mode">
+      <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></svg>
+    </button>
+  </nav>
+
+  <main class="how-page">
+    <header class="how-head">
+      <h1>How Constellate works</h1>
+      <p class="intro">Every topic in the course is a star in your sky. You make stars brighter by
+        doing the two things that work best for remembering: reading, then testing yourself.</p>
+    </header>
+
+    <section class="how-section">
+      <h2 class="section-title">How a star gets brighter</h2>
+          <ol class="how-grid star-steps">
+            <li><span class="glyph stage-2" aria-hidden="true"></span><b>Read the notes</b><p>Short notes with diagrams and worked examples. Read them all and your star is <i>Shining</i>.</p></li>
+            <li><span class="glyph stage-3" aria-hidden="true"></span><b>Blurt it</b><p>Close the notes and answer 20, 25 or 30 fresh questions from memory. Now it's <i>Bright</i>.</p></li>
+            <li><span class="glyph stage-4" aria-hidden="true"></span><b>Get it marked</b><p>Green, amber or red for every answer, with what you missed. 80% or more and it's <i>Blazing</i>.</p></li>
+            <li><span class="glyph joined" aria-hidden="true"></span><b>Join the dots</b><p>Light up the stars in a subject and they join into its constellation.</p></li>
+          </ol>
+    </section>
+
+    <section class="how-section">
+      <h2 class="section-title">What is blurting?</h2>
+      <div class="how-split">
+        <div class="how-text">
+          <p>Blurting means writing down everything you remember about a topic, <b>without looking at your notes</b>.
+            It feels harder than re-reading, and that's the point: pulling knowledge out of your memory is what
+            makes it stick. Psychologists call this <b>retrieval practice</b>.</p>
+          <p>On Constellate, you don't face a blank page. Claude writes <b>20, 25 or 30 fresh questions</b>
+            from the notes for that subtopic, so they always match the AQA spec. You answer from memory, then
+            every answer is marked:</p>
+          <ul class="rag-list">
+            <li><span class="verdict correct">✓ Correct</span> The answer would get full credit.</li>
+            <li><span class="verdict partial">~ Nearly</span> Right idea, but a key word is missing or it's too informal.</li>
+            <li><span class="verdict incorrect">✗ Not yet</span> Wrong, or missing the point. You get the model answer.</li>
+          </ul>
+          <p>Your score is simply how many you got right, like <b>19 / 25</b>. Then you can retry just your
+            ambers and reds, or ask for a whole new set.</p>
+        </div>
+        <figure class="demo" aria-label="Example: two blurting answers after marking">
+          <p class="demo-where">B1 Cell biology · Microscopy</p>
+          <div class="demo-item correct">
+            <p class="demo-q"><span class="q-num">9.</span> A cell is 20 µm long. Its image is 8 mm long. Calculate the magnification.</p>
+            <p class="demo-a">8 mm = 8000 µm, so 8000 ÷ 20 = × 400</p>
+            <p class="demo-f"><span class="verdict correct">✓ Correct</span> You converted the units first.</p>
+          </div>
+          <div class="demo-item partial">
+            <p class="demo-q"><span class="q-num">1.</span> What is magnification?</p>
+            <p class="demo-a">how zoomed in it is</p>
+            <p class="demo-f"><span class="verdict partial">~ Nearly</span> Too informal. Say: how many times bigger the image is than the real object.</p>
+          </div>
+          <div class="demo-item incorrect">
+            <p class="demo-q"><span class="q-num">4.</span> Name the structure where proteins are made.</p>
+            <p class="demo-a">mitochondria</p>
+            <p class="demo-f"><span class="verdict incorrect">✗ Not yet</span> Mitochondria release energy. Proteins are made at the ribosomes.</p>
+          </div>
+        </figure>
+      </div>
+    </section>
+
+    <section class="how-section">
+      <h2 class="section-title">After marking: your progress review</h2>
+      <p class="section-intro">Every question becomes a coloured square, grouped by section, and each section gets a rating.
+        Tap a square to jump to that question's feedback.</p>
+      <div class="review-example" aria-label="Example progress review">
+        <div class="rag-row"><span class="rating-chip secure">Secure</span><div class="rag-middle"><b>Animal, plant &amp; bacterial cells</b>
+          <div class="rag-squares"><span class="rag-square correct">1</span><span class="rag-square correct">2</span><span class="rag-square correct">3</span><span class="rag-square partial">4</span><span class="rag-square correct">5</span><span class="rag-square correct">6</span><span class="rag-square correct">7</span></div></div></div>
+        <div class="rag-row"><span class="rating-chip nearly">Nearly there</span><div class="rag-middle"><b>Microscopy</b>
+          <div class="rag-squares"><span class="rag-square correct">8</span><span class="rag-square partial">9</span><span class="rag-square correct">10</span><span class="rag-square incorrect">11</span><span class="rag-square correct">12</span><span class="rag-square partial">13</span></div></div></div>
+        <div class="rag-row"><span class="rating-chip revisit">Revisit</span><div class="rag-middle"><b>Culturing microorganisms</b>
+          <div class="rag-squares"><span class="rag-square incorrect">14</span><span class="rag-square partial">15</span><span class="rag-square incorrect">16</span><span class="rag-square correct">17</span></div></div></div>
+      </div>
+    </section>
+
+    <section class="how-section">
+      <h2 class="section-title">Your sky</h2>
+      <div class="how-text wide">
+        <p>Your sky shows every topic in the course. Stars brighten on their own as you read and blurt:
+          <b>Faint → Glimmer → Shining → Bright → Blazing</b>. Topics without notes yet are dotted stars that are still forming.</p>
+        <p><b>Moons</b> orbit each star, one per subtopic, coloured by your best blurt. <b>Your next star</b> always
+          tells you the single most useful thing to do next.</p>
+        <p>Already know a topic from class? Tap its star and choose <b>Set this star myself</b>. You'll be asked to
+          confirm first, and your star gets a dashed ring so you can tell it apart. When your real progress catches up,
+          it takes over.</p>
+        <p>Your progress is saved in your browser on this device.</p>
+      </div>
+    </section>
+
+    <section class="how-section">
+      <h2 class="section-title">Mixed blurting</h2>
+      <div class="how-text wide">
+        <p>Exams mix topics together, so your revision should too. <a class="accent-link" href="blurt-mix.html">Mixed blurting</a>
+          lets you tick topics from any subject and blurt them all in one go.</p>
+      </div>
+      <a class="button" href="index.html">Go to my sky</a>
+    </section>
+  </main>
+
+  <div class="sky-toast" id="sky-toast" role="status" hidden></div>
+
+  <footer>
+    <a class="accent-link" href="how.html">How it works</a> ·
+    <a class="accent-link" href="blurt-mix.html">Mixed blurting</a> ·
+    Made while learning to code with Claude
+  </footer>
+  <script src="progress.js"></script>
+</body>
+</html>
