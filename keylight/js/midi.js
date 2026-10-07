@@ -165,10 +165,9 @@ function makeDemo() {
    ============================================================ */
 const KEY_NAMES = ["C", "C♯", "D", "E♭", "E", "F", "F♯", "G", "A♭", "A", "B♭", "B"];
 const SCENE_WORDS = {
-  room: /\b(home|room|bedroom|study|coffee|tea|lofi|lo-fi|sleep|lullaby|bed|cozy|window|rain|piano|letter|alone)\b/i,
-  cottage: /\b(garden|flowers?|spring|summer|sun|sunny|bloom|roses?|cherry|sakura|happy|day|morning|field|meadow|butterfly|sweet|love)\b/i,
-  town: /\b(city|town|street|night|midnight|moon|stars?|lights?|neon|lonely|tokyo|paris|evening|nocturne|lune|luna|dream)\b/i,
-  forest: /\b(forest|woods?|tree|leaf|leaves|ghibli|totoro|mononoke|spirit|wind|path|journey|wild|moss|mushroom|frog|autumn|fall)\b/i
+  sea: /\b(sea|ocean|beach|wave|waves|harbou?r|port|island|summer|blue|sail|gulls?|coast|shore|town|city|kiki|delivery|ponyo)\b/i,
+  forest: /\b(forest|woods?|spirit|spirits|totoro|mononoke|moss|shrine|lantern|night|moon|stars?|firefl(y|ies)|dream|secret|deep|path|light)\b/i,
+  hill: /\b(wind|sky|cloud|clouds|hill|field|meadow|castle|howl|merry|go\s*round|journey|home|grass|valley|spring|days?|always|memory|memories)\b/i
 };
 function analyzeSong(song) {
   // Key: correlate a duration-weighted pitch-class profile with Krumhansl–Kessler profiles
@@ -196,13 +195,14 @@ function analyzeSong(song) {
   const pace = density < 3 ? "sparse" : density < 7 ? "flowing" : "busy";
 
   // palette from the mood, scene from the title (or the palette when the title says nothing)
-  const palette = best.minor ? (bpm < 100 || density < 4 ? "night" : "rain") : (density >= 5 || bpm >= 118 ? "pastel" : "honey");
-  const moodWord = { night: "minor and slow", rain: "minor with motion", pastel: "bright and busy", honey: "warm and steady" }[palette];
+  // time of day from the mood; scene from the title, otherwise from the time of day
+  const time = best.minor ? (bpm < 100 || density < 4 ? "night" : "dusk") : (density >= 5 || bpm >= 118 ? "day" : "golden");
+  const moodWord = { night: "minor and slow", dusk: "minor with motion", day: "bright and busy", golden: "warm and steady" }[time];
   let scene = null, why = "";
   for (const [s, re] of Object.entries(SCENE_WORDS)) {
     const m = song.title.match(re);
     if (m) { scene = s; why = `the title says “${m[0].toLowerCase()}”`; break; }
   }
-  if (!scene) { scene = { night: "town", rain: "room", pastel: "cottage", honey: "forest" }[palette]; why = `it sounds ${moodWord}`; }
-  return { key, bpm, density, pace, avgVel, scene, palette, why, moodWord };
+  if (!scene) { scene = { night: "forest", dusk: "sea", day: "sea", golden: "hill" }[time]; why = `it sounds ${moodWord}`; }
+  return { key, bpm, density, pace, avgVel, scene, time, why, moodWord };
 }

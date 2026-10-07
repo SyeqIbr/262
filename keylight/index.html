@@ -6,7 +6,7 @@
 <title>Keylight</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Patrick+Hand&family=Italiana&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
 /* Layout: the stage holds the canvas at the chosen frame shape; a glass control dock sits beneath it. */
 :root {
@@ -18,7 +18,7 @@
   --muted: rgba(220, 225, 255, 0.58);
   --accent: #8fe8d8;
   --rec: #ff5a6a;
-  --font-display: "Patrick Hand", "Comic Sans MS", "Chalkboard SE", cursive;
+  --font-display: "Shippori Mincho", "Hiragino Mincho ProN", Georgia, serif;
   --font-ui: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 }
@@ -43,7 +43,7 @@ body { background: var(--ink); color: var(--fg); font: 14px/1.4 var(--font-ui); 
 #app.fill #dock { position: absolute; left: 50%; bottom: calc(12px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); margin: 0; transition: opacity .5s; }
 #app.fill.idle #dock { opacity: 0; pointer-events: none; }
 .row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.brand { font-family: var(--font-display); font-size: 26px; letter-spacing: .02em; }
+.brand { font-family: var(--font-display); font-size: 22px; letter-spacing: .06em; }
 .song { min-width: 0; flex: 1; display: flex; flex-direction: column; }
 .song b { font-weight: 600; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .song span { color: var(--muted); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -130,22 +130,19 @@ input[type=file] { position: absolute; width: 1px; height: 1px; opacity: 0; }
     </div>
     <div class="row">
       <div class="chips" id="scenes" role="group" aria-label="Scene"></div>
+      <select id="time" aria-label="Time of day">
+        <option value="auto">Time: match the song</option>
+        <option value="day">Summer day</option>
+        <option value="golden">Golden hour</option>
+        <option value="dusk">Dusk</option>
+        <option value="night">Starry night</option>
+      </select>
       <select id="classic" aria-label="Classic styles">
         <option value="">Classic…</option>
         <option value="aurora">Aurora</option>
         <option value="sumi">Sumi ink</option>
         <option value="stars">Constellation</option>
         <option value="dusk">Dusk</option>
-      </select>
-    </div>
-    <div class="row">
-      <div class="chips" id="media" role="group" aria-label="Paint style"></div>
-      <select id="palette" aria-label="Colours">
-        <option value="auto">Colours: match the song</option>
-        <option value="pastel">Soft pastel</option>
-        <option value="honey">Warm honey</option>
-        <option value="night">Cozy night</option>
-        <option value="rain">Rainy lavender</option>
       </select>
     </div>
     <div class="row">
@@ -176,8 +173,7 @@ input[type=file] { position: absolute; width: 1px; height: 1px; opacity: 0; }
 <script src="js/audio.js"></script>
 <script src="js/classic.js"></script>
 <script src="js/painter.js"></script>
-<script src="js/scenes.js"></script>
-<script src="js/storybook.js"></script>
+<script src="js/ghibli.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>
