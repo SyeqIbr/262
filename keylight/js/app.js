@@ -1,16 +1,14 @@
 "use strict";
 /* Keylight app: one clock for sound and picture, the controls, recording and saving. */
 const $ = id => document.getElementById(id);
-const app = $("app"), glCanvas = $("gl"), cv2d = $("cv2d");
+const app = $("app"), cv2d = $("cv2d"), ctx2d = cv2d.getContext("2d");
 const R = Classic.R;
-const HAS_3D = !!World3D;
-if (HAS_3D) World3D.init(glCanvas);
 
-const WORLD_INFO = {
-  tree: { label: "Growing tree", dot: "#ffb3c7", ui: { ink: "#120f24", panel: "rgba(30,22,48,0.74)", fg: "#fff2f4", muted: "rgba(255,230,236,0.62)", line: "rgba(255,200,215,0.16)", accent: "#ffb3c7" } },
-  pond: { label: "Night pond", dot: "#c8c2ff", ui: { ink: "#03050c", panel: "rgba(10,16,34,0.76)", fg: "#e9eeff", muted: "rgba(205,215,255,0.6)", line: "rgba(160,180,255,0.16)", accent: "#c8c2ff" } },
-  field: { label: "Flower field", dot: "#f2b632", ui: { ink: "#1b1710", panel: "rgba(40,34,22,0.74)", fg: "#fff7e8", muted: "rgba(255,240,215,0.62)", line: "rgba(255,225,170,0.18)", accent: "#f2b632" } },
-  seasons: { label: "Changing seasons", dot: "#e8590c", ui: { ink: "#10141a", panel: "rgba(24,30,38,0.76)", fg: "#f4f7fb", muted: "rgba(225,232,245,0.62)", line: "rgba(200,215,235,0.16)", accent: "#ffb26b" } }
+const SCENE_UI = {
+  pastel: { ink: "#efe8dc", panel: "rgba(255,251,244,0.86)", fg: "#4a3f4f", muted: "rgba(74,63,79,0.62)", line: "rgba(74,63,79,0.16)", accent: "#e98aa0" },
+  honey: { ink: "#eadbc2", panel: "rgba(252,244,230,0.88)", fg: "#4b3527", muted: "rgba(75,53,39,0.62)", line: "rgba(75,53,39,0.18)", accent: "#d9783f" },
+  night: { ink: "#14162c", panel: "rgba(30,33,64,0.84)", fg: "#f2eee4", muted: "rgba(242,238,228,0.62)", line: "rgba(242,238,228,0.16)", accent: "#ffd38a" },
+  rain: { ink: "#dcd6e6", panel: "rgba(248,245,250,0.86)", fg: "#3d3550", muted: "rgba(61,53,80,0.62)", line: "rgba(61,53,80,0.16)", accent: "#9b7fe0" }
 };
 
 /* ---------- player: one clock for sound and picture ---------- */
@@ -27,7 +25,7 @@ const player = {
     this.pause(); this.song = song; this.anchorSong = -LEAD;
     this.analysis = analyzeSong(song);
     R.layout(song, $("range").value); R.keys = []; R.hitIdx = 0; R.resetFx();
-    if (HAS_3D) World3D.setSong(song, this.analysis);
+    Storybook.setSong(song, this.analysis);
     applyStyle();
   },
   async play() {
@@ -56,7 +54,7 @@ const player = {
     const was = this.playing; this.pause();
     this.anchorSong = clamp(t, -LEAD, this.song.duration);
     R.hitIdx = lowerBound(this.song.notes, this.anchorSong); R.resetFx();
-    if (HAS_3D && !was) World3D.snapCamera();
+    Storybook.reset();
     if (was) this.play(); else ui.sync();
   },
   setSpeed(v) { if (this.playing) { this.anchorSong = this.raw(); this.anchorCtx = synth.ctx.currentTime; } this.speed = v; },
@@ -71,51 +69,53 @@ const player = {
   }
 };
 
-/* ---------- style: a 3D world (auto or chosen) or a classic 2D theme ---------- */
-let style = "auto";
-try { style = localStorage.getItem("keylight.style") || "auto"; } catch (e) {}
-const is3D = () => HAS_3D && !style.startsWith("classic:");
-function currentWorld() { return style === "auto" ? (player.analysis ? player.analysis.world : "pond") : style; }
+/* ---------- style: a storybook scene (auto or chosen) or a classic 2D theme ---------- */
+const prefs = { style: "auto", medium: "watercolor", palette: "auto" };
+try { Object.assign(prefs, JSON.parse(localStorage.getItem("keylight.story") || "{}")); } catch (e) {}
+const isStory = () => !prefs.style.startsWith("classic:");
+const currentScene = () => prefs.style === "auto" ? (player.analysis ? player.analysis.scene : "cottage") : prefs.style;
+const currentPalette = () => prefs.palette === "auto" ? (player.analysis ? player.analysis.palette : "pastel") : prefs.palette;
 function setUiColors(u) {
   const rs = document.documentElement.style;
   for (const k of ["ink", "panel", "fg", "muted", "line", "accent"]) rs.setProperty("--" + k, u[k]);
 }
 function applyStyle() {
-  if (!HAS_3D && !style.startsWith("classic:")) style = "classic:aurora";
-  const three = is3D();
-  glCanvas.hidden = !three; cv2d.hidden = three;
-  $("poster").disabled = !three; $("orbitHint").hidden = !three;
-  document.querySelectorAll("#worlds button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.s === style)));
-  $("classic").value = three ? "" : style.slice(8);
-  if (three) {
-    const w = currentWorld();
-    World3D.setWorld(w);
-    setUiColors(WORLD_INFO[w].ui);
+  if (!SCENES[prefs.style] && prefs.style !== "auto" && !prefs.style.startsWith("classic:")) prefs.style = "auto";
+  const story = isStory();
+  document.querySelectorAll("#scenes button").forEach(b => b.setAttribute("aria-pressed", String(story && b.dataset.s === prefs.style)));
+  document.querySelectorAll("#media button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.m === prefs.medium)));
+  $("classic").value = story ? "" : prefs.style.slice(8);
+  $("palette").value = prefs.palette;
+  $("media").hidden = $("palette").hidden = !story;
+  if (story) {
+    Storybook.setScene(currentScene()); Storybook.setPalette(currentPalette()); Storybook.setMedium(prefs.medium);
+    setUiColors(SCENE_UI[currentPalette()]);
   } else {
-    const th = Classic.THEMES[style.slice(8)] || Classic.THEMES.aurora;
+    const th = Classic.THEMES[prefs.style.slice(8)] || Classic.THEMES.aurora;
     R.theme = th; R.keys = []; R.resetFx(); setUiColors(th.ui);
   }
   const a = player.analysis;
-  if (a) {
-    $("songWhy").textContent = !three ? `${a.key} · ♩ ${a.bpm}`
-      : style === "auto" ? `${a.key} · ♩ ${a.bpm} · ${WORLD_INFO[a.world].label}, because ${a.why}` : `${a.key} · ♩ ${a.bpm} · ${WORLD_INFO[currentWorld()].label}`;
-  }
+  if (a) $("songWhy").textContent = `${a.key} · ♩ ${a.bpm}` + (story ? ` · ${SCENES[currentScene()].label}, ${PALETTES[currentPalette()].label.toLowerCase()}` + (prefs.style === "auto" ? `, because ${a.why}` : "") : "");
   resize();
-  try { localStorage.setItem("keylight.style", style); } catch (e) {}
+  try { localStorage.setItem("keylight.story", JSON.stringify(prefs)); } catch (e) {}
 }
-function setStyle(s) { style = s; applyStyle(); }
+function setStyle(s) { prefs.style = s; applyStyle(); }
 
-const worldsEl = $("worlds");
-if (HAS_3D) {
-  [["auto", "Auto", "conic-gradient(#ffb3c7,#c8c2ff,#f2b632,#e8590c,#ffb3c7)"], ...Object.entries(WORLD_INFO).map(([k, v]) => [k, v.label.split(" ").pop().replace(/^./, c => c.toUpperCase()), v.dot])].forEach(([k, label, dot], i) => {
-    const b = document.createElement("button");
-    b.type = "button"; b.dataset.s = k; b.title = k === "auto" ? "Pick a world that suits the song (A)" : `${WORLD_INFO[k].label} (${i})`;
-    b.innerHTML = `<i style="background:${dot}"></i>${label}`;
-    b.onclick = () => setStyle(k);
-    worldsEl.appendChild(b);
-  });
-} else worldsEl.hidden = true;
+[["auto", "Auto"], ...Object.entries(SCENES).map(([k, v]) => [k, v.label.split(" ").pop().replace(/^./, c => c.toUpperCase())])].forEach(([k, label], i) => {
+  const b = document.createElement("button");
+  b.type = "button"; b.dataset.s = k; b.textContent = label;
+  b.title = k === "auto" ? "Pick a scene that suits the song (A)" : `${SCENES[k].label} (${i})`;
+  b.onclick = () => setStyle(k);
+  $("scenes").appendChild(b);
+});
+Object.entries(Painter.MEDIA).forEach(([k, v]) => {
+  const b = document.createElement("button");
+  b.type = "button"; b.dataset.m = k; b.textContent = v.label;
+  b.onclick = () => { prefs.medium = k; applyStyle(); };
+  $("media").appendChild(b);
+});
 $("classic").onchange = e => { if (e.target.value) setStyle("classic:" + e.target.value); };
+$("palette").onchange = e => { prefs.palette = e.target.value; applyStyle(); };
 
 /* ---------- canvas sizing ---------- */
 const RES = { "9:16": [1080, 1920], "16:9": [1920, 1080], "1:1": [1440, 1440] };
@@ -129,14 +129,8 @@ function resize() {
     const k = Math.min((st.width - (app.classList.contains("clean") ? 0 : 32)) / fullW, (st.height - (app.classList.contains("clean") ? 0 : 16)) / fullH);
     cssW = Math.floor(fullW * k); cssH = Math.floor(fullH * k);
   }
-  for (const c of [glCanvas, cv2d]) { c.style.width = cssW + "px"; c.style.height = cssH + "px"; }
-  if (is3D()) {
-    // Preview renders at screen resolution; recording renders at the full frame size.
-    const full = recorder.active;
-    const w = full ? fullW : Math.min(fullW, Math.round(cssW * Math.min(dpr, 1.5)));
-    const h = Math.round(w * fullH / fullW);
-    World3D.resize(w, h);
-  } else if (cv2d.width !== fullW || cv2d.height !== fullH) { cv2d.width = fullW; cv2d.height = fullH; R.keys = []; }
+  cv2d.style.width = cssW + "px"; cv2d.style.height = cssH + "px";
+  if (cv2d.width !== fullW || cv2d.height !== fullH) { cv2d.width = fullW; cv2d.height = fullH; R.keys = []; }
 }
 window.addEventListener("resize", resize);
 
@@ -160,8 +154,8 @@ function loadSong(parsed, fallbackName) {
   for (const n of parsed.notes) { n.start -= t0; n.end -= t0; n.aEnd -= t0; }
   let end = 0; for (const n of parsed.notes) end = Math.max(end, n.end);
   const title = (fallbackName || parsed.name || "Untitled").replace(/\.(mid|midi)$/i, "").replace(/[_]+/g, " ").replace(/\s+-\s+/g, " – ").trim();
-  // keep a few seconds after the last note for the final reveal
-  player.load({ notes: parsed.notes, bpm: parsed.bpm, title, duration: end + (HAS_3D ? 9 : 1.2) });
+  // a few seconds after the last note for the bow and bedtime
+  player.load({ notes: parsed.notes, bpm: parsed.bpm, title, duration: end + 5.5 });
   $("songName").textContent = title; $("tDur").textContent = fmt(player.song.duration);
   ui.sync();
 }
@@ -175,9 +169,9 @@ $("demo").onclick = () => loadSong(makeDemo(), "Late Light");
 const toggle = () => player.playing ? player.pause() : player.play();
 $("play").onclick = toggle; $("bigPlay").onclick = toggle;
 $("aspect").onchange = () => { resize(); try { localStorage.setItem("keylight.aspect", $("aspect").value); } catch (e) {} };
-$("range").onchange = () => { R.layout(player.song, $("range").value); R.keys = []; if (HAS_3D) World3D.setRange($("range").value); };
+$("range").onchange = () => { R.layout(player.song, $("range").value); R.keys = []; Storybook.setRange($("range").value); };
 $("speed").oninput = e => player.setSpeed(+e.target.value);
-$("fall").oninput = e => { R.lookahead = +e.target.value; if (HAS_3D) World3D.setFall(+e.target.value); };
+$("fall").oninput = e => { R.lookahead = +e.target.value; Storybook.setFall(+e.target.value); };
 $("fs").onclick = () => { const el = document.documentElement; try { const p = document.fullscreenElement ? document.exitFullscreen() : el.requestFullscreen && el.requestFullscreen(); p && p.catch && p.catch(() => {}); } catch (e) {} };
 let scrubbing = false;
 $("scrub").addEventListener("input", e => { scrubbing = true; if (player.song) player.seek(-LEAD + (+e.target.value / 1000) * (player.song.duration + LEAD)); });
@@ -192,12 +186,12 @@ window.addEventListener("drop", e => { e.preventDefault(); dragDepth = 0; $("dro
 window.addEventListener("keydown", e => {
   if (e.target.tagName === "INPUT" && e.target.type !== "range") return;
   if (e.target.tagName === "SELECT") return;
-  const order = ["tree", "pond", "field", "seasons"];
+  const order = Object.keys(SCENES);
   if (e.code === "Space") { e.preventDefault(); toggle(); }
   else if (e.key === "ArrowRight" && player.song) player.seek(player.time() + 5);
   else if (e.key === "ArrowLeft" && player.song) player.seek(player.time() - 5);
-  else if (/^[1-4]$/.test(e.key) && HAS_3D) setStyle(order[+e.key - 1]);
-  else if ((e.key === "a" || e.key === "A") && HAS_3D) setStyle("auto");
+  else if (/^[1-4]$/.test(e.key)) setStyle(order[+e.key - 1]);
+  else if (e.key === "a" || e.key === "A") setStyle("auto");
   else if (e.key === "f" || e.key === "F") $("fs").click();
   else if (e.key === "h" || e.key === "H") { app.classList.toggle("clean"); resize(); }
   else if (e.key === "Escape" && app.classList.contains("clean")) { app.classList.remove("clean"); resize(); }
@@ -219,27 +213,22 @@ async function saveFile(blob, name) {
   ui.toast(`Saved <b>${name.replace(/</g, "")}</b>. If the download didn't start, <a href="${url}" download="${name.replace(/"/g, "")}">save it here</a>.`, 0);
 }
 const safeName = () => (player.song.title || "keylight").replace(/[^\w\- ]+/g, "").trim() || "keylight";
-const styleLabel = () => is3D() ? WORLD_INFO[currentWorld()].label : Classic.THEMES[style.slice(8)].label;
+const styleLabel = () => isStory() ? `${SCENES[currentScene()].label} ${Painter.MEDIA[prefs.medium].label}` : Classic.THEMES[prefs.style.slice(8)].label;
 
-$("poster").onclick = () => {
-  if (!is3D() || !player.song) return;
-  const out = World3D.poster();
-  if (!out) return;
-  out.toBlob(b => b && saveFile(b, `${safeName()} - ${styleLabel()}.png`), "image/png");
-};
+$("poster").onclick = () => { if (player.song) cv2d.toBlob(b => b && saveFile(b, `${safeName()} - ${styleLabel()}.png`), "image/png"); };
 
 /* ---------- video recording (canvas + piano audio) ---------- */
 const recorder = {
   active: false,
   start() {
     if (!player.song) return;
-    const canvas = is3D() ? glCanvas : cv2d;
+    const canvas = cv2d;
     if (!window.MediaRecorder || !canvas.captureStream) { ui.toast("This browser can't record video. Try Chrome, Edge or Safari."); return; }
     synth.ensure();
     const types = ["video/mp4;codecs=avc1.640028,mp4a.40.2", "video/mp4", "video/webm;codecs=vp9,opus", "video/webm;codecs=vp8,opus", "video/webm"];
     const type = types.find(t => MediaRecorder.isTypeSupported(t)) || "";
     this.active = true; app.classList.add("recording"); $("recBadge").hidden = false;
-    resize(); // full frame size while recording
+    resize();
     const stream = new MediaStream([...canvas.captureStream(60).getVideoTracks(), ...synth.recStream().getAudioTracks()]);
     let mr;
     try { mr = new MediaRecorder(stream, { mimeType: type, videoBitsPerSecond: 16e6, audioBitsPerSecond: 192e3 }); }
@@ -248,7 +237,6 @@ const recorder = {
     mr.ondataavailable = e => e.data.size && this.chunks.push(e.data);
     mr.onstop = () => this.finish();
     player.seek(-LEAD); R.resetFx();
-    if (HAS_3D) World3D.resetCamera();
     mr.start(250); player.play(); ui.sync();
   },
   stop() { if (!this.active) return; this.active = false; player.pause(); try { this.mr.stop(); } catch (e) {} },
@@ -263,15 +251,19 @@ $("rec").onclick = () => recorder.start();
 $("recStop").onclick = () => recorder.stop();
 
 /* ---------- main loop ---------- */
-let last = performance.now();
+let last = performance.now(), painting = false;
 function loop(now) {
   const dt = Math.min(0.05, (now - last) / 1000); last = now;
   const song = player.song;
   let t = player.time();
   if (player.playing && song && t >= song.duration) { if (recorder.active) recorder.stop(); else player.pause(); player.anchorSong = song.duration; t = song.duration; ui.sync(); }
   const sdt = player.playing ? dt * player.speed : dt * 0.5;
-  if (is3D()) World3D.frame(t, sdt, now / 1000, player.playing);
-  else R.frame(song, t, sdt, now / 1000);
+  if (isStory()) {
+    // repainting a scene takes a moment: say so, then paint on the next frame
+    if (Storybook.isDirty() && !painting) { painting = true; ui.toast("Painting the scene…", 0); requestAnimationFrame(loop); return; }
+    Storybook.frame(ctx2d, cv2d.width, cv2d.height, t, sdt, now / 1000);
+    if (painting) { painting = false; $("toast").hidden = true; }
+  } else R.frame(song, t, sdt, now / 1000);
   if (song) {
     $("tCur").textContent = fmt(t);
     if (!scrubbing) $("scrub").value = Math.round(((t + LEAD) / (song.duration + LEAD)) * 1000);
@@ -284,7 +276,6 @@ function loop(now) {
   let aspect = "9:16";
   try { aspect = localStorage.getItem("keylight.aspect") || aspect; } catch (e) {}
   if ([...$("aspect").options].some(o => o.value === aspect)) $("aspect").value = aspect;
-  if (!HAS_3D) ui.toast("The 3D worlds need an internet connection to load. Showing the classic styles.", 6000);
   loadSong(makeDemo(), "Late Light");
   requestAnimationFrame(loop);
   (document.fonts && document.fonts.ready || Promise.resolve()).then(() => { R.keys = []; });
