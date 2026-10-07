@@ -1104,11 +1104,18 @@ const recorder = {
     mr.start(250); player.play(); ui.sync();
   },
   stop() { if (!this.active) return; this.active = false; player.pause(); try { this.mr.stop(); } catch (e) {} },
-  finish() {
+  async finish() {
     app.classList.remove("recording"); $("recBadge").hidden = true; resize();
     const blob = new Blob(this.chunks, { type: this.type });
     const ext = this.type.includes("mp4") ? "mp4" : "webm";
     const name = `${(player.song.title || "keylight").replace(/[^\w\- ]+/g, "").trim() || "keylight"} - ${R.theme.label}.${ext}`;
+    // Inside a claude.ai artifact, downloads go through the viewer's save prompt
+    const dl = window.claude && window.claude.use ? await window.claude.use("downloads").catch(() => null) : null;
+    if (dl) {
+      try { await dl.save({ filename: name, data: blob }); ui.toast(`Saved ${name.replace(/</g, "")}.`); }
+      catch (e) { ui.toast(e && e.code === "declined" ? "Video not saved." : "This view can't save files. Open index.html locally to record."); }
+      ui.sync(); return;
+    }
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a"); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
     ui.toast(`Saved <b>${name.replace(/</g, "")}</b>. If the download didn't start, <a href="${url}" download="${name.replace(/"/g, "")}">save it here</a>.`, 0);
