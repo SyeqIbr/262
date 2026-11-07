@@ -121,7 +121,7 @@ textarea { width: 100%; min-height: 200px; margin-top: 10px; font: inherit; font
   <label class="opt"><input type="checkbox" id="noRepeat" checked> Don't repeat a scale until every one has come out</label>
 
   <section>
-    <h2>In the hat <span class="example" id="exTag">example list</span></h2>
+    <h2>In the hat <span class="example" id="exTag" hidden>your own list</span></h2>
     <p class="sub" id="poolSub"></p>
     <ul class="pool" id="pool"></ul>
   </section>
@@ -137,7 +137,7 @@ textarea { width: 100%; min-height: 200px; margin-top: 10px; font: inherit; font
     <textarea id="scaleText" aria-label="Scales, one per line"></textarea>
     <div class="row">
       <button type="button" id="save">Save list</button>
-      <button type="button" id="reset">Restore example list</button>
+      <button type="button" id="reset">Restore Grade 5 list</button>
       <span class="note" id="saved"></span>
     </div>
   </details>
@@ -145,15 +145,23 @@ textarea { width: 100%; min-height: 200px; margin-top: 10px; font: inherit; font
 
 <script>
 (function () {
-  // Placeholder list until the real Grade 5 syllabus is added.
+  // Grade 5 clarinet syllabus.
   const EXAMPLE = [
-    "F major", "G major", "A major", "B♭ major", "E♭ major",
-    "D minor", "E minor", "F♯ minor", "G minor", "C minor",
-    "Chromatic on E", "Chromatic on F"
+    "E major", "G major", "A♭ major", "B♭ major", "E♭ major",
+    "F minor harmonic", "F♯ minor harmonic", "G minor harmonic", "C minor harmonic", "C♯ minor harmonic",
+    "Dominant 7th in the key of D", "Dominant 7th in the key of F",
+    "Diminished 7th starting on D",
+    "Chromatic scale starting on C", "Chromatic scale starting on A"
   ];
+  // Sevenths are always arpeggios and chromatics always scales; everything else gets a random pick.
+  function typeFor(name) {
+    if (/7th|seventh/i.test(name)) return "Arpeggio";
+    if (/chromatic/i.test(name)) return "Scale";
+    return pick(TYPES);
+  }
   const TYPES = ["Scale", "Arpeggio"];
   const ARTS = ["Tongued", "Slurred"];
-  const KEY = "scaleHat.scales.v1";
+  const KEY = "scaleHat.scales.v2";
 
   const $ = (id) => document.getElementById(id);
   const store = {
@@ -187,7 +195,7 @@ textarea { width: 100%; min-height: 200px; margin-top: 10px; font: inherit; font
     $("poolSub").textContent = noRep
       ? `${bag.length} of ${scales.length} still in the hat.`
       : `${scales.length} scales. Any of them can come out each time.`;
-    $("exTag").hidden = custom;
+    $("exTag").hidden = !custom;
   }
 
   function renderHistory() {
@@ -212,7 +220,7 @@ textarea { width: 100%; min-height: 200px; margin-top: 10px; font: inherit; font
     } else {
       key = pick(scales);
     }
-    const res = { key, type: pick(TYPES), art: pick(ARTS) };
+    const res = { key, type: typeFor(key), art: pick(ARTS) };
     history.push(res);
 
     $("vKey").textContent = res.key;
@@ -236,7 +244,7 @@ textarea { width: 100%; min-height: 200px; margin-top: 10px; font: inherit; font
   });
   $("reset").addEventListener("click", () => {
     store.del(); scales = EXAMPLE.slice(); custom = false; refill();
-    $("scaleText").value = scales.join("\n"); $("saved").textContent = "Example list restored.";
+    $("scaleText").value = scales.join("\n"); $("saved").textContent = "Grade 5 list restored.";
     renderPool();
   });
 
