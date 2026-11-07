@@ -89,6 +89,16 @@ summary { cursor: pointer; font-weight: 700; }
 textarea { width: 100%; min-height: 200px; margin-top: 10px; font: inherit; font-size: 0.95rem; padding: 10px 12px; border-radius: 6px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
 .row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
 .note { color: var(--muted); font-size: 0.88rem; }
+
+.hint { border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; display: grid; gap: 14px; }
+.hint h3 { font-family: var(--display); font-weight: 800; font-size: 1.1rem; margin: 0; }
+.hint .k { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin: 0 0 6px; }
+.hint p { margin: 0; }
+.notes { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0; padding: 0; }
+.notes li { min-width: 2.4em; text-align: center; padding: 4px 8px; border-radius: 6px; background: var(--line); font-weight: 700; }
+.notes li.acc { background: var(--accent); color: #fff; }
+.hint ul.tips { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; }
+button:disabled { opacity: .45; cursor: default; }
 </style>
 </head>
 <body>
@@ -117,7 +127,9 @@ textarea { width: 100%; min-height: 200px; margin-top: 10px; font: inherit; font
 
   <div class="actions">
     <button class="draw" id="draw" type="button">Pull from the hat</button>
+    <button type="button" id="hintBtn" disabled>Show hint</button>
   </div>
+  <div class="hint" id="hint" hidden aria-live="polite"></div>
   <label class="opt"><input type="checkbox" id="noRepeat" checked> Don't repeat a scale until every one has come out</label>
 
   <section>
@@ -158,6 +170,78 @@ textarea { width: 100%; min-height: 200px; margin-top: 10px; font: inherit; font
     if (/7th|seventh/i.test(name)) return "Arpeggio";
     if (/chromatic/i.test(name)) return "Scale";
     return pick(TYPES);
+  }
+
+  const HINTS = {
+    "E major": { sig: "4 sharps: F♯ C♯ G♯ D♯", scale: "E F♯ G♯ A B C♯ D♯ E", arp: "E G♯ B E",
+      tips: ["Same key signature as C♯ minor, its relative minor."] },
+    "G major": { sig: "1 sharp: F♯", scale: "G A B C D E F♯ G", arp: "G B D G",
+      tips: ["Only one sharp to remember: F♯, the note just before G at the top."] },
+    "A♭ major": { sig: "4 flats: B♭ E♭ A♭ D♭", scale: "A♭ B♭ C D♭ E♭ F G A♭", arp: "A♭ C E♭ A♭",
+      tips: ["Same key signature as F minor, its relative minor.", "Only C, F and G are naturals."] },
+    "B♭ major": { sig: "2 flats: B♭ E♭", scale: "B♭ C D E♭ F G A B♭", arp: "B♭ D F B♭",
+      tips: ["Same key signature as G minor, its relative minor."] },
+    "E♭ major": { sig: "3 flats: B♭ E♭ A♭", scale: "E♭ F G A♭ B♭ C D E♭", arp: "E♭ G B♭ E♭",
+      tips: ["Same key signature as C minor, its relative minor."] },
+    "F minor harmonic": { sig: "4 flats: B♭ E♭ A♭ D♭ (same as A♭ major)", scale: "F G A♭ B♭ C D♭ E♮ F", arp: "F A♭ C F",
+      tips: ["Harmonic minor raises the 7th note by a semitone, going up and coming down. Here E♭ becomes E♮.", "The arpeggio has no 7th, so it doesn't change."] },
+    "F♯ minor harmonic": { sig: "3 sharps: F♯ C♯ G♯ (same as A major)", scale: "F♯ G♯ A B C♯ D E♯ F♯", arp: "F♯ A C♯ F♯",
+      tips: ["The raised 7th is E♯. It's the same note and fingering as F♮.", "The arpeggio has no 7th, so it doesn't change."] },
+    "G minor harmonic": { sig: "2 flats: B♭ E♭ (same as B♭ major)", scale: "G A B♭ C D E♭ F♯ G", arp: "G B♭ D G",
+      tips: ["The raised 7th is F♯, the note just before G at the top.", "The arpeggio has no 7th, so it doesn't change."] },
+    "C minor harmonic": { sig: "3 flats: B♭ E♭ A♭ (same as E♭ major)", scale: "C D E♭ F G A♭ B♮ C", arp: "C E♭ G C",
+      tips: ["The raised 7th is B♮. Watch for it, because B♭ is in the key signature.", "The arpeggio has no 7th, so it doesn't change."] },
+    "C♯ minor harmonic": { sig: "4 sharps: F♯ C♯ G♯ D♯ (same as E major)", scale: "C♯ D♯ E F♯ G♯ A B♯ C♯", arp: "C♯ E G♯ C♯",
+      tips: ["The raised 7th is B♯. It's the same note and fingering as C♮.", "The arpeggio has no 7th, so it doesn't change."] },
+    "Dominant 7th in the key of D": { sig: "Key of D: 2 sharps, F♯ C♯", arp: "A C♯ E G A",
+      tips: ["A dominant 7th starts on the 5th note of the key. The 5th note of D major is A.", "It's a major arpeggio on A with an extra G added.", "In an exam it usually finishes by resolving to D."] },
+    "Dominant 7th in the key of F": { sig: "Key of F: 1 flat, B♭", arp: "C E G B♭ C",
+      tips: ["A dominant 7th starts on the 5th note of the key. The 5th note of F major is C.", "It's a major arpeggio on C with an extra B♭ added.", "In an exam it usually finishes by resolving to F."] },
+    "Diminished 7th starting on D": { sig: "No key signature", arp: "D F A♭ C♭ D",
+      tips: ["Every note is a minor 3rd (3 semitones) above the last one.", "C♭ is the same note and fingering as B♮."] },
+    "Chromatic scale starting on C": { sig: "No key signature. Every semitone.", scale: "C C♯ D D♯ E F F♯ G G♯ A A♯ B C",
+      tips: ["Going up, think in sharps. Coming down, think in flats: C B B♭ A A♭ G G♭ F E E♭ D D♭ C.", "E to F and B to C have no note in between."] },
+    "Chromatic scale starting on A": { sig: "No key signature. Every semitone.", scale: "A A♯ B C C♯ D D♯ E F F♯ G G♯ A",
+      tips: ["Going up, think in sharps. Coming down, think in flats: A A♭ G G♭ F E E♭ D D♭ C B B♭ A.", "B to C and E to F have no note in between."] }
+  };
+  const ART_TIP = {
+    Tongued: "Tongued: start every note with the tongue, keeping the air steady between them.",
+    Slurred: "Slurred: tongue only the first note, then let the air carry you through the rest."
+  };
+  let current = null;
+
+  function notesList(str) {
+    const ul = document.createElement("ul"); ul.className = "notes";
+    str.split(" ").forEach(n => {
+      const li = document.createElement("li"); li.textContent = n;
+      if (/[♯♭♮]/.test(n)) li.classList.add("acc");
+      ul.appendChild(li);
+    });
+    return ul;
+  }
+  function block(label, content) {
+    const d = document.createElement("div");
+    const k = document.createElement("p"); k.className = "k"; k.textContent = label;
+    d.append(k, typeof content === "string" ? Object.assign(document.createElement("p"), { textContent: content }) : content);
+    return d;
+  }
+  function renderHint() {
+    const box = $("hint"); box.innerHTML = "";
+    if (!current) return;
+    const h = HINTS[current.key];
+    const title = document.createElement("h3");
+    title.textContent = `${current.key}: ${current.type.toLowerCase()}, ${current.art.toLowerCase()}`;
+    box.appendChild(title);
+    if (!h) {
+      box.appendChild(Object.assign(document.createElement("p"), { textContent: "No hint saved for this one. Hints are only for the Grade 5 list." }));
+    } else {
+      box.appendChild(block("Key signature", h.sig));
+      const notes = current.type === "Arpeggio" ? (h.arp || h.scale) : (h.scale || h.arp);
+      box.appendChild(block(current.type === "Arpeggio" ? "Arpeggio notes (going up)" : "Scale notes (going up)", notesList(notes)));
+      const tips = document.createElement("ul"); tips.className = "tips";
+      h.tips.concat(ART_TIP[current.art]).forEach(t => tips.appendChild(Object.assign(document.createElement("li"), { textContent: t })));
+      box.appendChild(block("Tips", tips));
+    }
   }
   const TYPES = ["Scale", "Arpeggio"];
   const ARTS = ["Tongued", "Slurred"];
@@ -222,6 +306,8 @@ textarea { width: 100%; min-height: 200px; margin-top: 10px; font: inherit; font
     }
     const res = { key, type: typeFor(key), art: pick(ARTS) };
     history.push(res);
+    current = res;
+    $("hint").hidden = true; $("hintBtn").disabled = false; $("hintBtn").textContent = "Show hint";
 
     $("vKey").textContent = res.key;
     $("vType").textContent = res.type;
@@ -234,6 +320,11 @@ textarea { width: 100%; min-height: 200px; margin-top: 10px; font: inherit; font
   }
 
   $("draw").addEventListener("click", draw);
+  $("hintBtn").addEventListener("click", () => {
+    const box = $("hint");
+    if (box.hidden) { renderHint(); box.hidden = false; $("hintBtn").textContent = "Hide hint"; }
+    else { box.hidden = true; $("hintBtn").textContent = "Show hint"; }
+  });
   $("noRepeat").addEventListener("change", () => { refill(); renderPool(); });
   $("save").addEventListener("click", () => {
     const list = parse($("scaleText").value);
