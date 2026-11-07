@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>body{margin:0}[hidden]{display:none!important}</style>
+<title>Scale Hat</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap">
+<style>
+/* Layout: one centred column — a hat, three paper slips pulled from it, then the list of scales underneath */
+:root {
+  --bg: #e9ecf2;          /* cool practice-room grey */
+  --ink: #1b1d24;
+  --muted: #5c6274;
+  --wood: #2a1f1d;        /* grenadilla blackwood */
+  --silver: #b9c0cc;      /* key-work */
+  --slip: #fffdf7;
+  --slip-ink: #1b1d24;
+  --accent: #b5462f;      /* reed-case red */
+  --line: #cfd4de;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "Atkinson Hyperlegible", system-ui, -apple-system, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #15161b; --ink: #eceef3; --muted: #9aa1b2; --wood: #0b0909; --silver: #8d95a4;
+  --slip: #f4efe2; --slip-ink: #1b1d24; --accent: #e0745c; --line: #2c2f38; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #15161b; --ink: #eceef3; --muted: #9aa1b2; --wood: #0b0909; --silver: #8d95a4;
+  --slip: #f4efe2; --slip-ink: #1b1d24; --accent: #e0745c; --line: #2c2f38; color-scheme: dark }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.5; }
+.wrap { max-width: 640px; margin: 0 auto; padding-block: 28px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 28px; }
+header h1 { font-family: var(--display); font-weight: 800; font-size: clamp(2rem, 7vw, 2.8rem); line-height: 1; margin: 0; letter-spacing: -0.02em; text-wrap: balance; }
+header p { margin: 8px 0 0; color: var(--muted); }
+
+/* Hat + slips */
+.stage { display: flex; flex-direction: column; align-items: center; gap: 0; }
+.slips { display: grid; gap: 10px; width: 100%; max-width: 420px; position: relative; z-index: 2; margin-bottom: -18px; }
+.slip { background: var(--slip); color: var(--slip-ink); border-radius: 3px; padding: 12px 16px;
+  box-shadow: 0 1px 0 rgba(0,0,0,.06), 0 6px 16px rgba(0,0,0,.12);
+  display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.slip:nth-child(1) { transform: rotate(-1.2deg); }
+.slip:nth-child(2) { transform: rotate(0.8deg); }
+.slip:nth-child(3) { transform: rotate(-0.5deg); }
+.slip .lab { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: #6b6458; white-space: nowrap; }
+.slip .val { font-family: var(--display); font-weight: 800; font-size: 1.45rem; line-height: 1.15; text-align: right; }
+.slip.empty .val { color: #a39c8e; font-weight: 500; }
+.slips.drawing .slip { animation: pull .55s cubic-bezier(.2,.8,.3,1.2) both; }
+.slips.drawing .slip:nth-child(2) { animation-delay: .12s; }
+.slips.drawing .slip:nth-child(3) { animation-delay: .24s; }
+@keyframes pull { from { transform: translateY(70px) scale(.9); opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .slips.drawing .slip { animation: none; } }
+
+.hat { width: 260px; max-width: 100%; position: relative; z-index: 1; }
+.hat svg { display: block; width: 100%; height: auto; }
+.hat .crown { fill: var(--wood); }
+.hat .band { fill: var(--accent); }
+.hat .brim { fill: var(--wood); }
+.hat .rim { fill: none; stroke: var(--silver); stroke-width: 2; }
+
+.actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+button { font: inherit; cursor: pointer; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--ink); padding: 10px 18px; }
+button:focus-visible, textarea:focus-visible, input:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.draw { background: var(--accent); border-color: var(--accent); color: #fff; font-family: var(--display); font-weight: 800; font-size: 1.15rem; padding: 14px 32px; }
+.draw:active { transform: translateY(1px); }
+
+.opt { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 0.95rem; justify-content: center; }
+.opt input { width: 18px; height: 18px; accent-color: var(--accent); }
+
+section h2 { font-family: var(--display); font-weight: 800; font-size: 1.2rem; margin: 0 0 4px; }
+section .sub { color: var(--muted); font-size: 0.92rem; margin: 0 0 12px; }
+.history { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.history li { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+.history li span:last-child { color: var(--muted); text-align: right; }
+.history .none { color: var(--muted); border: 0; }
+
+.pool { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.pool li { border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; font-size: 0.9rem; }
+.pool li.used { opacity: .4; text-decoration: line-through; }
+.example { display: inline-block; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--accent); margin-left: 6px; }
+
+details { border-top: 1px solid var(--line); padding-top: 14px; }
+summary { cursor: pointer; font-weight: 700; }
+textarea { width: 100%; min-height: 200px; margin-top: 10px; font: inherit; font-size: 0.95rem; padding: 10px 12px; border-radius: 6px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); }
+.row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; align-items: center; }
+.note { color: var(--muted); font-size: 0.88rem; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <h1>Scale Hat</h1>
+    <p>Grade 5 clarinet. Pull a scale, how to play it, and the articulation.</p>
+  </header>
+
+  <div class="stage">
+    <div class="slips" id="slips" aria-live="polite">
+      <div class="slip empty"><span class="lab">Key</span><span class="val" id="vKey">?</span></div>
+      <div class="slip empty"><span class="lab">Play as</span><span class="val" id="vType">?</span></div>
+      <div class="slip empty"><span class="lab">Articulation</span><span class="val" id="vArt">?</span></div>
+    </div>
+    <div class="hat" aria-hidden="true">
+      <svg viewBox="0 0 260 150">
+        <ellipse class="brim" cx="130" cy="20" rx="125" ry="18"/>
+        <path class="crown" d="M28 22 L42 132 Q130 150 218 132 L232 22 Q130 44 28 22 Z"/>
+        <path class="band" d="M37 98 Q130 116 223 98 L220 120 Q130 138 40 120 Z"/>
+        <ellipse class="rim" cx="130" cy="20" rx="125" ry="18"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="draw" id="draw" type="button">Pull from the hat</button>
+  </div>
+  <label class="opt"><input type="checkbox" id="noRepeat" checked> Don't repeat a scale until every one has come out</label>
+
+  <section>
+    <h2>In the hat <span class="example" id="exTag">example list</span></h2>
+    <p class="sub" id="poolSub"></p>
+    <ul class="pool" id="pool"></ul>
+  </section>
+
+  <section>
+    <h2>This session</h2>
+    <ul class="history" id="history"><li class="none">Nothing pulled yet.</li></ul>
+  </section>
+
+  <details>
+    <summary>Edit the scales</summary>
+    <p class="note">One scale per line. Saved in this browser.</p>
+    <textarea id="scaleText" aria-label="Scales, one per line"></textarea>
+    <div class="row">
+      <button type="button" id="save">Save list</button>
+      <button type="button" id="reset">Restore example list</button>
+      <span class="note" id="saved"></span>
+    </div>
+  </details>
+</div>
+
+<script>
+(function () {
+  // Placeholder list until the real Grade 5 syllabus is added.
+  const EXAMPLE = [
+    "F major", "G major", "A major", "B♭ major", "E♭ major",
+    "D minor", "E minor", "F♯ minor", "G minor", "C minor",
+    "Chromatic on E", "Chromatic on F"
+  ];
+  const TYPES = ["Scale", "Arpeggio"];
+  const ARTS = ["Tongued", "Slurred"];
+  const KEY = "scaleHat.scales.v1";
+
+  const $ = (id) => document.getElementById(id);
+  const store = {
+    get() { try { return localStorage.getItem(KEY); } catch (e) { return null; } },
+    set(v) { try { localStorage.setItem(KEY, v); return true; } catch (e) { return false; } },
+    del() { try { localStorage.removeItem(KEY); } catch (e) {} }
+  };
+
+  let scales = EXAMPLE.slice();
+  let custom = false;
+  const saved = store.get();
+  if (saved) { const list = parse(saved); if (list.length) { scales = list; custom = true; } }
+
+  let bag = [];
+  const history = [];
+
+  function parse(t) { return t.split("\n").map(s => s.trim()).filter(Boolean); }
+  function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
+  function refill() { bag = scales.slice(); }
+
+  function renderPool() {
+    const noRep = $("noRepeat").checked;
+    const left = new Set(bag);
+    $("pool").innerHTML = "";
+    scales.forEach(s => {
+      const li = document.createElement("li");
+      li.textContent = s;
+      if (noRep && !left.has(s)) li.classList.add("used");
+      $("pool").appendChild(li);
+    });
+    $("poolSub").textContent = noRep
+      ? `${bag.length} of ${scales.length} still in the hat.`
+      : `${scales.length} scales. Any of them can come out each time.`;
+    $("exTag").hidden = custom;
+  }
+
+  function renderHistory() {
+    const ul = $("history");
+    ul.innerHTML = "";
+    if (!history.length) { ul.innerHTML = '<li class="none">Nothing pulled yet.</li>'; return; }
+    history.slice().reverse().forEach((h, i) => {
+      const li = document.createElement("li");
+      const a = document.createElement("span"); a.textContent = `${history.length - i}. ${h.key}`;
+      const b = document.createElement("span"); b.textContent = `${h.type}, ${h.art.toLowerCase()}`;
+      li.append(a, b); ul.appendChild(li);
+    });
+  }
+
+  function draw() {
+    if (!scales.length) return;
+    let key;
+    if ($("noRepeat").checked) {
+      if (!bag.length) refill();
+      const i = Math.floor(Math.random() * bag.length);
+      key = bag.splice(i, 1)[0];
+    } else {
+      key = pick(scales);
+    }
+    const res = { key, type: pick(TYPES), art: pick(ARTS) };
+    history.push(res);
+
+    $("vKey").textContent = res.key;
+    $("vType").textContent = res.type;
+    $("vArt").textContent = res.art;
+    document.querySelectorAll(".slip").forEach(s => s.classList.remove("empty"));
+    const slips = $("slips");
+    slips.classList.remove("drawing"); void slips.offsetWidth; slips.classList.add("drawing");
+
+    renderPool(); renderHistory();
+  }
+
+  $("draw").addEventListener("click", draw);
+  $("noRepeat").addEventListener("change", () => { refill(); renderPool(); });
+  $("save").addEventListener("click", () => {
+    const list = parse($("scaleText").value);
+    if (!list.length) { $("saved").textContent = "Add at least one scale first."; return; }
+    scales = list; custom = true; refill();
+    $("saved").textContent = store.set(list.join("\n")) ? "Saved." : "Using this list until you close the page.";
+    renderPool();
+  });
+  $("reset").addEventListener("click", () => {
+    store.del(); scales = EXAMPLE.slice(); custom = false; refill();
+    $("scaleText").value = scales.join("\n"); $("saved").textContent = "Example list restored.";
+    renderPool();
+  });
+
+  $("scaleText").value = scales.join("\n");
+  refill(); renderPool();
+})();
+</script>
+</body>
+</html>
